@@ -9,3 +9,9 @@ and excess of heap allocations. They normally are good enough for most
 projects, but it's common for me to reinvent some STL classes. After doing that
 a couple of times, I decided to publish them as a open source project.
 
+## Modules
+
+* **Core** - Convenience classes
+* **DI** - Dependency injection with some scope management
+* **Test** - Test conveniences
+
