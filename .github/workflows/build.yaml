@@ -15,16 +15,23 @@ jobs:
   android:
     runs-on: ubuntu-latest
     steps:
+    - run: yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager 'system-images;android-29;default;x86_64'
+    - run: echo | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/avdmanager create avd -n test -k 'system-images;android-29;default;x86_64'
+    - run: ${ANDROID_SDK_ROOT}/emulator/emulator -avd test -no-window -no-audio -no-snapshot -no-boot-anim -no-accel &
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+    - id: adb
+      run: echo "::set-output name=ADB::${ANDROID_SDK_ROOT}/platform-tools/adb"
     - id: ndk
       run: echo "::set-output name=ANDROID_NDK::${ANDROID_SDK_ROOT}/ndk/21.3.6528147"
+    - run: ${{ steps.adb.outputs.ADB }} wait-for-device
     - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
       env:
         ndk: ${{ steps.ndk.outputs.ANDROID_NDK }}
       with:
         extra_configure_flags: >
+          -DADB=${{ steps.adb.outputs.ADB }}
           -DANDROID_ABI=x86_64 
           -DANDROID_NATIVE_API_LEVEL=26 
           -DANDROID_TOOLCHAIN=clang 
