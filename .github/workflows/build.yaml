@@ -1,0 +1,33 @@
+name: Build
+on: [push]
+
+jobs:
+  simple-build:
+    strategy:
+      matrix:
+        os: [windows, macos]
+    runs-on: ${{matrix.os}}-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
+  android:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - id: ndk
+      run: echo "::set-output name=ANDROID_NDK::${ANDROID_SDK_ROOT}/ndk/21.3.6528147"
+    - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
+      env:
+        ndk: ${{ steps.ndk.outputs.ANDROID_NDK }}
+      with:
+        extra_configure_flags: >
+          -DANDROID_ABI=x86_64 
+          -DANDROID_NATIVE_API_LEVEL=26 
+          -DANDROID_TOOLCHAIN=clang 
+          -DANDROID_NDK=${{ env.ndk }}
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.ndk }}/build/cmake/android.toolchain.cmake
+

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <array>
+#include <memory>
+#include <stdexcept>
 
 namespace m4c0 {
   template<typename Fn>
