@@ -38,4 +38,32 @@ namespace m4c0::di {
       m_injected = false;
     }
   };
+
+  /// \brief Convenience for statically defining a class scope.
+  ///
+  /// It requires a scope creator function like this:
+  ///
+  ///   m4c0::di::scope * my_scope() {
+  ///     static m4c0::di::scope instance {};
+  ///     return &instance;
+  ///   }
+  ///
+  /// Then, instances of Tp can be defined like this in a module:
+  ///
+  ///   static m4c0::di::static_bind<my_scope, my_class, parm_1, parm_2> b;
+  ///
+  /// This will add "my_class" to "my_scope" and an instance will be added by injecting a pointer to "parm_1" and
+  /// "parm_2", assuming that class has a suitable constructor and both parms are bound to the same scope.
+  template<m4c0::di::scope * (*Scope)(), typename Tp, typename... Deps>
+  struct static_bind {
+    static_bind() noexcept {
+      Scope()->bind<Tp, Deps...>();
+    }
+    ~static_bind() = default;
+
+    static_bind(static_bind &&) = delete;
+    static_bind(const static_bind &) = delete;
+    static_bind & operator=(static_bind &&) = delete;
+    static_bind & operator=(const static_bind &) = delete;
+  };
 }
