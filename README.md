@@ -13,5 +13,9 @@ a couple of times, I decided to publish them as a open source project.
 
 * **Core** - Convenience classes
 * **DI** - Dependency injection with some scope management
-* **Test** - Test conveniences
+* **Log** - Simple native logging. It wraps each supported platform log API in
+  a minimalistic cross-platform module. Apple (iOS+OSX) uses NSLog, Windows 
+  creates a file at the same directory as the executable, and Android uses its
+  log library.
+* **Test** - Conveniences for unit tests
 
