@@ -4,4 +4,4 @@ target_include_directories(m4c0-core INTERFACE inc)
 
 add_library(m4c0::core ALIAS m4c0-core)
 
-add_subdirectory(tst)
+m4c0_add_test_subdirectory(tst)

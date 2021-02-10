@@ -15,5 +15,5 @@ endif()
 
 add_library(m4c0::log ALIAS m4c0-log)
 
-add_subdirectory(tst)
+m4c0_add_test_subdirectory(tst)
 

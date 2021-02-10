@@ -9,4 +9,4 @@ target_link_libraries(m4c0-di PUBLIC m4c0::core)
 
 add_library(m4c0::di ALIAS m4c0-di)
 
-add_subdirectory(tst)
+m4c0_add_test_subdirectory(tst)
