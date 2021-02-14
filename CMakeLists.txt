@@ -15,3 +15,7 @@ add_subdirectory(ext)
 add_subdirectory(log)
 add_subdirectory(test)
 
+if(WIN32)
+  add_subdirectory(win-main)
+endif()
+
