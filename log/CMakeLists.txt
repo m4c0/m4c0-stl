@@ -1,6 +1,7 @@
-add_library(m4c0-log STATIC)
-target_compile_features(m4c0-log PUBLIC cxx_std_20)
-target_include_directories(m4c0-log PUBLIC inc)
+m4c0_add_library(
+  TARGET m4c0-log
+  ALIAS m4c0::log
+  )
 
 if (APPLE)
   enable_language(OBJC)
@@ -12,8 +13,6 @@ elseif(ANDROID)
   target_sources(m4c0-log PRIVATE src/android.cpp)
   target_link_libraries(m4c0-log PUBLIC log)
 endif()
-
-add_library(m4c0::log ALIAS m4c0-log)
 
 m4c0_add_test_subdirectory(tst)
 

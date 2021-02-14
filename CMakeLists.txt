@@ -6,6 +6,7 @@ project(m4c0-stl
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(cmake/library-utils.cmake)
 include(cmake/test-utils.cmake)
 
 add_subdirectory(core)
