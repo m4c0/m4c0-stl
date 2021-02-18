@@ -15,7 +15,10 @@ add_subdirectory(ext)
 add_subdirectory(log)
 add_subdirectory(test)
 
-if(WIN32)
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  enable_language(OBJC OBJCXX)
+  add_subdirectory(osx-main)
+elseif(WIN32)
   add_subdirectory(win-main)
 endif()
 
