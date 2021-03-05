@@ -14,5 +14,7 @@ elseif(ANDROID)
   target_link_libraries(m4c0-log PUBLIC log)
 endif()
 
-m4c0_add_test_subdirectory(tst)
-
+m4c0_add_test(
+  TARGET m4c0-test-log-link
+  SOURCES tst/test-log-link.cpp
+  LIBRARIES m4c0::log)

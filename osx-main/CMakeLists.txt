@@ -10,4 +10,7 @@ m4c0_add_library(
     "-framework Cocoa"
   )
 
-m4c0_add_test_subdirectory(tst)
+m4c0_add_test(
+  TARGET m4c0-test-osx-main-link
+  SOURCES tst/dummy.cpp
+  LIBRARIES m4c0::osx::main)

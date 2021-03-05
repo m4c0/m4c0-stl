@@ -4,4 +4,8 @@ m4c0_add_library(
   SOURCES src/main.cpp
   )
 
-m4c0_add_test_subdirectory(tst)
+m4c0_add_test(
+  TARGET m4c0-test-win-main-link 
+  SOURCES tst/dummy.cpp
+  LIBRARIES m4c0::win::main
+  WIN32)

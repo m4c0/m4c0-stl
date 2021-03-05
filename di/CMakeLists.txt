@@ -8,4 +8,14 @@ m4c0_add_library(
   LIBRARIES m4c0::core
   )
 
-m4c0_add_test_subdirectory(tst)
+m4c0_add_test(
+  ALIAS m4c0::di::base
+  TARGET m4c0-test-di
+  SOURCES tst/test-di.cpp
+  LIBRARIES m4c0::di m4c0::test)
+
+m4c0_add_test(
+  ALIAS m4c0::di::scopes
+  TARGET m4c0-test-di-scopes
+  SOURCES tst/test-di-scopes.cpp
+  LIBRARIES m4c0::di m4c0::test)

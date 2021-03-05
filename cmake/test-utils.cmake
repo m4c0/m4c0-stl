@@ -12,12 +12,17 @@ function(m4c0_add_test)
     return()
   endif()
 
+  set(options WIN32)
   set(one_value_args TARGET ALIAS)
   set(multi_value_args LIBRARIES SOURCES)
-  cmake_parse_arguments(MAT "" "${one_value_args}" "${multi_value_args}" ${ARGN})
+  cmake_parse_arguments(MAT "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
   add_executable(${MAT_TARGET} ${MAT_SOURCES})
   target_link_libraries(${MAT_TARGET} PRIVATE ${MAT_LIBRARIES})
+
+  if(MAT_WIN32)
+    set_target_properties(${MAT_TARGET} PROPERTIES WIN32_EXECUTABLE TRUE)
+  endif()
 
   if(NOT MAT_ALIAS)
     return()
@@ -31,13 +36,6 @@ function(m4c0_add_test)
       POST_BUILD
       COMMAND ${ADB} push $<TARGET_FILE:${MAT_TARGET}> /data/local/tmp/${MAT_TARGET}
       )
-    add_test(${MAT_TEST} ${ADB} shell /data/local/tmp/${MAT_TARGET})
+    add_test(${MAT_ALIAS} ${ADB} shell /data/local/tmp/${MAT_TARGET})
   endif()
 endfunction()
-
-macro(m4c0_add_test_subdirectory)
-  if (M4C0_ENABLE_TESTS)
-    add_subdirectory(tst)
-  endif()
-endmacro()
-
