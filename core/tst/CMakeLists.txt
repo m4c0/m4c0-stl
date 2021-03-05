@@ -1,7 +1,11 @@
-add_executable(m4c0-test-function test-function.cpp)
-target_link_libraries(m4c0-test-function PRIVATE m4c0::core m4c0::test)
-m4c0_add_test(m4c0::core::function m4c0-test-function)
+m4c0_add_test(
+  ALIAS m4c0::core::function
+  TARGET m4c0-test-function
+  SOURCES test-function.cpp
+  LIBRARIES m4c0::core m4c0::test)
 
-add_executable(m4c0-test-pimpl test-pimpl.cpp)
-target_link_libraries(m4c0-test-pimpl PRIVATE m4c0::core m4c0::test)
-m4c0_add_test(m4c0::core::pimpl m4c0-test-pimpl)
+m4c0_add_test(
+  ALIAS m4c0::core::pimpl
+  TARGET m4c0-test-pimpl
+  SOURCES test-pimpl.cpp
+  LIBRARIES m4c0::core m4c0::test)

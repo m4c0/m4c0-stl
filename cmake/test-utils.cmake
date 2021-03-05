@@ -7,20 +7,31 @@ if (M4C0_ENABLE_TESTS)
   endif()
 endif()
 
-function(m4c0_add_test TEST TARGET)
+function(m4c0_add_test)
   if(NOT M4C0_ENABLE_TESTS)
     return()
   endif()
 
+  set(one_value_args TARGET ALIAS)
+  set(multi_value_args LIBRARIES SOURCES)
+  cmake_parse_arguments(MAT "" "${one_value_args}" "${multi_value_args}" ${ARGN})
+
+  add_executable(${MAT_TARGET} ${MAT_SOURCES})
+  target_link_libraries(${MAT_TARGET} PRIVATE ${MAT_LIBRARIES})
+
+  if(NOT MAT_ALIAS)
+    return()
+  endif()
+
   if(NOT ANDROID)
-    add_test(${TEST} ${TARGET})
+    add_test(${MAT_ALIAS} ${MAT_TARGET})
   else()
     add_custom_command(
-      TARGET ${TARGET}
+      TARGET ${MAT_TARGET}
       POST_BUILD
-      COMMAND ${ADB} push $<TARGET_FILE:${TARGET}> /data/local/tmp/${TARGET}
+      COMMAND ${ADB} push $<TARGET_FILE:${MAT_TARGET}> /data/local/tmp/${MAT_TARGET}
       )
-    add_test(${TEST} ${ADB} shell /data/local/tmp/${TARGET})
+    add_test(${MAT_TEST} ${ADB} shell /data/local/tmp/${MAT_TARGET})
   endif()
 endfunction()
 
