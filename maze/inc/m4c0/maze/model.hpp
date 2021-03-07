@@ -55,5 +55,9 @@ namespace m4c0::maze::model {
     void link(unsigned from, unsigned to) {
       m_rooms.at(from).add_adjancency(&m_rooms.at(to));
     }
+    void double_link(unsigned from, unsigned to) {
+      link(from, to);
+      link(to, from);
+    }
   };
 }
