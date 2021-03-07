@@ -3,11 +3,29 @@
 #include <array>
 #include <stdexcept>
 
-template<typename Wall, unsigned Adjacency>
-class room {
-  using self_t = room<Wall, Adjacency>;
+template<typename Room>
+class wall {
+  using room_t = Room;
+  room_t * m_room {};
 
-  std::array<Wall, Adjacency> m_adj {};
+public:
+  constexpr wall() = default;
+  explicit wall(room_t * r) : m_room(r) {
+  }
+
+  [[nodiscard]] explicit constexpr operator bool() const {
+    return m_room != nullptr;
+  }
+
+  [[nodiscard]] constexpr const auto * room() const {
+    return m_room;
+  }
+};
+template<unsigned Adjacency>
+class room {
+  using self_t = room<Adjacency>;
+
+  std::array<wall<self_t>, Adjacency> m_adj {};
 
 public:
   [[nodiscard]] const auto & operator[](unsigned index) const {
@@ -17,40 +35,34 @@ public:
   void add_adjancency(self_t * t) {
     for (auto & adj : m_adj) {
       if (!adj) {
-        adj = Wall { t };
+        adj = wall { t };
         return;
       }
     }
     throw std::runtime_error("Maze graph overflow");
   }
 };
+template<typename Room, unsigned RoomCount>
+class graph {
+  std::array<Room, RoomCount> m_rooms {};
+
+public:
+  [[nodiscard]] const auto & operator[](unsigned index) const {
+    return m_rooms.at(index);
+  }
+
+  void link(unsigned from, unsigned to) {
+    m_rooms.at(from).add_adjancency(&m_rooms.at(to));
+  }
+};
 
 go_bandit([] { // NOLINT
   describe("maze", [] {
     it("can be build", [] {
-      struct wall;
-      using room = room<wall, 3>;
-      class wall {
-        room * m_room {};
-
-      public:
-        constexpr wall() = default;
-        explicit wall(room * r) : m_room(r) {
-        }
-
-        [[nodiscard]] explicit constexpr operator bool() const {
-          return m_room != nullptr;
-        }
-
-        [[nodiscard]] constexpr const auto * room() const {
-          return m_room;
-        }
-      };
-
-      std::array<room, 3> apt {};
-      apt[0].add_adjancency(&apt[2]);
-      apt[0].add_adjancency(&apt[1]);
-      apt[1].add_adjancency(&apt[2]);
+      graph<room<3>, 3> apt {};
+      apt.link(0, 2);
+      apt.link(0, 1);
+      apt.link(1, 2);
 
       AssertThat(apt[0][0].room(), Is().EqualTo(&apt[2]));
       AssertThat(apt[0][1].room(), Is().EqualTo(&apt[1]));
