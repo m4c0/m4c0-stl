@@ -4,7 +4,7 @@ m4c0_add_interface(
   )
 
 m4c0_add_test(
-  ALIAS m4c0::maze
-  TARGET m4c0-test-maze
-  SOURCES tst/dummy.cpp
+  ALIAS m4c0::maze::model
+  TARGET m4c0-test-maze-model
+  SOURCES tst/model.cpp
   LIBRARIES m4c0::maze m4c0::test)
