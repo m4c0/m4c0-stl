@@ -13,6 +13,7 @@ add_subdirectory(core)
 add_subdirectory(di)
 add_subdirectory(ext)
 add_subdirectory(log)
+add_subdirectory(maze)
 add_subdirectory(test)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
