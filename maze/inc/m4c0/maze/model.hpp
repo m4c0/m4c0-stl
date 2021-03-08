@@ -47,12 +47,26 @@ namespace m4c0::maze::model {
       }
       throw std::runtime_error("Maze graph overflow");
     }
+
+    template<class Fn>
+    void visit_adjacents(Fn fn) const {
+      for (const auto & w : m_adj) {
+        if (w) fn(w.room());
+      }
+    }
   };
   template<typename Room, unsigned RoomCount>
   class graph {
     std::array<Room, RoomCount> m_rooms {};
 
   public:
+    graph() = default;
+    ~graph() = default;
+    graph(const graph &) = delete;
+    graph(graph &&) = delete;
+    graph & operator=(const graph &) = delete;
+    graph & operator=(graph &&) = delete;
+
     [[nodiscard]] const auto & operator[](unsigned index) const {
       return m_rooms.at(index);
     }
@@ -69,10 +83,18 @@ namespace m4c0::maze::model {
     }
 
     template<class Fn>
-    void visit_rooms(Fn fn) {
+    void visit_rooms(Fn fn) const {
       for (const auto & room : m_rooms) {
         if (room) fn(&room);
       }
+    }
+    template<class Fn>
+    void visit_walls(Fn fn) const {
+      visit_rooms([&](const auto * r) {
+        r->visit_adjacents([&](const auto * s) {
+          fn(r, s);
+        });
+      });
     }
   };
 }
