@@ -27,16 +27,21 @@ namespace m4c0::maze::model {
     using self_t = room<Adjacency>;
 
     std::array<wall<self_t>, Adjacency> m_adj {};
+    bool m_has_degree { false };
 
   public:
     [[nodiscard]] const auto & operator[](unsigned index) const {
       return m_adj.at(index);
+    }
+    [[nodiscard]] explicit constexpr operator bool() const {
+      return m_has_degree;
     }
 
     void add_adjancency(self_t * t) {
       for (auto & adj : m_adj) {
         if (!adj) {
           adj = wall { t };
+          m_has_degree = true;
           return;
         }
       }
@@ -51,6 +56,9 @@ namespace m4c0::maze::model {
     [[nodiscard]] const auto & operator[](unsigned index) const {
       return m_rooms.at(index);
     }
+    [[nodiscard]] auto & operator[](unsigned index) {
+      return m_rooms.at(index);
+    }
 
     void link(unsigned from, unsigned to) {
       m_rooms.at(from).add_adjancency(&m_rooms.at(to));
@@ -58,6 +66,13 @@ namespace m4c0::maze::model {
     void double_link(unsigned from, unsigned to) {
       link(from, to);
       link(to, from);
+    }
+
+    template<class Fn>
+    void visit_rooms(Fn fn) {
+      for (const auto & room : m_rooms) {
+        if (room) fn(&room);
+      }
     }
   };
 }
