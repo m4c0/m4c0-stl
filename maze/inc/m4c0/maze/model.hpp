@@ -22,12 +22,13 @@ namespace m4c0::maze::model {
       return m_room;
     }
   };
-  template<unsigned Adjacency>
+  template<typename Data, unsigned Adjacency>
   class room {
-    using self_t = room<Adjacency>;
+    using self_t = room<Data, Adjacency>;
 
     std::array<wall<self_t>, Adjacency> m_adj {};
     bool m_has_degree { false };
+    Data m_data {};
 
   public:
     [[nodiscard]] const auto & operator[](unsigned index) const {
@@ -35,6 +36,13 @@ namespace m4c0::maze::model {
     }
     [[nodiscard]] explicit constexpr operator bool() const {
       return m_has_degree;
+    }
+
+    [[nodiscard]] Data & data() {
+      return m_data;
+    }
+    [[nodiscard]] const Data & data() const {
+      return m_data;
     }
 
     void add_adjancency(self_t * t) {
