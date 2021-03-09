@@ -6,6 +6,7 @@
 using namespace m4c0::maze::model;
 using graph_1_2 = graph<room<1>, 2>;
 using graph_3_3 = graph<room<3>, 3>;
+using graph_1_5 = graph<room<1>, 5>; // NOLINT
 
 class pair {
   unsigned a;
@@ -56,23 +57,21 @@ go_bandit([] { // NOLINT
     });
 
     describe("iterations", [] {
-      static constexpr const auto count = 5;
-      using room = room<1>;
-      graph<room, count> apt {};
+      graph_1_5 apt {};
       apt.link(0, 1);
       apt.link(1, 2);
       apt.link(2, 3);
       apt.link(4, 3);
 
       it("can iterate rooms", [&] {
-        std::vector<const room *> visited {};
+        std::vector<const room<1> *> visited {};
         apt.visit_rooms([&](const auto * r) {
           AssertThat(r, Is().Not().EqualTo(&apt[3]));
           visited.push_back(r);
         });
 
-        AssertThat(visited, Is().OfLength(count - 1));
-        for (int i = 0; i < count; i++) {
+        AssertThat(visited, Is().OfLength(4));
+        for (int i = 0; i <= 4; ++i) {
           if (i == 3) continue;
           AssertThat(visited, Contains(&apt[i]));
         }
