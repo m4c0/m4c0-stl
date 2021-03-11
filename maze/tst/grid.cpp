@@ -8,7 +8,7 @@ static constexpr const auto grid_height = 3;
 using grid_t = grid<grid_width, grid_height>;
 
 go_bandit([] { // NOLINT
-  describe("maze::model::grid", [] {
+  describe("maze::grid", [] {
     it("has index and coords in-sync", [] {
       static constexpr const auto x = 4;
       static constexpr const auto y = 2;

@@ -10,7 +10,7 @@ m4c0_add_test(
   LIBRARIES m4c0::maze m4c0::test)
 
 m4c0_add_test(
-  ALIAS m4c0::maze::view::grid
-  TARGET m4c0-test-maze-view-grid
-  SOURCES tst/view_grid.cpp
+  ALIAS m4c0::maze::grid
+  TARGET m4c0-test-maze-grid
+  SOURCES tst/grid.cpp
   LIBRARIES m4c0::maze m4c0::test)
