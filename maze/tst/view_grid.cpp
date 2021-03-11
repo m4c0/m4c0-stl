@@ -9,13 +9,31 @@ class grid {
   static constexpr const auto grid_height = GridH;
   static constexpr const auto room_count = grid_width * grid_height;
 
-  using room_t = room<int, 4>;
+  using room_t = room<unsigned, 4>;
 
   graph<room_t, room_count> m_graph {};
 
 public:
   static constexpr const auto array_width = grid_width * 2 - 1;
   static constexpr const auto array_size = array_width * (grid_height * 2 - 1);
+
+  class position {
+    unsigned m_index;
+
+  public:
+    explicit constexpr position(unsigned i) : m_index(i) {
+    }
+
+    [[nodiscard]] constexpr auto index() const noexcept {
+      return m_index;
+    }
+    [[nodiscard]] constexpr auto x() const noexcept {
+      return m_index % array_width;
+    }
+    [[nodiscard]] constexpr auto y() const noexcept {
+      return m_index / array_width;
+    }
+  };
 
   constexpr grid() {
     for (int y = 0, i = 0; y < grid_height; ++y) {
@@ -32,10 +50,10 @@ public:
   template<typename Fn>
   void visit_grid(Fn fn) const {
     m_graph.visit_rooms([&](const room_t * r) {
-      fn(r->data());
+      fn(position { r->data() });
     });
     m_graph.visit_walls([&](const room_t * ra, const room_t * rb) {
-      fn((ra->data() + rb->data()) / 2);
+      fn(position { (ra->data() + rb->data()) / 2 });
     });
   }
 };
@@ -46,6 +64,15 @@ using grid_t = grid<grid_width, grid_height>;
 
 go_bandit([] { // NOLINT
   describe("maze::model::grid", [] {
+    it("has index and coords in-sync", [] {
+      static constexpr const auto x = 4;
+      static constexpr const auto y = 2;
+      static constexpr const auto index = y * 7 + x;
+      grid_t::position p { index };
+      AssertThat(p.index(), Is().EqualTo(index));
+      AssertThat(p.x(), Is().EqualTo(x));
+      AssertThat(p.y(), Is().EqualTo(y));
+    });
     it("can be visited by index", [] {
       // Expected:
       // 0*1*2 3
@@ -72,8 +99,8 @@ go_bandit([] { // NOLINT
       std::fill(std::begin(result), std::end(result), ' ');
       result[grid_t::array_size] = 0;
 
-      model.visit_grid([&](unsigned index) {
-        result.at(index) = '*';
+      model.visit_grid([&](auto pos) {
+        result.at(pos.index()) = '*';
       });
 
       AssertThat(
