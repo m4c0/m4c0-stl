@@ -31,6 +31,13 @@ namespace m4c0::maze::model {
     Data m_data {};
 
   public:
+    room() = default;
+    ~room() = default;
+    room(const room &) = delete;
+    room(room &&) = delete;
+    room & operator=(const room &) = delete;
+    room & operator=(room &&) = delete;
+
     [[nodiscard]] const auto & operator[](unsigned index) const {
       return m_adj.at(index);
     }
@@ -68,13 +75,6 @@ namespace m4c0::maze::model {
     std::array<Room, RoomCount> m_rooms {};
 
   public:
-    graph() = default;
-    ~graph() = default;
-    graph(const graph &) = delete;
-    graph(graph &&) = delete;
-    graph & operator=(const graph &) = delete;
-    graph & operator=(graph &&) = delete;
-
     [[nodiscard]] const auto & operator[](unsigned index) const {
       return m_rooms.at(index);
     }
