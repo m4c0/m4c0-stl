@@ -12,13 +12,6 @@ static Ret objc_msg_send(void * obj, const char * sel_name) {
   return reinterpret_cast<Ret (*)(void *, SEL)>(objc_msgSend)(obj, sel);
 }
 
-template<typename Fn>
-static void class_add_method(Class cls, const char * sel_name, Fn fn, const char * signature) {
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  IMP imp = *reinterpret_cast<IMP *>(&fn);
-  class_addMethod(cls, sel_getUid(sel_name), imp, signature);
-}
-
 class autorelease_pool {
   id m_ar;
 
@@ -43,12 +36,21 @@ public:
 namespace m4c0::objc {
   class middleware {
     std::unordered_map<const char *, Class> m_class_cache {};
+    std::unordered_map<const char *, IMP> m_imps {};
 
-    static Class create_class(const char * base_class_name) {
+    Class create_class(const char * base_class_name) {
       using namespace std::literals;
       std::string name = "M4C0_$$_"s + base_class_name;
       Class super = objc_getClass(base_class_name);
       Class cls = objc_allocateClassPair(super, name.c_str(), 0);
+      for (auto & kv : m_imps) {
+        Method m = class_getInstanceMethod(super, sel_getUid(kv.first));
+        if (m == nullptr) continue;
+
+        const char * sign = method_getTypeEncoding(m);
+        SEL sel = sel_getUid(kv.first);
+        class_addMethod(cls, sel, kv.second, sign);
+      }
       objc_registerClassPair(cls);
       return cls;
     }
@@ -80,10 +82,17 @@ namespace m4c0::objc {
       void * result = objc_msg_send<void *>(cls, "new");
       return objc_msg_send<void *>(result, "autorelease");
     }
-    template<typename Fn>
-    void add_forward(const char * sel_name, Fn fn) {
+    template<typename Ret, typename... Args>
+    void add_forward(const char * sel_name, Ret (*fn)(Args...)) {
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+      IMP imp = *reinterpret_cast<IMP *>(&fn);
+      m_imps[sel_name] = imp;
     }
   };
+}
+
+static auto dummy() {
+  return 3;
 }
 
 go_bandit([] { // NOLINT
@@ -115,19 +124,15 @@ go_bandit([] { // NOLINT
       const char * cstr = objc_msg_send<const char *>(str, "UTF8String");
       AssertThat(cstr, Is().EqualTo("M4C0_$$_NSObject"));
     });
-    xit("forward invocations", [] {
+    it("override methods", [] {
       m4c0::objc::middleware midware;
+      midware.add_forward("length", &dummy);
+
       autorelease_pool pool;
 
-      void * obj = midware.create_for("NSObject");
-
-      constexpr auto expected = 3;
-      midware.add_forward("draw", [e = expected]() -> int {
-        return e;
-      });
-
-      int res = objc_msg_send<int>(obj, "draw");
-      AssertThat(res, Is().EqualTo(expected));
+      void * obj = midware.create_for("NSString");
+      int res = objc_msg_send<int>(obj, "length");
+      AssertThat(res, Is().EqualTo(dummy()));
     });
   });
 });
