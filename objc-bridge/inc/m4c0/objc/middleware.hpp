@@ -7,9 +7,9 @@ namespace m4c0::objc {
     class data;
     pimpl<data> m_data {};
 
-    void add_imp(const char * sel_name, void (*imp)());
-
   public:
+    using imp_t = void (*)();
+
     static middleware & instance() {
       static middleware i {};
       return i;
@@ -23,9 +23,6 @@ namespace m4c0::objc {
     middleware & operator=(const middleware &) = delete;
 
     void * create_for(const char * base_class_name);
-    template<typename Fn>
-    void add_forward(const char * sel_name, Fn fn) {
-      add_imp(sel_name, to_imp(fn));
-    }
+    void add_imp(const char * sel_name, imp_t imp);
   };
 }

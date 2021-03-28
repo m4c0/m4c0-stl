@@ -40,7 +40,9 @@ go_bandit([] { // NOLINT
     });
     it("override methods", [] {
       m4c0::objc::middleware midware;
-      midware.add_forward("length", &dummy);
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+      auto imp = reinterpret_cast<m4c0::objc::middleware::imp_t>(&dummy);
+      midware.add_imp("length", imp);
 
       m4c0::objc::autorelease_pool pool;
 
