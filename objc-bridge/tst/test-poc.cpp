@@ -1,37 +1,13 @@
+#include "m4c0/objc/autorelease_pool.hpp"
+#include "m4c0/objc/casts.hpp"
+
+#undef Nil
 #include "m4c0/test.hpp"
 
 #include <objc/message.h>
 #include <objc/runtime.h>
 #include <string>
 #include <unordered_map>
-
-template<class Ret>
-static Ret objc_msg_send(void * obj, const char * sel_name) {
-  SEL sel = sel_getUid(sel_name);
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-  return reinterpret_cast<Ret (*)(void *, SEL)>(objc_msgSend)(obj, sel);
-}
-
-class autorelease_pool {
-  id m_ar;
-
-  static auto objc_new() {
-    auto * ar_cls = objc_getClass("NSAutoreleasePool");
-    return objc_msg_send<id>(ar_cls, "new");
-  }
-
-public:
-  autorelease_pool() : m_ar(objc_new()) {
-  }
-  ~autorelease_pool() {
-    objc_msg_send<void>(m_ar, "drain");
-  }
-
-  autorelease_pool(autorelease_pool &&) = delete;
-  autorelease_pool(const autorelease_pool &) = delete;
-  autorelease_pool & operator=(autorelease_pool &&) = delete;
-  autorelease_pool & operator=(const autorelease_pool &) = delete;
-};
 
 namespace m4c0::objc {
   class middleware {
@@ -82,11 +58,9 @@ namespace m4c0::objc {
       void * result = objc_msg_send<void *>(cls, "new");
       return objc_msg_send<void *>(result, "autorelease");
     }
-    template<typename Ret, typename... Args>
-    void add_forward(const char * sel_name, Ret (*fn)(Args...)) {
-      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-      IMP imp = *reinterpret_cast<IMP *>(&fn);
-      m_imps[sel_name] = imp;
+    template<typename Fn>
+    void add_forward(const char * sel_name, Fn fn) {
+      m_imps[sel_name] = to_imp(fn);
     }
   };
 }
@@ -98,11 +72,11 @@ static auto dummy() {
 go_bandit([] { // NOLINT
   describe("objc-bridge", [] {
     it("can create an autorelease pool", [] {
-      autorelease_pool pool;
+      m4c0::objc::autorelease_pool pool;
     });
     it("creates instances of a base class", [] {
       m4c0::objc::middleware midware;
-      autorelease_pool pool;
+      m4c0::objc::autorelease_pool pool;
 
       void * obj = midware.create_for("NSObject");
       AssertThat(obj, Is().Not().Null());
@@ -110,28 +84,28 @@ go_bandit([] { // NOLINT
     it("creates instances of a base class a second time", [] {
       // This validates if next tests will have a chance of succeeding
       m4c0::objc::middleware midware;
-      autorelease_pool pool;
+      m4c0::objc::autorelease_pool pool;
 
       void * obj = midware.create_for("NSObject");
       AssertThat(obj, Is().Not().Null());
     });
     it("can invoke methods from the base class", [] {
       m4c0::objc::middleware midware;
-      autorelease_pool pool;
+      m4c0::objc::autorelease_pool pool;
 
       void * obj = midware.create_for("NSObject");
-      void * str = objc_msg_send<void *>(obj, "className");
-      const char * cstr = objc_msg_send<const char *>(str, "UTF8String");
+      void * str = m4c0::objc::objc_msg_send<void *>(obj, "className");
+      const char * cstr = m4c0::objc::objc_msg_send<const char *>(str, "UTF8String");
       AssertThat(cstr, Is().EqualTo("M4C0_$$_NSObject"));
     });
     it("override methods", [] {
       m4c0::objc::middleware midware;
       midware.add_forward("length", &dummy);
 
-      autorelease_pool pool;
+      m4c0::objc::autorelease_pool pool;
 
       void * obj = midware.create_for("NSString");
-      int res = objc_msg_send<int>(obj, "length");
+      int res = m4c0::objc::objc_msg_send<int>(obj, "length");
       AssertThat(res, Is().EqualTo(dummy()));
     });
   });
