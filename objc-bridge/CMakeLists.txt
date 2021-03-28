@@ -1,7 +1,10 @@
-m4c0_add_interface(
+m4c0_add_library(
   ALIAS m4c0::objc::bridge
   TARGET m4c0-objc-bridge
-  LIBRARIES "-framework Foundation")
+  SOURCES src/middleware.cpp
+  LIBRARIES
+    m4c0::core
+    "-framework Foundation")
 
 m4c0_add_test(
   ALIAS m4c0::objc::bridge::poc
