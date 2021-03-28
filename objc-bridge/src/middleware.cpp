@@ -51,6 +51,9 @@ public:
   }
 };
 
+middleware::middleware() {
+  m_data.make_new();
+}
 middleware::~middleware() = default;
 void * middleware::create_for(const char * base_class_name) {
   Class cls = m_data->get_class(base_class_name);

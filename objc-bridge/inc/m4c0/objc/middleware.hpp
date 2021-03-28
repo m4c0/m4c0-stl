@@ -14,7 +14,7 @@ namespace m4c0::objc {
       static middleware i {};
       return i;
     }
-    middleware() = default;
+    middleware();
     ~middleware();
 
     middleware(middleware &&) = delete;

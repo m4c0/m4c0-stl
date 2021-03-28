@@ -1,4 +1,5 @@
 #include "m4c0/objc/autorelease_pool.hpp"
+#include "m4c0/objc/casts.hpp"
 
 #undef Nil
 #include "m4c0/test.hpp"
