@@ -7,7 +7,9 @@ m4c0_add_library(
     src/M4C0Window.mm
     src/main.mm
   LIBRARIES
+    m4c0::objc::bridge
     "-framework Cocoa"
+    "-framework MetalKit"
   )
 
 m4c0_add_test(

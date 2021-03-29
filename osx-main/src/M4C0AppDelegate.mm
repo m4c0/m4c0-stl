@@ -1,13 +1,20 @@
 #import "M4C0AppDelegate.h"
 #import "M4C0Window.h"
 
-#include <m4c0/osx/main.hpp>
-#include <objc/runtime.h>
+#import <MetalKit/MetalKit.h>
+#include <m4c0/objc/middleware.hpp>
+
+const id m4c0_dummy = @[ @protocol(NSWindowDelegate), @protocol(MTKViewDelegate) ];
+
+static id create_class(const char * base_class) {
+  return (__bridge id)m4c0::objc::middleware::instance().create_for_class(base_class);
+}
+static id create_proto(const char * base_class) {
+  return (__bridge id)m4c0::objc::middleware::instance().create_for_protocol(base_class);
+}
 
 @interface M4C0AppDelegate ()
 @property (nonatomic, strong) M4C0Window * window;
-@property (nonatomic, strong) id<NSWindowDelegate> windowDelegate;
-@property (nonatomic, strong) id viewDelegate;
 
 - (void)createAppleMenu:(NSString *)appName;
 - (void)createWindow:(NSString *)appName;
@@ -31,14 +38,12 @@
 }
 
 - (void)createWindow:(NSString *)appName {
-  self.viewDelegate = [[objc_getClass(m4c0::osx::view_delegate_classname()) alloc] init];
-
-  id view = [[objc_getClass(m4c0::osx::view_classname()) alloc] init];
-  [view setDelegate:self.viewDelegate];
+  id view = create_class("MTKView");
+  [view setDelegate:create_proto("MTKViewDelegate")];
 
   self.window = [[M4C0Window alloc] init];
   self.window.contentView = view;
-  self.window.delegate = self.windowDelegate = [[objc_getClass(m4c0::osx::window_delegate_classname()) alloc] init];
+  [self.window setDelegate:create_proto("NSWindowDelegate")];
   [self.window setupWithTitle:appName];
 }
 

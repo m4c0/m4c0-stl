@@ -1,11 +1,5 @@
-#include "m4c0/osx/main.hpp"
+#include "m4c0/objc/inject.hpp"
 
-const char * m4c0::osx::view_classname() {
-  return "MTKView";
+static void dummy() {
 }
-const char * m4c0::osx::view_delegate_classname() {
-  return "Dummy";
-}
-const char * m4c0::osx::window_delegate_classname() {
-  return "Dummy";
-}
+static const m4c0::objc::static_inject i { "mtkView:drawableSizeWillChange:", &dummy };
