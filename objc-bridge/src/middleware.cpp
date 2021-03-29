@@ -21,16 +21,15 @@ class middleware::data {
     Protocol * proto = objc_getProtocol(proto_name);
     // TODO: check for nullptr
     class_addProtocol(cls, proto);
-    /*
     for (auto & kv : m_imps) {
-      Method m = class_getInstanceMethod(super, sel_getUid(kv.first));
-      if (m == nullptr) continue;
+      auto m = protocol_getMethodDescription(proto, sel_getUid(kv.first), YES, YES);
+      if (m.name == nullptr) {
+        m = protocol_getMethodDescription(proto, sel_getUid(kv.first), NO, YES);
+      }
+      if (m.name == nullptr) continue;
 
-      const char * sign = method_getTypeEncoding(m);
-      SEL sel = sel_getUid(kv.first);
-      class_addMethod(cls, sel, kv.second, sign);
+      class_addMethod(cls, m.name, kv.second, m.types);
     }
-    */
     objc_registerClassPair(cls);
     return cls;
   }

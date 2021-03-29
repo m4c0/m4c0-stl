@@ -8,7 +8,7 @@
 static auto dummy() {
   return 3;
 }
-static void dummy2(int * ptr) {
+static void dummy2(void * /*self*/, SEL /*sel*/, int * ptr) {
   // By the powers of undefined behaviour, I call you!
   *ptr = 3;
 }
@@ -85,7 +85,7 @@ go_bandit([] { // NOLINT
       int magic = 0;
 
       void * obj = midware.create_for_protocol("NSUserActivityDelegate");
-      int res = m4c0::objc::objc_msg_send<int>(obj, "userActivityWillSave:", &magic);
+      m4c0::objc::objc_msg_send<void>(obj, "userActivityWillSave:", &magic);
       AssertThat(magic, Is().EqualTo(3));
     });
   });
