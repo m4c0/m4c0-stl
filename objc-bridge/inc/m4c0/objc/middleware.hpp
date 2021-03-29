@@ -22,7 +22,8 @@ namespace m4c0::objc {
     middleware & operator=(middleware &&) = delete;
     middleware & operator=(const middleware &) = delete;
 
-    void * create_for(const char * base_class_name);
+    void * create_for_class(const char * base_class_name);
+    void * create_for_protocol(const char * proto_name);
     void add_imp(const char * sel_name, imp_t imp);
   };
 }
