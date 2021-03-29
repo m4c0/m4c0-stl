@@ -13,13 +13,15 @@ class middleware::data {
   std::unordered_map<const char *, Class> m_proto_cache {};
   std::unordered_map<const char *, IMP> m_imps {};
 
-  Class create_protocol(const char * base_class_name) {
+  Class create_protocol(const char * proto_name) {
     using namespace std::literals;
-    std::string name = "M4C0_$$_"s + base_class_name;
+    std::string name = "M4C0_!!_"s + proto_name;
     Class super = objc_getClass("NSObject");
     Class cls = objc_allocateClassPair(super, name.c_str(), 0);
-    Protocol * proto = objc_getProtocol(base_class_name);
+    Protocol * proto = objc_getProtocol(proto_name);
+    // TODO: check for nullptr
     class_addProtocol(cls, proto);
+    /*
     for (auto & kv : m_imps) {
       Method m = class_getInstanceMethod(super, sel_getUid(kv.first));
       if (m == nullptr) continue;
@@ -28,6 +30,7 @@ class middleware::data {
       SEL sel = sel_getUid(kv.first);
       class_addMethod(cls, sel, kv.second, sign);
     }
+    */
     objc_registerClassPair(cls);
     return cls;
   }
@@ -53,6 +56,9 @@ public:
   data() = default;
   ~data() {
     for (auto & kv : m_class_cache) {
+      objc_disposeClassPair(kv.second);
+    }
+    for (auto & kv : m_proto_cache) {
       objc_disposeClassPair(kv.second);
     }
   }

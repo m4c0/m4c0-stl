@@ -8,6 +8,10 @@
 static auto dummy() {
   return 3;
 }
+static void dummy2(int * ptr) {
+  // By the powers of undefined behaviour, I call you!
+  *ptr = 3;
+}
 
 go_bandit([] { // NOLINT
   describe("objc-bridge pre-reqs", [] {
@@ -62,6 +66,27 @@ go_bandit([] { // NOLINT
 
       void * obj = midware.create_for_protocol("NSUserActivityDelegate");
       AssertThat(obj, Is().Not().Null());
+    });
+    it("creates instances of a protocol a second time", [] {
+      m4c0::objc::middleware midware;
+      m4c0::objc::autorelease_pool pool;
+
+      void * obj = midware.create_for_protocol("NSUserActivityDelegate");
+      AssertThat(obj, Is().Not().Null());
+    });
+    it("implement methods from protocol", [] {
+      m4c0::objc::middleware midware;
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+      auto imp = reinterpret_cast<m4c0::objc::middleware::imp_t>(&dummy2);
+      midware.add_imp("userActivityWillSave:", imp);
+
+      m4c0::objc::autorelease_pool pool;
+
+      int magic = 0;
+
+      void * obj = midware.create_for_protocol("NSUserActivityDelegate");
+      int res = m4c0::objc::objc_msg_send<int>(obj, "userActivityWillSave:", &magic);
+      AssertThat(magic, Is().EqualTo(3));
     });
   });
 });

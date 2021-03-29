@@ -18,7 +18,7 @@ m4c0_add_test(
 m4c0_add_test(
   ALIAS m4c0::objc::bridge::middleware
   TARGET m4c0-objc-bridge-middleware
-  SOURCES tst/test-middleware.cpp
+  SOURCES tst/test-middleware.cpp tst/test-middleware-protos.m
   LIBRARIES m4c0::objc::bridge m4c0::test)
 
 m4c0_add_test(
