@@ -43,7 +43,7 @@ go_bandit([] { // NOLINT
       void * obj = midware.create_for_class("NSObject");
       void * str = m4c0::objc::objc_msg_send<void *>(obj, "className");
       const char * cstr = m4c0::objc::objc_msg_send<const char *>(str, "UTF8String");
-      AssertThat(cstr, Is().EqualTo("M4C0_2_$$_NSObject"));
+      AssertThat(cstr, Is().EqualTo(midware.class_name_for_class("NSObject")));
     });
     it("override methods from base class", [] {
       m4c0::objc::middleware midware;

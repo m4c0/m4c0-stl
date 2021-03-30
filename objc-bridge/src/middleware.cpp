@@ -17,7 +17,7 @@ class middleware::data {
   std::string m_prefix;
 
   Class create_protocol(const char * proto_name) {
-    std::string name = m_prefix + "_!!_" + proto_name;
+    std::string name = class_name_for_protocol(proto_name);
     Class super = objc_getClass("NSObject");
     Class cls = objc_allocateClassPair(super, name.c_str(), 0);
     Protocol * proto = objc_getProtocol(proto_name);
@@ -37,7 +37,7 @@ class middleware::data {
   }
 
   Class create_class(const char * base_class_name) {
-    std::string name = m_prefix + "_$$_" + base_class_name;
+    std::string name = class_name_for_class(base_class_name);
     Class super = objc_getClass(base_class_name);
     Class cls = objc_allocateClassPair(super, name.c_str(), 0);
     for (auto & kv : m_imps) {
@@ -73,6 +73,13 @@ public:
   data & operator=(data &&) = delete;
   data & operator=(const data &) = delete;
 
+  [[nodiscard]] std::string class_name_for_class(const char * base) const {
+    return m_prefix + "_!!_" + base;
+  }
+  [[nodiscard]] std::string class_name_for_protocol(const char * proto) const {
+    return m_prefix + "_$$_" + proto;
+  }
+
   Class get_class(const char * base_class_name) {
     auto & cls = m_class_cache[base_class_name];
     if (cls == nullptr) cls = create_class(base_class_name);
@@ -95,6 +102,13 @@ middleware::middleware() {
   m_data.make_new();
 }
 middleware::~middleware() = default;
+
+std::string middleware::class_name_for_class(const char * base_class_name) const {
+  return m_data->class_name_for_class(base_class_name);
+}
+std::string middleware::class_name_for_protocol(const char * protocol) const {
+  return m_data->class_name_for_protocol(protocol);
+}
 
 void * middleware::create_for_class(const char * base_class_name) {
   Class cls = m_data->get_class(base_class_name);
