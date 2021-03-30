@@ -9,13 +9,15 @@
 using namespace m4c0::objc;
 
 class middleware::data {
+  static char prefix;
+
   std::unordered_map<const char *, Class> m_class_cache {};
   std::unordered_map<const char *, Class> m_proto_cache {};
   std::unordered_map<const char *, IMP> m_imps {};
+  std::string m_prefix;
 
   Class create_protocol(const char * proto_name) {
-    using namespace std::literals;
-    std::string name = "M4C0_!!_"s + proto_name;
+    std::string name = m_prefix + "_!!_" + proto_name;
     Class super = objc_getClass("NSObject");
     Class cls = objc_allocateClassPair(super, name.c_str(), 0);
     Protocol * proto = objc_getProtocol(proto_name);
@@ -35,8 +37,7 @@ class middleware::data {
   }
 
   Class create_class(const char * base_class_name) {
-    using namespace std::literals;
-    std::string name = "M4C0_$$_"s + base_class_name;
+    std::string name = m_prefix + "_$$_" + base_class_name;
     Class super = objc_getClass(base_class_name);
     Class cls = objc_allocateClassPair(super, name.c_str(), 0);
     for (auto & kv : m_imps) {
@@ -52,15 +53,21 @@ class middleware::data {
   }
 
 public:
-  data() = default;
-  ~data() {
-    for (auto & kv : m_class_cache) {
-      objc_disposeClassPair(kv.second);
-    }
-    for (auto & kv : m_proto_cache) {
-      objc_disposeClassPair(kv.second);
-    }
+  data() : m_prefix(std::string("M4C0_") + prefix++) {
   }
+  ~data() = default;
+  // ObjC runtime isn't pretty in a real-world scenario. iOS have issues de-registering classes and some child classes
+  // are dynamically created in runtime by Apple, which creates a lot of noise when we cleanup.
+  //
+  // This code was left here as a reminder, if some kind soul wants to fix this.
+  //~data() {
+  //  for (auto & kv : m_class_cache) {
+  //    objc_disposeClassPair(kv.second);
+  //  }
+  //  for (auto & kv : m_proto_cache) {
+  //    objc_disposeClassPair(kv.second);
+  //  }
+  //}
   data(data &&) = delete;
   data(const data &) = delete;
   data & operator=(data &&) = delete;
@@ -81,6 +88,8 @@ public:
     m_imps[sel_name] = imp;
   }
 };
+
+char middleware::data::prefix = '0';
 
 middleware::middleware() {
   m_data.make_new();
