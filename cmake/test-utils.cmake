@@ -17,6 +17,16 @@ function(m4c0_add_test)
   set(multi_value_args LIBRARIES SOURCES)
   cmake_parse_arguments(MAT "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
+  if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    add_executable(${MAT_TARGET} MACOSX_BUNDLE ${MAT_SOURCES})
+    set_target_properties(${MAT_TARGET} PROPERTIES
+      MACOSX_BUNDLE TRUE
+      MACOSX_BUNDLE_GUI_IDENTIFIER "com.m4c0.stl.${MAT_TARGET}"
+      )
+    target_link_libraries(${MAT_TARGET} PUBLIC ${MAT_LIBRARIES})
+    return()
+  endif()
+
   add_executable(${MAT_TARGET} ${MAT_SOURCES})
   target_link_libraries(${MAT_TARGET} PRIVATE ${MAT_LIBRARIES})
 

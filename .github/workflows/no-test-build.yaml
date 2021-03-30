@@ -23,7 +23,8 @@ jobs:
         submodules: recursive
     - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
       with:
-        extra_configure_flags: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 -DM4C0_ENABLE_TESTS=OFF
+        extra_configure_flags: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 -DM4C0_ENABLE_TESTS=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64
+        extra_build_flags: -- -sdk iphonesimulator
 
   android:
     runs-on: ubuntu-latest

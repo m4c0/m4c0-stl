@@ -16,9 +16,12 @@ add_subdirectory(log)
 add_subdirectory(maze)
 add_subdirectory(test)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+if(APPLE)
   enable_language(OBJC OBJCXX)
   add_subdirectory(objc-bridge)
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   add_subdirectory(osx-main)
 elseif(WIN32)
   add_subdirectory(win-main)
