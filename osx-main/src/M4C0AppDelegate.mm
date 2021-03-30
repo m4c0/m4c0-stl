@@ -15,6 +15,8 @@ static id create_proto(const char * base_class) {
 
 @interface M4C0AppDelegate ()
 @property (nonatomic, strong) M4C0Window * window;
+@property (nonatomic, strong) id viewDelegate;
+@property (nonatomic, strong) id windowDelegate;
 
 - (void)createAppleMenu:(NSString *)appName;
 - (void)createWindow:(NSString *)appName;
@@ -38,12 +40,15 @@ static id create_proto(const char * base_class) {
 }
 
 - (void)createWindow:(NSString *)appName {
+  self.windowDelegate = create_proto("NSWindowDelegate");
+  self.viewDelegate = create_proto("MTKViewDelegate");
+
   id view = create_class("MTKView");
-  [view setDelegate:create_proto("MTKViewDelegate")];
+  [view setDelegate:self.viewDelegate];
 
   self.window = [[M4C0Window alloc] init];
   self.window.contentView = view;
-  [self.window setDelegate:create_proto("NSWindowDelegate")];
+  [self.window setDelegate:self.windowDelegate];
   [self.window setupWithTitle:appName];
 }
 
