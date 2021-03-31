@@ -4,8 +4,10 @@ m4c0_add_library(
   SOURCES
     src/app_delegate.cpp
     src/main.cpp
+    src/main.m
   LIBRARIES
     m4c0::objc::bridge
     "-framework Metal"
     "-framework MetalKit"
+    "-framework UIKit"
   )

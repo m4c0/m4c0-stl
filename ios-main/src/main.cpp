@@ -1,14 +1,16 @@
-#include "m4c0/objc/autorelease_pool.hpp"
-#include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/middleware.hpp"
 
-extern "C" int UIApplicationMain(int argc, char ** argv, void * app_class_name, void * delegate_class_name);
+#include <string>
+
+extern "C" {
+#include "main.h"
+}
 
 int main(int argc, char ** argv) {
-  m4c0::objc::autorelease_pool pool;
+  auto & midware = m4c0::objc::middleware::instance();
+  midware.create_for_protocol("UIApplicationDelegate");
 
-  void * obj = m4c0::objc::middleware::instance().create_for_protocol("UIApplicationDelegate");
-  void * cls_name = m4c0::objc::objc_msg_send<void *>(obj, "className");
-
-  return UIApplicationMain(argc, argv, nullptr, cls_name);
+  auto cls_name = midware.class_name_for_protocol("UIApplicationDelegate");
+  objc_main(argc, argv, cls_name.c_str());
+  return 0;
 }
