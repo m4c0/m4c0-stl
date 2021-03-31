@@ -23,6 +23,8 @@ endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   add_subdirectory(osx-main)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  add_subdirectory(ios-main)
 elseif(WIN32)
   add_subdirectory(win-main)
 endif()
