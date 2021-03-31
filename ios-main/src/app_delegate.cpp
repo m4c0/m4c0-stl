@@ -20,13 +20,13 @@ static void * create_view() {
   void * view = create_obj("MTKView", "new");
   view_delegate = m4c0::objc::middleware::instance().create_for_protocol("MTKViewDelegate");
   objc_msg_send<void>(view_delegate, "retain");
-  objc_msg_send<void>(view, "setDelegate", view_delegate);
+  objc_msg_send<void>(view, "setDelegate:", view_delegate);
   return view;
 }
 
 static void * create_view_controller() {
   view_controller = create_obj("UIViewController", "new");
-  objc_msg_send<void>(view_controller, "setView", create_view());
+  objc_msg_send<void>(view_controller, "setView:", create_view());
   return objc_msg_send<void *>(view_controller, "retain");
 }
 
@@ -35,13 +35,13 @@ static void * create_window() {
   CGRect wnd_bounds = objc_msg_send<CGRect>(main_scr, "bounds");
 
   void * wnd = create_obj("UIWindow", "alloc");
-  return objc_msg_send<void *>(wnd, "initWithFrame", wnd_bounds);
+  return objc_msg_send<void *>(wnd, "initWithFrame:", wnd_bounds);
 }
 
 static BOOL app_did_finish_launching(void * self) {
   void * wnd = create_window();
-  objc_msg_send<void>(wnd, "setRootViewController", create_view_controller());
-  objc_msg_send<void>(self, "setWindow", wnd);
+  objc_msg_send<void>(wnd, "setRootViewController:", create_view_controller());
+  objc_msg_send<void>(self, "setWindow:", wnd);
 
   objc_msg_send<void>(wnd, "makeKeyAndVisible");
   return YES;
