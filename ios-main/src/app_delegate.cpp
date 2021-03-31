@@ -1,3 +1,4 @@
+#include "m4c0/ios/main.hpp"
 #include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/inject.hpp"
 #include "m4c0/objc/middleware.hpp"
@@ -45,4 +46,6 @@ static BOOL app_did_finish_launching(void * self) {
   objc_msg_send<void>(wnd, "makeKeyAndVisible");
   return YES;
 }
-static const m4c0::objc::static_inject i { "application:didFinishLaunchingWithOptions:", &app_did_finish_launching };
+m4c0::ios::inject_app_did_finish_launch_with_options::inject_app_did_finish_launch_with_options()
+  : m4c0::objc::static_inject("application:didFinishLaunchingWithOptions:", &app_did_finish_launching) {
+}
