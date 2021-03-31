@@ -6,4 +6,6 @@ m4c0_add_library(
     src/main.cpp
   LIBRARIES
     m4c0::objc::bridge
+    "-framework Metal"
+    "-framework MetalKit"
   )
