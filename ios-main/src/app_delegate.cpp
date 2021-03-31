@@ -10,6 +10,7 @@ using m4c0::objc::objc_msg_send;
 // TODO: Find a way to keep this in `self`
 static void * view_controller;
 static void * view_delegate;
+static void * window;
 
 static void * create_obj(const char * cls_name, const char * msg_name) {
   void * cls = objc_getClass(cls_name);
@@ -35,15 +36,14 @@ static void * create_window() {
   CGRect wnd_bounds = objc_msg_send<CGRect>(main_scr, "bounds");
 
   void * wnd = create_obj("UIWindow", "alloc");
-  return objc_msg_send<void *>(wnd, "initWithFrame:", wnd_bounds);
+  wnd = objc_msg_send<void *>(wnd, "initWithFrame:", wnd_bounds);
+  objc_msg_send<void>(wnd, "setRootViewController:", create_view_controller());
+  objc_msg_send<void>(wnd, "makeKeyAndVisible");
+  return objc_msg_send<void *>(wnd, "retain");
 }
 
 static BOOL app_did_finish_launching(void * self) {
-  void * wnd = create_window();
-  objc_msg_send<void>(wnd, "setRootViewController:", create_view_controller());
-  objc_msg_send<void>(self, "setWindow:", wnd);
-
-  objc_msg_send<void>(wnd, "makeKeyAndVisible");
+  window = create_window();
   return YES;
 }
 m4c0::ios::inject_app_did_finish_launch_with_options::inject_app_did_finish_launch_with_options()
