@@ -2,3 +2,9 @@
 	path = ext/bandit/bandit
 	url = https://github.com/banditcpp/bandit
 	branch = headers-only
+[submodule "ext/volk"]
+	path = ext/volk
+	url = https://github.com/zeux/volk.git
+[submodule "ext/vulkan-headers"]
+	path = ext/vulkan-headers
+	url = https://github.com/KhronosGroup/Vulkan-Headers.git
