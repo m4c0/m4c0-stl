@@ -27,4 +27,5 @@ Take everything here as unstable (or, at least WIP).
   be injectable.
 * **Maze** - Maze generation
 * **Test** - Conveniences for unit tests
+* **Vulkan** - C++ wrapper for Vulkan objects
 

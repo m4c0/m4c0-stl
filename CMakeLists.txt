@@ -15,6 +15,7 @@ add_subdirectory(ext)
 add_subdirectory(log)
 add_subdirectory(maze)
 add_subdirectory(test)
+add_subdirectory(vulkan)
 
 if(APPLE)
   enable_language(OBJC OBJCXX)
