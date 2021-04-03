@@ -1,13 +1,10 @@
+#include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/handle.hpp"
 #include "m4c0/vulkan/instance.hpp"
 
 using namespace m4c0::vulkan::details;
 using namespace m4c0::vulkan;
 
-struct debug_utils_messenger : handle<struct VkDebugUtilsMessengerEXT_T *> {
-  using handle::handle;
-  [[nodiscard]] static debug_utils_messenger create();
-};
 struct surface : handle<struct VkSurfaceKHR_T *> {
   using handle::handle;
   [[nodiscard]] static surface for_native_ptr(void *);
@@ -22,13 +19,6 @@ int main() {
 }
 
 #include <volk.h>
-
-debug_utils_messenger debug_utils_messenger::create() {
-  return debug_utils_messenger { nullptr };
-}
-template<>
-void handle<VkDebugUtilsMessengerEXT>::reset() {
-}
 
 surface surface::for_native_ptr(void * native) {
   VkSurfaceKHR surf;
