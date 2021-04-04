@@ -69,5 +69,5 @@ debug_utils_messenger debug_utils_messenger::create() {
 }
 template<>
 void details::handle<VkDebugUtilsMessengerEXT>::reset() {
-  vkDestroyDebugUtilsMessengerEXT(volkGetLoadedInstance(), pointer(), nullptr);
+  vkDestroyDebugUtilsMessengerEXT(volk::get_instance(), pointer(), nullptr);
 }

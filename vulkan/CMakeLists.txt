@@ -6,6 +6,7 @@ m4c0_add_library(
     src/instance.cpp
     src/safe_calls.cpp
     src/surface.cpp
+    src/volk_dynamic.cpp
   LIBRARIES
     m4c0::ext::volk
     m4c0::log

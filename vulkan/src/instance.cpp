@@ -71,14 +71,8 @@ static VkInstance create_instance(const char * app_name) {
 }
 
 instance instance::create_for_app(const char * app_name) {
-  static struct initer {
-    initer() {
-      volkInitialize();
-    }
-  } init;
-
   VkInstance i = create_instance(app_name);
-  volkLoadInstance(i);
+  volk::load_instance(i);
   return instance { i };
 }
 template<>
