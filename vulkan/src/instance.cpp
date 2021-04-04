@@ -1,7 +1,7 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/instance.hpp"
+#include "m4c0/vulkan/loader.hpp"
 #include "safe_calls.hpp"
-#include "volk.hpp"
 
 #include <string_view>
 #include <vector>
@@ -72,7 +72,7 @@ static VkInstance create_instance(const char * app_name) {
 
 instance instance::create_for_app(const char * app_name) {
   VkInstance i = create_instance(app_name);
-  volk::load_instance(i);
+  loader::load_instance(i);
   return instance { i };
 }
 template<>

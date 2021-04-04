@@ -1,7 +1,7 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
+#include "m4c0/vulkan/loader.hpp"
 #include "safe_calls.hpp"
-#include "volk.hpp"
 
 #include <string>
 
@@ -69,5 +69,5 @@ debug_utils_messenger debug_utils_messenger::create() {
 }
 template<>
 void details::handle<VkDebugUtilsMessengerEXT>::reset() {
-  vkDestroyDebugUtilsMessengerEXT(volk::get_instance(), pointer(), nullptr);
+  vkDestroyDebugUtilsMessengerEXT(loader::get_instance(), pointer(), nullptr);
 }
