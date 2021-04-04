@@ -1,7 +1,8 @@
 #pragma once
 
+#include "volk.hpp"
+
 #include <utility>
-#include <volk.h>
 
 namespace m4c0::vulkan::details {
   void check(VkResult);

@@ -1,10 +1,10 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "safe_calls.hpp"
+#include "volk.hpp"
 
 #include <string_view>
 #include <vector>
-#include <volk.h>
 
 using namespace m4c0::vulkan;
 

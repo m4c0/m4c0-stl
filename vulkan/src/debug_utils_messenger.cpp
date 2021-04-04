@@ -1,9 +1,9 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "safe_calls.hpp"
+#include "volk.hpp"
 
 #include <string>
-#include <volk.h>
 
 using namespace m4c0::vulkan;
 
