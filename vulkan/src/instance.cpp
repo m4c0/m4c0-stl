@@ -71,6 +71,12 @@ static VkInstance create_instance(const char * app_name) {
 }
 
 instance instance::create_for_app(const char * app_name) {
+  static struct init {
+    init() {
+      loader::initialise();
+    }
+  } init;
+
   VkInstance i = create_instance(app_name);
   loader::load_instance(i);
   return instance { i };

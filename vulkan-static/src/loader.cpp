@@ -1,5 +1,8 @@
 #include "m4c0/vulkan/loader.hpp"
 
+void m4c0::vulkan::loader::initialise() {
+}
+
 static VkInstance & global_instance() {
   static VkInstance i {};
   return i;

@@ -62,7 +62,7 @@ debug_utils_messenger debug_utils_messenger::create() {
   info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
                    | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 
-  VkInstance instance = volkGetLoadedInstance();
+  VkInstance instance = loader::get_instance();
   return debug_utils_messenger {
     details::safe_create<VkDebugUtilsMessengerEXT>(vkCreateDebugUtilsMessengerEXT, instance, &info)
   };
