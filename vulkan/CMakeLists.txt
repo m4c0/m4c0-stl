@@ -3,6 +3,7 @@ m4c0_add_library(
   ALIAS m4c0::vulkan
   SOURCES
     src/debug_utils_messenger.cpp
+    src/device.cpp
     src/instance.cpp
     src/physical_device.cpp
     src/safe_calls.cpp

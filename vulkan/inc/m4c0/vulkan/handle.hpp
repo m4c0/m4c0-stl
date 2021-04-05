@@ -6,7 +6,7 @@ namespace m4c0::vulkan::details {
     Tp m_ptr;
 
   protected:
-    explicit handle(Tp ptr) : m_ptr(ptr) {
+    explicit constexpr handle(Tp ptr) : m_ptr(ptr) {
     }
 
   public:

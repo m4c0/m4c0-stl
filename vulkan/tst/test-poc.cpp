@@ -1,4 +1,5 @@
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
+#include "m4c0/vulkan/device.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
 #include "m4c0/vulkan/surface.hpp"
@@ -11,5 +12,6 @@ int main() {
   auto dbg = debug_utils_messenger::create();
   auto s = surface::for_native_ptr(nullptr);
   auto pd = physical_device::best_for(&s);
-  // auto d = device::best_for(pd);
+  auto d = device::create_for_physical_device(&pd);
+  d.wait_idle();
 }
