@@ -28,9 +28,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
   target_link_libraries(m4c0-vulkan PUBLIC m4c0::vulkan::static)
 else()
   target_link_libraries(m4c0-vulkan PUBLIC m4c0::vulkan::dynamic)
-endif()
 
-m4c0_add_test(
-  TARGET m4c0-test-vulkan-poc
-  SOURCES tst/test-poc.cpp
-  LIBRARIES m4c0::vulkan)
+  m4c0_add_test(
+    TARGET m4c0-test-vulkan-poc
+    SOURCES tst/test-poc.cpp
+    LIBRARIES m4c0::vulkan)
+endif()
