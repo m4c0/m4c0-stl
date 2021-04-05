@@ -4,6 +4,7 @@ m4c0_add_library(
   SOURCES
     src/debug_utils_messenger.cpp
     src/instance.cpp
+    src/physical_device.cpp
     src/safe_calls.cpp
     src/surface.cpp
   LIBRARIES

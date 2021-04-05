@@ -29,4 +29,14 @@ namespace m4c0::vulkan::details {
     safe_call(fn, std::forward<Args>(args)..., &count, res.data());
     return res;
   }
+
+  template<class Out, class Fn, class... Args>
+  auto unsafe_enumerate(Fn fn, Args &&... args) {
+    unsigned count {};
+    fn(std::forward<Args>(args)..., &count, nullptr);
+
+    std::vector<Out> res { count };
+    fn(std::forward<Args>(args)..., &count, res.data());
+    return res;
+  }
 }
