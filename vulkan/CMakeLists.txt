@@ -8,6 +8,7 @@ m4c0_add_library(
     src/physical_device.cpp
     src/safe_calls.cpp
     src/surface.cpp
+    src/queue.cpp
   LIBRARIES
     m4c0::log
   )

@@ -38,16 +38,10 @@ static VkDevice create_device(VkPhysicalDevice pd, int qf) {
   return details::safe_create<VkDevice>(vkCreateDevice, pd, &create_info);
 }
 
-static VkQueue get_queue(VkDevice d, int qf) {
-  VkQueue q {};
-  vkGetDeviceQueue(d, qf, 0, &q);
-  return q;
-}
-
 device device::create_for_physical_device(const physical_device * pd) {
   VkDevice d = create_device(pd->pointer(), pd->unified_queue_family());
   loader::load_device(d);
-  return device { d, get_queue(d, pd->unified_queue_family()) };
+  return device { d };
 }
 
 template<>
