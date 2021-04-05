@@ -10,9 +10,17 @@ m4c0_add_library(
     m4c0::log
   )
 
-if(APPLE)
+if(ANDROID)
+  target_compile_definitions(m4c0-vulkan PRIVATE M4C0_VULKAN_SURFACE_EXTENSION_NAME=VK_KHR_ANDROID_SURFACE_EXTENSION_NAME)
+  target_sources(m4c0-vulkan PRIVATE src/surface.android.cpp)
+elseif(APPLE)
   target_compile_definitions(m4c0-vulkan PRIVATE M4C0_VULKAN_SURFACE_EXTENSION_NAME=VK_EXT_METAL_SURFACE_EXTENSION_NAME)
   target_sources(m4c0-vulkan PRIVATE src/surface.metal.cpp)
+elseif(WIN32)
+  target_compile_definitions(m4c0-vulkan PRIVATE M4C0_VULKAN_SURFACE_EXTENSION_NAME=VK_KHR_WIN32_SURFACE_EXTENSION_NAME)
+  target_sources(m4c0-vulkan PRIVATE src/surface.win32.cpp)
+else()
+  message(ERROR "Unsupported platform")
 endif()
 
 # So far, it was easier to add a static MoltenVK instead of codesigning it in iOS

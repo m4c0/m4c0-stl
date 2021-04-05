@@ -3,6 +3,7 @@
 #include "m4c0/vulkan/loader.hpp"
 
 #include <utility>
+#include <vector>
 
 namespace m4c0::vulkan::details {
   void check(VkResult);
