@@ -6,6 +6,7 @@ m4c0_add_library(
     src/debug_utils_messenger.cpp
     src/device.cpp
     src/fence.cpp
+    src/image.cpp
     src/instance.cpp
     src/physical_device.cpp
     src/queue.cpp
