@@ -8,6 +8,7 @@ m4c0_add_library(
     src/fence.cpp
     src/image.cpp
     src/instance.cpp
+    src/memory_requirements.cpp
     src/physical_device.cpp
     src/queue.cpp
     src/render_pass.cpp

@@ -1,5 +1,6 @@
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/loader.hpp"
+#include "m4c0/vulkan/memory_requirements.hpp"
 #include "safe_calls.hpp"
 
 using namespace m4c0::vulkan;
@@ -34,4 +35,10 @@ image image::create_rgba_with_extent(unsigned int w, unsigned int h) {
 template<>
 void details::handle<VkImage>::reset() {
   vkDestroyImage(loader::get_device(), pointer(), nullptr);
+}
+
+memory_requirements image::memory_requirements() const {
+  VkMemoryRequirements res {};
+  vkGetImageMemoryRequirements(m4c0::vulkan::loader::get_device(), pointer(), &res);
+  return vulkan::memory_requirements { res };
 }

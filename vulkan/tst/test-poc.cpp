@@ -1,7 +1,9 @@
 #include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/device.hpp"
+#include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/instance.hpp"
+#include "m4c0/vulkan/memory_requirements.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
 #include "m4c0/vulkan/queue.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
@@ -24,6 +26,8 @@ int main() {
   auto rp = render_pass::create_with_opiniated_defaults_and_format(&sfmt);
 
   command_pool::create_resettable_for_queue_family(pd.unified_queue_family()).allocate(3, true);
+
+  auto mr = image::create_depth_with_extent(3, 2).memory_requirements();
 
   d.wait_idle();
 }
