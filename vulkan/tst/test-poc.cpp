@@ -1,3 +1,4 @@
+#include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/device.hpp"
 #include "m4c0/vulkan/instance.hpp"
@@ -21,6 +22,8 @@ int main() {
 
   auto sfmt = surface_format::best_from_device_and_surface(&pd, &s);
   auto rp = render_pass::create_with_opiniated_defaults_and_format(&sfmt);
+
+  command_pool::create_resettable_for_queue_family(pd.unified_queue_family()).allocate(3, true);
 
   d.wait_idle();
 }
