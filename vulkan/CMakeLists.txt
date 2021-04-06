@@ -19,6 +19,7 @@ m4c0_add_library(
     src/semaphore.cpp
     src/surface.cpp
     src/surface_format.cpp
+    src/swapchain.cpp
   LIBRARIES
     m4c0::core
     m4c0::log
