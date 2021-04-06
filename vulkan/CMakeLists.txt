@@ -2,6 +2,7 @@ m4c0_add_library(
   TARGET m4c0-vulkan
   ALIAS m4c0::vulkan
   SOURCES
+    src/buffer.cpp
     src/command_pool.cpp
     src/debug_utils_messenger.cpp
     src/device.cpp
