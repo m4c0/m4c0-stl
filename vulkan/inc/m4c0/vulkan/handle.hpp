@@ -22,6 +22,7 @@ namespace m4c0::vulkan::details {
       if (m_ptr != o.m_ptr) reset();
       m_ptr = o.m_ptr;
       o.m_ptr = nullptr;
+      return *this;
     }
 
     handle(const handle &) = delete;
