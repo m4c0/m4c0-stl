@@ -7,12 +7,15 @@ m4c0_add_library(
     src/fence.cpp
     src/instance.cpp
     src/physical_device.cpp
+    src/queue.cpp
+    src/render_pass.cpp
     src/safe_calls.cpp
     src/sampler.cpp
     src/semaphore.cpp
     src/surface.cpp
-    src/queue.cpp
+    src/surface_format.cpp
   LIBRARIES
+    m4c0::core
     m4c0::log
   )
 
