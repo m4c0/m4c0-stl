@@ -7,7 +7,7 @@ using namespace m4c0::vulkan;
 semaphore semaphore::create() {
   VkSemaphoreCreateInfo info {};
   info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-  return semaphore { details::safe_create<VkSemaphore>(vkCreateSemaphore, loader::get_device(), &info) };
+  return semaphore { details::safe_create_d<VkSemaphore>(vkCreateSemaphore, &info) };
 }
 
 template<>
