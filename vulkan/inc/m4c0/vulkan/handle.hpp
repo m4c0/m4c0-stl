@@ -14,6 +14,7 @@ namespace m4c0::vulkan::details {
       reset();
     }
 
+    constexpr handle() = default;
     handle(handle && o) noexcept : m_ptr(o.m_ptr) {
       o.m_ptr = nullptr;
     }
