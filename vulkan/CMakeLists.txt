@@ -6,6 +6,7 @@ m4c0_add_library(
     src/command_pool.cpp
     src/debug_utils_messenger.cpp
     src/device.cpp
+    src/device_memory.cpp
     src/fence.cpp
     src/image.cpp
     src/image_view.cpp
