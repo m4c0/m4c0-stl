@@ -6,6 +6,8 @@
 #include "m4c0/vulkan/swapchain.hpp"
 #include "safe_calls.hpp"
 
+#include <stdexcept>
+
 using namespace m4c0::vulkan;
 
 static constexpr auto get_min_image_count(const VkSurfaceCapabilitiesKHR & cap) {
