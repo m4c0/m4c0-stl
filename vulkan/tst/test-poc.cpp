@@ -1,5 +1,6 @@
 #include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
+#include "m4c0/vulkan/descriptor_pool.hpp"
 #include "m4c0/vulkan/device.hpp"
 #include "m4c0/vulkan/framebuffer.hpp"
 #include "m4c0/vulkan/image.hpp"
@@ -30,6 +31,7 @@ int main() {
   auto mr = image::create_depth_with_extent(3, 2).memory_requirements();
 
   framebuffer fb = framebuffer::builder().with_extent(3, 2).build();
+  descriptor_pool pool = descriptor_pool::builder().add_combined_image_sampler_type(1).build();
 
   d.wait_idle();
 }
