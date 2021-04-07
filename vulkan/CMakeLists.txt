@@ -8,6 +8,7 @@ m4c0_add_library(
     src/device.cpp
     src/device_memory.cpp
     src/fence.cpp
+    src/framebuffer.cpp
     src/image.cpp
     src/image_view.cpp
     src/instance.cpp

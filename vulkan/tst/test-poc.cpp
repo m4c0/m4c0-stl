@@ -1,6 +1,7 @@
 #include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/device.hpp"
+#include "m4c0/vulkan/framebuffer.hpp"
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/memory_requirements.hpp"
@@ -10,7 +11,6 @@
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
 
-using namespace m4c0::vulkan::details;
 using namespace m4c0::vulkan;
 
 int main() {
@@ -28,6 +28,8 @@ int main() {
   command_pool::create_resettable_for_queue_family(pd.unified_queue_family()).allocate(3, true);
 
   auto mr = image::create_depth_with_extent(3, 2).memory_requirements();
+
+  framebuffer fb = framebuffer::builder().with_extent(3, 2).build();
 
   d.wait_idle();
 }
