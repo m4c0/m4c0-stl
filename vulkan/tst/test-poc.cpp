@@ -8,6 +8,7 @@
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/memory_requirements.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
+#include "m4c0/vulkan/pipeline.hpp"
 #include "m4c0/vulkan/pipeline_layout.hpp"
 #include "m4c0/vulkan/queue.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
@@ -44,6 +45,18 @@ int main() {
 
   auto spv = std::array<std::uint32_t, 4> { 1, 2, 3, 4 };
   shader_module sm = shader_module::create_from_spv(spv);
+
+  pipeline p = pipeline::builder()
+                   .with_pipeline_layout(&pl)
+                   .with_render_pass(&rp)
+                   .add_vertex_stage(sm, "vmain")
+                   .add_fragment_stage(sm, "fmain")
+                   .add_vertex_binding_with_stride(4)
+                   .add_vertex_binding_instanced_with_stride(4)
+                   .add_vec4_attribute_with_bind_and_offset(0, 0)
+                   .add_vec2_attribute_with_bind_and_offset(1, 0)
+                   .add_vec2_attribute_with_bind_and_offset(1, 2)
+                   .build();
 
   d.wait_idle();
 }
