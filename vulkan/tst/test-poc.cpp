@@ -1,12 +1,14 @@
 #include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/descriptor_pool.hpp"
+#include "m4c0/vulkan/descriptor_set_layout.hpp"
 #include "m4c0/vulkan/device.hpp"
 #include "m4c0/vulkan/framebuffer.hpp"
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/memory_requirements.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
+#include "m4c0/vulkan/pipeline_layout.hpp"
 #include "m4c0/vulkan/queue.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
 #include "m4c0/vulkan/surface.hpp"
@@ -32,6 +34,12 @@ int main() {
 
   framebuffer fb = framebuffer::builder().with_extent(3, 2).build();
   descriptor_pool pool = descriptor_pool::builder().add_combined_image_sampler_type(1).build();
+
+  descriptor_set_layout dsl = descriptor_set_layout::builder().add_fragment_sampler_binding().build();
+  pipeline_layout pl = pipeline_layout::builder()
+                           .add_descriptor_set_layout(&dsl)
+                           .add_vertex_push_constant_with_size_and_offset(4, 0)
+                           .build();
 
   d.wait_idle();
 }

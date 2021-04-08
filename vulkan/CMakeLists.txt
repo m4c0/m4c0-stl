@@ -16,6 +16,7 @@ m4c0_add_library(
     src/instance.cpp
     src/memory_requirements.cpp
     src/physical_device.cpp
+    src/pipeline_layout.cpp
     src/queue.cpp
     src/render_pass.cpp
     src/safe_calls.cpp
