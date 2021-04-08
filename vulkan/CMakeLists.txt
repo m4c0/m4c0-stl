@@ -22,6 +22,7 @@ m4c0_add_library(
     src/safe_calls.cpp
     src/sampler.cpp
     src/semaphore.cpp
+    src/shader_module.cpp
     src/surface.cpp
     src/surface_format.cpp
     src/swapchain.cpp

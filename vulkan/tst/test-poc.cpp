@@ -11,6 +11,7 @@
 #include "m4c0/vulkan/pipeline_layout.hpp"
 #include "m4c0/vulkan/queue.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
+#include "m4c0/vulkan/shader_module.hpp"
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
 
@@ -40,6 +41,9 @@ int main() {
                            .add_descriptor_set_layout(&dsl)
                            .add_vertex_push_constant_with_size_and_offset(4, 0)
                            .build();
+
+  auto spv = std::array<std::uint32_t, 4> { 1, 2, 3, 4 };
+  shader_module sm = shader_module::create_from_spv(spv);
 
   d.wait_idle();
 }
