@@ -25,12 +25,12 @@ int main() {
   auto pd = physical_device::best_for(&s);
   auto d = device::create_for_physical_device(&pd);
 
-  VkQueue q = queue::get_for_family(pd.unified_queue_family()).pointer();
+  auto q = queue::get_for_family(pd.unified_queue_family());
 
   auto sfmt = surface_format::best_from_device_and_surface(&pd, &s);
   auto rp = render_pass::create_with_opiniated_defaults_and_format(&sfmt);
 
-  command_pool::create_resettable_for_queue_family(pd.unified_queue_family()).allocate(3, true);
+  auto cp = command_pool::create_resettable_for_queue_family(pd.unified_queue_family());
 
   auto mr = image::create_depth_with_extent(3, 2).memory_requirements();
 
