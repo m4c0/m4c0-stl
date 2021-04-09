@@ -18,15 +18,3 @@ template<>
 void details::handle<VkCommandPool>::reset() {
   vkDestroyCommandPool(loader::get_device(), pointer(), nullptr);
 }
-
-std::vector<VkCommandBuffer> command_pool::allocate(int count, bool primary) {
-  VkCommandBufferAllocateInfo info {};
-  info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  info.commandPool = pointer();
-  info.commandBufferCount = count;
-  info.level = primary ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-
-  std::vector<VkCommandBuffer> res { static_cast<std::size_t>(count) };
-  details::safe_call_d(vkAllocateCommandBuffers, &info, res.data());
-  return res;
-}
