@@ -2,6 +2,8 @@
 
 namespace m4c0::vulkan {
   class command_buffer;
+  class framebuffer;
+  class render_pass;
 
   class command_buffer_guard {
     const command_buffer * m_cmd_buf {};
@@ -23,6 +25,24 @@ namespace m4c0::vulkan {
     }
 
     [[nodiscard]] static command_buffer_guard begin_one_time_submit(const command_buffer * cb);
-    //[[nodiscard]] static command_buffer_guard begin_render_pass_continue(VkCommandBuffer cb);
+
+    class render_pass_continue {
+      const command_buffer * m_cmd_buf;
+      const framebuffer * m_framebuffer {};
+      const render_pass * m_render_pass {};
+
+    public:
+      explicit constexpr render_pass_continue(const command_buffer * cb) : m_cmd_buf(cb) {
+      }
+      [[nodiscard]] render_pass_continue & with_framebuffer(const framebuffer * fb) {
+        m_framebuffer = fb;
+        return *this;
+      }
+      [[nodiscard]] render_pass_continue & with_render_pass(const render_pass * rp) {
+        m_render_pass = rp;
+        return *this;
+      }
+      [[nodiscard]] command_buffer_guard begin() const;
+    };
   };
 }

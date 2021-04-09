@@ -62,6 +62,7 @@ int main() {
 
   auto cb = command_buffer(static_cast<VkCommandBuffer>(nullptr));
   { auto cbg = command_buffer_guard::begin_one_time_submit(&cb); }
+  { auto cbg = command_buffer_guard::render_pass_continue(&cb).with_framebuffer(&fb).with_render_pass(&rp).begin(); }
 
   d.wait_idle();
 }
