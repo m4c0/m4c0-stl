@@ -1,0 +1,4 @@
+m4c0_add_interface(
+  TARGET m4c0-vulkan
+  ALIAS m4c0::vulkan
+  LIBRARIES m4c0::vulkan::objects)

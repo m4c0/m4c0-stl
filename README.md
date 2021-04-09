@@ -27,6 +27,7 @@ Take everything here as unstable (or, at least WIP).
   be injectable.
 * **Maze** - Maze generation
 * **Test** - Conveniences for unit tests
+* **Vulkan** - Packages all Vulkan sub-libraries
 * **Vulkan Dynamic** - A wrapper for dynamically loading Vulkan library.
   Currently, a wrapper around Volk.
 * **Vulkan Objects** - C++ wrapper for Vulkan objects. Provides RAII and fluent
