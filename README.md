@@ -28,4 +28,9 @@ Take everything here as unstable (or, at least WIP).
 * **Maze** - Maze generation
 * **Test** - Conveniences for unit tests
 * **Vulkan** - C++ wrapper for Vulkan objects
+* **Vulkan Dynamic** - A wrapper for dynamically loading Vulkan library.
+  Currently, a wrapper around Volk.
+* **Vulkan Static** - An implementation of the dynamic counterpart. This
+  provides the same signature but it is compatible with static linkage. Mainly
+  used in iOS/OSX to avoid codesigning MoltenVK independently.
 
