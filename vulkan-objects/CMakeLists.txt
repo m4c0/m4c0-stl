@@ -3,8 +3,6 @@ m4c0_add_library(
   ALIAS m4c0::vulkan::objects
   SOURCES
     src/buffer.cpp
-    src/command_buffer.cpp
-    src/command_buffer_guard.cpp
     src/command_pool.cpp
     src/debug_utils_messenger.cpp
     src/descriptor_pool.cpp

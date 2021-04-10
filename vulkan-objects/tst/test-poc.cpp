@@ -1,5 +1,3 @@
-#include "m4c0/vulkan/command_buffer.hpp"
-#include "m4c0/vulkan/command_buffer_guard.hpp"
 #include "m4c0/vulkan/command_pool.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/descriptor_pool.hpp"
@@ -59,10 +57,6 @@ int main() {
                    .add_vec2_attribute_with_bind_and_offset(1, 0)
                    .add_vec2_attribute_with_bind_and_offset(1, 2)
                    .build();
-
-  auto cb = command_buffer(static_cast<VkCommandBuffer>(nullptr));
-  { auto cbg = command_buffer_guard::begin_one_time_submit(&cb); }
-  { auto cbg = command_buffer_guard::render_pass_continue(&cb).with_framebuffer(&fb).with_render_pass(&rp).begin(); }
 
   d.wait_idle();
 }
