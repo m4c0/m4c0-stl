@@ -6,6 +6,7 @@
 #include "m4c0/vulkan/shader_module.hpp"
 #include "safe_calls.hpp"
 
+#include <array>
 #include <vector>
 
 using namespace m4c0::vulkan;

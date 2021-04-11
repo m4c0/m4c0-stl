@@ -16,6 +16,8 @@
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
 
+#include <array>
+
 using namespace m4c0::vulkan;
 
 int main() {
