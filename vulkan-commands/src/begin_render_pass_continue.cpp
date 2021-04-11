@@ -5,7 +5,7 @@
 
 using namespace m4c0::vulkan::cmd;
 
-void render_pass_continue::begin() const {
+void begin_render_pass_continue::now() const {
   VkCommandBufferInheritanceInfo inheritance {};
   inheritance.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
   inheritance.framebuffer = m_framebuffer->pointer();

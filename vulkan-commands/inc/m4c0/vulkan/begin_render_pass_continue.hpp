@@ -7,23 +7,22 @@ namespace m4c0::vulkan {
   class render_pass;
 }
 namespace m4c0::vulkan::cmd {
-  class render_pass_continue : base_command {
+  class begin_render_pass_continue : base_command {
     const framebuffer * m_framebuffer {};
     const render_pass * m_render_pass {};
 
   public:
-    explicit constexpr render_pass_continue(VkCommandBuffer cb) : base_command(cb) {
-    }
+    using base_command::base_command;
 
-    [[nodiscard]] render_pass_continue & with_framebuffer(const framebuffer * fb) {
+    [[nodiscard]] begin_render_pass_continue & with_framebuffer(const framebuffer * fb) {
       m_framebuffer = fb;
       return *this;
     }
-    [[nodiscard]] render_pass_continue & with_render_pass(const render_pass * rp) {
+    [[nodiscard]] begin_render_pass_continue & with_render_pass(const render_pass * rp) {
       m_render_pass = rp;
       return *this;
     }
 
-    void begin() const;
+    void now() const;
   };
 }

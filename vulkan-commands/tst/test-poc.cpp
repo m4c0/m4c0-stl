@@ -13,7 +13,7 @@ int main() {
 
   VkCommandBuffer cb {};
 
-  one_time_submit(cb).begin();
-  render_pass_continue(cb).with_render_pass(&rp).with_framebuffer(&fb).begin();
-  command_buffer(cb).end();
+  begin_one_time_submit(cb).now();
+  begin_render_pass_continue(cb).with_render_pass(&rp).with_framebuffer(&fb).now();
+  end_command_buffer(cb).now();
 }

@@ -3,6 +3,6 @@
 
 using namespace m4c0::vulkan::cmd;
 
-void command_buffer::end() const {
+void end_command_buffer::now() const {
   vkEndCommandBuffer(pointer());
 }
