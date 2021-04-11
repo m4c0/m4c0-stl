@@ -6,6 +6,9 @@
 #include "m4c0/vulkan/framebuffer.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
+#include "m4c0/vulkan/set_scissor.hpp"
+#include "m4c0/vulkan/set_viewport.hpp"
+#include "m4c0/vulkan/update_buffer.hpp"
 
 using namespace m4c0::vulkan::cmd;
 
@@ -15,6 +18,11 @@ int main() {
 
   VkCommandBuffer cb {};
   begin_one_time_submit(cb).now();
+
+  set_scissor(cb).with_size(3, 2).now();
+  set_viewport(cb).with_size(3, 2).now();
+  update_buffer(cb).now();
+
   end_command_buffer(cb).now();
 
   VkCommandBuffer cb2 {};

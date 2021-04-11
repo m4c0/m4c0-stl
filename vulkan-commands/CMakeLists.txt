@@ -7,6 +7,9 @@ m4c0_add_library(
     src/begin_render_pass_continue.cpp
     src/end_command_buffer.cpp
     src/end_render_pass.cpp
+    src/set_scissor.cpp
+    src/set_viewport.cpp
+    src/update_buffer.cpp
   LIBRARIES
     m4c0::log
     m4c0::vulkan::objects
