@@ -5,6 +5,7 @@ m4c0_add_library(
     src/begin_one_time_submit.cpp
     src/begin_render_pass_continue.cpp
     src/end_command_buffer.cpp
+    src/begin_render_pass.cpp
   LIBRARIES
     m4c0::log
     m4c0::vulkan::objects
