@@ -9,7 +9,8 @@ namespace m4c0::vulkan::cmd {
     std::vector<VkCommandBuffer> m_cmds {};
 
   public:
-    using base_command::base_command;
+    explicit execute_commands(VkCommandBuffer cb) : base_command(cb) {
+    }
 
     [[nodiscard]] execute_commands & add_command_buffer(VkCommandBuffer cb) {
       m_cmds.push_back(cb);
