@@ -7,6 +7,7 @@ m4c0_add_library(
     src/begin_render_pass_continue.cpp
     src/bind_index_buffer.cpp
     src/bind_pipeline.cpp
+    src/bind_vertex_buffer.cpp
     src/copy_buffer_to_image.cpp
     src/draw.cpp
     src/end_command_buffer.cpp
