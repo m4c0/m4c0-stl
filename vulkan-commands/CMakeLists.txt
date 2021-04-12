@@ -5,8 +5,10 @@ m4c0_add_library(
     src/begin_one_time_submit.cpp
     src/begin_render_pass.cpp
     src/begin_render_pass_continue.cpp
+    src/copy_buffer_to_image.cpp
     src/end_command_buffer.cpp
     src/end_render_pass.cpp
+    src/pipeline_barrier.cpp
     src/set_scissor.cpp
     src/set_viewport.cpp
     src/update_buffer.cpp
