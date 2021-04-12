@@ -2,6 +2,7 @@
 #include "m4c0/vulkan/begin_render_pass.hpp"
 #include "m4c0/vulkan/begin_render_pass_continue.hpp"
 #include "m4c0/vulkan/copy_buffer_to_image.hpp"
+#include "m4c0/vulkan/draw.hpp"
 #include "m4c0/vulkan/end_command_buffer.hpp"
 #include "m4c0/vulkan/end_render_pass.hpp"
 #include "m4c0/vulkan/execute_commands.hpp"
@@ -40,4 +41,6 @@ int main() {
   end_render_pass(cb2).now();
 
   execute_commands(cb).add_command_buffer(cb2).now();
+
+  draw(cb).now();
 }

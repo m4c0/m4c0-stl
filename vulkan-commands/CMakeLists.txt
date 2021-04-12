@@ -6,6 +6,7 @@ m4c0_add_library(
     src/begin_render_pass.cpp
     src/begin_render_pass_continue.cpp
     src/copy_buffer_to_image.cpp
+    src/draw.cpp
     src/end_command_buffer.cpp
     src/end_render_pass.cpp
     src/execute_commands.cpp
