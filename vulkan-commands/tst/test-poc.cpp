@@ -16,6 +16,7 @@
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/pipeline.hpp"
 #include "m4c0/vulkan/pipeline_barrier.hpp"
+#include "m4c0/vulkan/push_constants.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
 #include "m4c0/vulkan/set_scissor.hpp"
 #include "m4c0/vulkan/set_viewport.hpp"
@@ -50,6 +51,9 @@ int main() {
 
   execute_commands(cb).add_command_buffer(cb2).now();
 
+  struct {
+  } complex_stuff;
+  push_constants(cb).with_data_from(&complex_stuff).to_vertex_stage();
   bind_descriptor_set(cb).now();
   bind_pipeline(cb).with_pipeline(&p).now();
   bind_vertex_buffer(cb).with_buffer(&b).now();
