@@ -1,6 +1,7 @@
 #include "m4c0/vulkan/begin_one_time_submit.hpp"
 #include "m4c0/vulkan/begin_render_pass.hpp"
 #include "m4c0/vulkan/begin_render_pass_continue.hpp"
+#include "m4c0/vulkan/bind_descriptor_set.hpp"
 #include "m4c0/vulkan/bind_index_buffer.hpp"
 #include "m4c0/vulkan/bind_pipeline.hpp"
 #include "m4c0/vulkan/bind_vertex_buffer.hpp"
@@ -49,6 +50,7 @@ int main() {
 
   execute_commands(cb).add_command_buffer(cb2).now();
 
+  bind_descriptor_set(cb).now();
   bind_pipeline(cb).with_pipeline(&p).now();
   bind_vertex_buffer(cb).with_buffer(&b).now();
   bind_index_buffer(cb).with_buffer(&b).now();

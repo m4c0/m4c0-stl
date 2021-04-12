@@ -5,6 +5,7 @@ m4c0_add_library(
     src/begin_one_time_submit.cpp
     src/begin_render_pass.cpp
     src/begin_render_pass_continue.cpp
+    src/bind_descriptor_set.cpp
     src/bind_index_buffer.cpp
     src/bind_pipeline.cpp
     src/bind_vertex_buffer.cpp
