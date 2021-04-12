@@ -4,6 +4,7 @@
 #include "m4c0/vulkan/copy_buffer_to_image.hpp"
 #include "m4c0/vulkan/end_command_buffer.hpp"
 #include "m4c0/vulkan/end_render_pass.hpp"
+#include "m4c0/vulkan/execute_commands.hpp"
 #include "m4c0/vulkan/framebuffer.hpp"
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/instance.hpp"
@@ -37,4 +38,6 @@ int main() {
 
   begin_render_pass(cb2).with_render_pass(&rp).with_framebuffer(&fb).with_clear_color(1, 1, 0, 0).now();
   end_render_pass(cb2).now();
+
+  execute_commands(cb).add_command_buffer(cb2).now();
 }
