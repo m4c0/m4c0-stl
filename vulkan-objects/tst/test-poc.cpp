@@ -59,6 +59,4 @@ int main() {
                    .add_vec2_attribute_with_bind_and_offset(1, 0)
                    .add_vec2_attribute_with_bind_and_offset(1, 2)
                    .build();
-
-  d.wait_idle();
 }

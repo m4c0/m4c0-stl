@@ -11,7 +11,5 @@ namespace m4c0::vulkan {
     using handle::handle;
 
     [[nodiscard]] static device create_for_physical_device(const physical_device * pd);
-
-    void wait_idle() const noexcept;
   };
 }

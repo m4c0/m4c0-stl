@@ -48,7 +48,3 @@ template<>
 void details::handle<VkDevice>::reset() {
   vkDestroyDevice(pointer(), nullptr);
 }
-
-void device::wait_idle() const noexcept {
-  vkDeviceWaitIdle(pointer());
-}

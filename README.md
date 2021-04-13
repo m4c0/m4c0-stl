@@ -28,6 +28,10 @@ Take everything here as unstable (or, at least WIP).
 * **Maze** - Maze generation
 * **Test** - Conveniences for unit tests
 * **Vulkan** - Packages all Vulkan sub-libraries
+* **Vulkan Actions** - Fluent interfaces for Vulkan functions (submit queue,
+  etc)
+* **Vulkan Commands** - Fluent interfaces for commands issued to Vulkan command
+  buffers.
 * **Vulkan Dynamic** - A wrapper for dynamically loading Vulkan library.
   Currently, a wrapper around Volk.
 * **Vulkan Objects** - C++ wrapper for Vulkan objects. Provides RAII and fluent
