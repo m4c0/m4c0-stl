@@ -7,22 +7,17 @@
 
 using namespace m4c0::vulkan;
 
-static auto create_queue_info(uint32_t index) {
-  static const std::array<float, 1> queues { 1.0 };
+static VkDevice create_device(VkPhysicalDevice pd, int qf) {
+  static const std::array device_extensions { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+  static const std::array<float, 1> queue_prioritiess { 1.0 };
 
   VkDeviceQueueCreateInfo queue_create_info {};
   queue_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-  queue_create_info.queueFamilyIndex = index;
-  queue_create_info.queueCount = queues.size();
-  queue_create_info.pQueuePriorities = queues.data();
-  return queue_create_info;
-}
+  queue_create_info.queueFamilyIndex = qf;
+  queue_create_info.queueCount = queue_prioritiess.size();
+  queue_create_info.pQueuePriorities = queue_prioritiess.data();
 
-static VkDevice create_device(VkPhysicalDevice pd, int qf) {
-  static const std::array device_extensions { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
-
-  auto queues = std::array { create_queue_info(qf) };
-
+  auto queues = std::array { queue_create_info };
   VkPhysicalDeviceFeatures deviceFeatures {};
   deviceFeatures.samplerAnisotropy = VK_TRUE;
 
