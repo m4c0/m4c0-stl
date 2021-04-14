@@ -1,9 +1,9 @@
+#include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/out_of_date_error.hpp"
 #include "m4c0/vulkan/queue.hpp"
 #include "m4c0/vulkan/queue_present.hpp"
 #include "m4c0/vulkan/semaphore.hpp"
 #include "m4c0/vulkan/swapchain.hpp"
-#include "vulkan/vulkan_core.h"
 
 void m4c0::vulkan::actions::queue_present::now() const {
   VkSwapchainKHR swapchain = m_swapchain->pointer();
