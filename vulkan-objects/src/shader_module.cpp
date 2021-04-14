@@ -14,5 +14,5 @@ shader_module shader_module::create_from_spv(std::span<const std::uint32_t> spv)
 
 template<>
 void details::handle<VkShaderModule>::reset() {
-  vkDestroyShaderModule(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyShaderModule, this);
 }

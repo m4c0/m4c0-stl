@@ -15,7 +15,7 @@ fence fence::create_signaled() {
 
 template<>
 void details::handle<VkFence>::reset() {
-  vkDestroyFence(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyFence, this);
 }
 
 void fence::wait_and_reset() const {

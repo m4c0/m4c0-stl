@@ -17,7 +17,7 @@ struct pipeline::builder::shaders : std::vector<VkPipelineShaderStageCreateInfo>
 
 template<>
 void details::handle<VkPipeline>::reset() {
-  vkDestroyPipeline(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyPipeline, this);
 }
 
 pipeline::builder::builder() {

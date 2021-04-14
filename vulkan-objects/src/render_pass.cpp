@@ -103,5 +103,5 @@ render_pass render_pass::create_with_opiniated_defaults_and_format(const surface
 
 template<>
 void details::handle<VkRenderPass>::reset() {
-  vkDestroyRenderPass(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyRenderPass, this);
 }

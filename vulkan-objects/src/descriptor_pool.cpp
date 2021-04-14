@@ -17,7 +17,7 @@ descriptor_pool descriptor_pool::builder::build() const {
 
 template<>
 void details::handle<VkDescriptorPool>::reset() {
-  vkDestroyDescriptorPool(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyDescriptorPool, this);
 }
 
 descriptor_pool::builder::builder() : m_max_sets(0) {

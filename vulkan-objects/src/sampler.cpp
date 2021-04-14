@@ -25,5 +25,5 @@ sampler sampler::create_with_opiniated_defaults() {
 
 template<>
 void details::handle<VkSampler>::reset() {
-  vkDestroySampler(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroySampler, this);
 }

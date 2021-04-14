@@ -34,7 +34,7 @@ image image::create_rgba_with_extent(unsigned int w, unsigned int h) {
 
 template<>
 void details::handle<VkImage>::reset() {
-  vkDestroyImage(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyImage, this);
 }
 
 memory_requirements image::memory_requirements() const {

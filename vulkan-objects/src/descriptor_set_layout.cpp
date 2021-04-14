@@ -17,7 +17,7 @@ descriptor_set_layout descriptor_set_layout::builder::build() const {
 
 template<>
 void details::handle<VkDescriptorSetLayout>::reset() {
-  vkDestroyDescriptorSetLayout(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyDescriptorSetLayout, this);
 }
 
 descriptor_set_layout::builder::builder() {

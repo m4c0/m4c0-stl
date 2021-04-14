@@ -46,7 +46,7 @@ device_memory device_memory::create_local_memory(const physical_device * pd, con
 
 template<>
 void details::handle<VkDeviceMemory>::reset() {
-  vkFreeMemory(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkFreeMemory, this);
 }
 
 device_memory::map_guard device_memory::map_all() {

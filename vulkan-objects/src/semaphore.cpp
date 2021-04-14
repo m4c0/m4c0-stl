@@ -12,5 +12,5 @@ semaphore semaphore::create() {
 
 template<>
 void details::handle<VkSemaphore>::reset() {
-  vkDestroySemaphore(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroySemaphore, this);
 }

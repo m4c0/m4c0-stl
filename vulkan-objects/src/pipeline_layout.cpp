@@ -22,7 +22,7 @@ pipeline_layout pipeline_layout::builder::build() {
 
 template<>
 void details::handle<VkPipelineLayout>::reset() {
-  vkDestroyPipelineLayout(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyPipelineLayout, this);
 }
 
 pipeline_layout::builder::builder() {

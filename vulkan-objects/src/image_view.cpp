@@ -38,5 +38,5 @@ image_view image_view::create_rgba_for_image_and_format(VkImage img, const surfa
 
 template<>
 void details::handle<VkImageView>::reset() {
-  vkDestroyImageView(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyImageView, this);
 }

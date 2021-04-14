@@ -20,7 +20,7 @@ framebuffer framebuffer::builder::build() const {
 
 template<>
 void details::handle<VkFramebuffer>::reset() {
-  vkDestroyFramebuffer(loader::get_device(), pointer(), nullptr);
+  safe_destroy_d(vkDestroyFramebuffer, this);
 }
 
 framebuffer::builder & framebuffer::builder::add_attachment(const image_view * iv) {

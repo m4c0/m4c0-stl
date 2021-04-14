@@ -47,4 +47,10 @@ namespace m4c0::vulkan::details {
     fn(std::forward<Args>(args)..., &count, res.data());
     return res;
   }
+
+  template<class Fn, class Arg>
+  void safe_destroy_d(Fn fn, Arg * arg) {
+    // The only real benefit of this wrapper is to provide a common place for a debug breakpoint
+    fn(loader::get_device(), arg->pointer(), nullptr);
+  }
 }
