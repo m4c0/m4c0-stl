@@ -11,7 +11,7 @@ namespace m4c0::vulkan::details {
 
   public:
     ~handle() {
-      reset();
+      if (m_ptr) reset();
     }
 
     constexpr handle() = default;
@@ -19,7 +19,7 @@ namespace m4c0::vulkan::details {
       o.m_ptr = nullptr;
     }
     handle & operator=(handle && o) noexcept {
-      if (m_ptr != o.m_ptr) reset();
+      if (m_ptr && m_ptr != o.m_ptr) reset();
       m_ptr = o.m_ptr;
       o.m_ptr = nullptr;
       return *this;
