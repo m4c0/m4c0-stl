@@ -3,6 +3,7 @@ m4c0_add_library(
   ALIAS m4c0::vulkan::actions
   SOURCES
     src/allocate_command_buffers.cpp
+    src/allocate_descriptor_sets.cpp
     src/device_wait_idle.cpp
     src/queue_present.cpp
   LIBRARIES
