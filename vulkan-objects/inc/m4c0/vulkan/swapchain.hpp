@@ -13,7 +13,6 @@ namespace m4c0::vulkan {
   class surface;
 
   struct swapchain : details::handle<VkSwapchainKHR> {
-    class out_of_date_error {};
 
     using handle::handle;
     [[nodiscard]] static swapchain best_for(const physical_device * pd, const surface * s, unsigned w, unsigned h);

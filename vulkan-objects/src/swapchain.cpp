@@ -1,4 +1,5 @@
 #include "m4c0/vulkan/loader.hpp"
+#include "m4c0/vulkan/out_of_date_error.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
 #include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/semaphore.hpp"

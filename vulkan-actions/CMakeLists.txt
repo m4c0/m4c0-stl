@@ -4,6 +4,7 @@ m4c0_add_library(
   SOURCES
     src/allocate_command_buffers.cpp
     src/device_wait_idle.cpp
+    src/queue_present.cpp
   LIBRARIES
     m4c0::vulkan::objects
   )
