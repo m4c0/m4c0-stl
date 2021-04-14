@@ -10,8 +10,8 @@ namespace m4c0::vulkan {
 
 namespace m4c0::vulkan::actions {
   class allocate_command_buffers {
-    const command_pool * m_pool;
-    unsigned m_size;
+    const command_pool * m_pool {};
+    unsigned m_size {};
 
   public:
     constexpr allocate_command_buffers() = default;

@@ -5,6 +5,8 @@
 #include "m4c0/vulkan/semaphore.hpp"
 #include "m4c0/vulkan/swapchain.hpp"
 
+#include <stdexcept>
+
 void m4c0::vulkan::actions::queue_present::now() const {
   VkSwapchainKHR swapchain = m_swapchain->pointer();
   VkSemaphore wait_semaphore = m_semaphore->pointer();
