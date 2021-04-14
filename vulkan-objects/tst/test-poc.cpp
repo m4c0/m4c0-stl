@@ -14,6 +14,7 @@
 #include "m4c0/vulkan/render_pass.hpp"
 #include "m4c0/vulkan/shader_module.hpp"
 #include "m4c0/vulkan/surface.hpp"
+#include "m4c0/vulkan/surface_capabilities.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
 
 #include <array>
@@ -26,6 +27,10 @@ int main() {
   auto s = surface::for_native_ptr(nullptr);
   auto pd = physical_device::best_for(&s);
   auto d = device::create_for_physical_device(&pd);
+
+  auto scap = surface_capabilities::for_physical_device_and_surface(&pd, &s);
+  auto new_w = scap.normalize_width(3);
+  auto new_h = scap.normalize_height(2);
 
   auto q = queue::get_for_family(pd.unified_queue_family());
 
