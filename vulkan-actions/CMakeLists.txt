@@ -2,6 +2,7 @@ m4c0_add_library(
   TARGET m4c0-vulkan-actions
   ALIAS m4c0::vulkan::actions
   SOURCES
+    src/allocate_command_buffers.cpp
     src/device_wait_idle.cpp
   LIBRARIES
     m4c0::vulkan::objects
