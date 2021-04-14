@@ -1,8 +1,8 @@
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
-#include "safe_calls.hpp"
 
 using namespace m4c0::vulkan;
 

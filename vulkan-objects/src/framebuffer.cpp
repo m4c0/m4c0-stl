@@ -2,7 +2,7 @@
 #include "m4c0/vulkan/image_view.hpp"
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
-#include "safe_calls.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 
 using namespace m4c0::vulkan;
 

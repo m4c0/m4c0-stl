@@ -1,10 +1,10 @@
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/semaphore.hpp"
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
 #include "m4c0/vulkan/swapchain.hpp"
-#include "safe_calls.hpp"
 
 #include <stdexcept>
 

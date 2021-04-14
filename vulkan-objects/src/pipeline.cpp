@@ -3,8 +3,8 @@
 #include "m4c0/vulkan/pipeline.hpp"
 #include "m4c0/vulkan/pipeline_layout.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/shader_module.hpp"
-#include "safe_calls.hpp"
 
 #include <array>
 #include <vector>

@@ -1,7 +1,7 @@
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/render_pass.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
-#include "safe_calls.hpp"
 
 #include <array>
 

@@ -1,7 +1,7 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/loader.hpp"
-#include "safe_calls.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 
 #include <string_view>
 #include <vector>

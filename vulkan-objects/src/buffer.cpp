@@ -1,7 +1,7 @@
 #include "m4c0/vulkan/buffer.hpp"
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/memory_requirements.hpp"
-#include "safe_calls.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 
 using namespace m4c0::vulkan;
 

@@ -1,8 +1,8 @@
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/loader.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/surface.hpp"
-#include "safe_calls.hpp"
 
 #include <optional>
 #include <sstream>

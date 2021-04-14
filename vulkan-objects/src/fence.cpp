@@ -1,6 +1,6 @@
 #include "m4c0/vulkan/fence.hpp"
 #include "m4c0/vulkan/loader.hpp"
-#include "safe_calls.hpp"
+#include "m4c0/vulkan/safe_calls.hpp"
 
 #include <array>
 
