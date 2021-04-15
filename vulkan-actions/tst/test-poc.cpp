@@ -4,8 +4,10 @@
 #include "m4c0/vulkan/bind_image_memory.hpp"
 #include "m4c0/vulkan/device_wait_idle.hpp"
 #include "m4c0/vulkan/queue_present.hpp"
+#include "m4c0/vulkan/queue_submit.hpp"
 #include "m4c0/vulkan/update_descriptor_sets.hpp"
 
+// TODO: improve these with a more realistic example
 int main() {
   m4c0::vulkan::actions::device_wait_idle();
 
@@ -24,5 +26,6 @@ int main() {
       .with_sampler(nullptr)
       .now();
 
+  m4c0::vulkan::actions::queue_submit().now();
   m4c0::vulkan::actions::queue_present().now();
 }

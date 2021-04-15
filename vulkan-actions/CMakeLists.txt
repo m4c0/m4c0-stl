@@ -8,6 +8,7 @@ m4c0_add_library(
     src/bind_image_memory.cpp
     src/device_wait_idle.cpp
     src/queue_present.cpp
+    src/queue_submit.cpp
     src/update_descriptor_sets.cpp
   LIBRARIES
     m4c0::vulkan::objects
