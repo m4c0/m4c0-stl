@@ -4,6 +4,8 @@ m4c0_add_library(
   SOURCES
     src/allocate_command_buffers.cpp
     src/allocate_descriptor_sets.cpp
+    src/bind_buffer_memory.cpp
+    src/bind_image_memory.cpp
     src/device_wait_idle.cpp
     src/queue_present.cpp
     src/update_descriptor_sets.cpp
