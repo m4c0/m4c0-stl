@@ -3,12 +3,14 @@
 namespace m4c0::vulkan::details {
   template<class Tp>
   class handle {
-    Tp m_ptr;
+    using type_t = Tp;
+
+    type_t m_ptr;
 
     void reset();
 
   protected:
-    explicit constexpr handle(Tp ptr) : m_ptr(ptr) {
+    explicit constexpr handle(type_t ptr) : m_ptr(ptr) {
     }
 
   public:
@@ -30,7 +32,7 @@ namespace m4c0::vulkan::details {
     handle(const handle &) = delete;
     handle & operator=(const handle &) = delete;
 
-    [[nodiscard]] constexpr Tp pointer() const noexcept {
+    [[nodiscard]] constexpr type_t pointer() const noexcept {
       return m_ptr;
     }
   };
