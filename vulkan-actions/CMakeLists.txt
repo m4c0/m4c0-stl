@@ -6,6 +6,7 @@ m4c0_add_library(
     src/allocate_descriptor_sets.cpp
     src/device_wait_idle.cpp
     src/queue_present.cpp
+    src/update_descriptor_sets.cpp
   LIBRARIES
     m4c0::vulkan::objects
   )
