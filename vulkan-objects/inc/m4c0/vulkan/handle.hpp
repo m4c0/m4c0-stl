@@ -5,6 +5,8 @@ namespace m4c0::vulkan::details {
   class handle {
     Tp m_ptr;
 
+    void reset();
+
   protected:
     explicit constexpr handle(Tp ptr) : m_ptr(ptr) {
     }
@@ -28,10 +30,8 @@ namespace m4c0::vulkan::details {
     handle(const handle &) = delete;
     handle & operator=(const handle &) = delete;
 
-    [[nodiscard]] constexpr auto pointer() const noexcept {
+    [[nodiscard]] constexpr Tp pointer() const noexcept {
       return m_ptr;
     }
-
-    void reset();
   };
 }
