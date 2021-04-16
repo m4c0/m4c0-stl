@@ -2,11 +2,11 @@
 
 #include "m4c0/vulkan/handle.hpp"
 
-using VkSampler = struct VkSampler_T *;
+struct VkSampler_T;
 
 namespace m4c0::vulkan {
-  struct sampler : details::handle<VkSampler> {
-    using handle::handle;
+  struct sampler : details::nd_handle<VkSampler_T> {
+    using nd_handle::nd_handle;
     [[nodiscard]] static sampler create_with_opiniated_defaults();
   };
 }

@@ -3,15 +3,15 @@
 #include "m4c0/pimpl.hpp"
 #include "m4c0/vulkan/handle.hpp"
 
-using VkPipeline = struct VkPipeline_T *;
+struct VkPipeline_T;
 
 namespace m4c0::vulkan {
   class pipeline_layout;
   class render_pass;
   class shader_module;
 
-  struct pipeline : details::handle<VkPipeline> {
-    using handle::handle;
+  struct pipeline : details::nd_handle<VkPipeline_T> {
+    using nd_handle::nd_handle;
 
     class builder {
       const pipeline_layout * m_layout {};

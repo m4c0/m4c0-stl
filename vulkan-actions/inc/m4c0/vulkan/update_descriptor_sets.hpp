@@ -1,6 +1,7 @@
 #pragma once
 
-using VkDescriptorSet = struct VkDescriptorSet_T *;
+#include "m4c0/vulkan/handle.hpp"
+struct VkDescriptorSet_T;
 
 namespace m4c0::vulkan {
   class image_view;
@@ -9,13 +10,15 @@ namespace m4c0::vulkan {
 
 namespace m4c0::vulkan::actions {
   class write_image_to_descriptor_set {
+    using desc_set_t = details::pointer_t<VkDescriptorSet_T>;
+
     const image_view * m_image_view;
     const sampler * m_sampler;
-    VkDescriptorSet m_descriptor_set;
+    desc_set_t m_descriptor_set;
     unsigned m_binding;
 
   public:
-    [[nodiscard]] constexpr write_image_to_descriptor_set & with_destination_set(VkDescriptorSet ds) noexcept {
+    [[nodiscard]] constexpr write_image_to_descriptor_set & with_destination_set(desc_set_t ds) noexcept {
       m_descriptor_set = ds;
       return *this;
     }

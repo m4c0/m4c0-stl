@@ -3,10 +3,10 @@
 #include "m4c0/pimpl.hpp"
 #include "m4c0/vulkan/handle.hpp"
 
-using VkDescriptorPool = struct VkDescriptorPool_T *;
+struct VkDescriptorPool_T;
 
 namespace m4c0::vulkan {
-  struct descriptor_pool : details::handle<VkDescriptorPool> {
+  struct descriptor_pool : details::nd_handle<VkDescriptorPool_T> {
     class builder {
       class pool_sizes;
 
@@ -27,6 +27,6 @@ namespace m4c0::vulkan {
       [[nodiscard]] descriptor_pool build() const;
     };
 
-    using handle::handle;
+    using nd_handle::nd_handle;
   };
 }

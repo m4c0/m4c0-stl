@@ -5,11 +5,11 @@
 #include <cstdint>
 #include <span>
 
-using VkShaderModule = struct VkShaderModule_T *;
+struct VkShaderModule_T;
 
 namespace m4c0::vulkan {
-  struct shader_module : details::handle<VkShaderModule> {
-    using handle::handle;
+  struct shader_module : details::nd_handle<VkShaderModule_T> {
+    using nd_handle::nd_handle;
 
     [[nodiscard]] static shader_module create_from_spv(std::span<const std::uint32_t> spv);
   };

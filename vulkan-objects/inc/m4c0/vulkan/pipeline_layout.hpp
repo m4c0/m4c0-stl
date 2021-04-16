@@ -3,12 +3,12 @@
 #include "m4c0/pimpl.hpp"
 #include "m4c0/vulkan/handle.hpp"
 
-using VkPipelineLayout = struct VkPipelineLayout_T *;
+struct VkPipelineLayout_T;
 
 namespace m4c0::vulkan {
   class descriptor_set_layout;
 
-  struct pipeline_layout : details::handle<VkPipelineLayout> {
+  struct pipeline_layout : details::nd_handle<VkPipelineLayout_T> {
     class builder {
       class set_layouts;
       class push_constants;
@@ -24,6 +24,6 @@ namespace m4c0::vulkan {
       [[nodiscard]] pipeline_layout build();
     };
 
-    using handle::handle;
+    using nd_handle::nd_handle;
   };
 }

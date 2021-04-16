@@ -93,7 +93,8 @@ pipeline pipeline::builder::build() {
   info.pVertexInputState = &vertex_input;
   info.pViewportState = &viewport;
 
-  return pipeline { details::safe_create_d<VkPipeline>(vkCreateGraphicsPipelines, nullptr, 1, &info) };
+  VkPipelineCache cache {};
+  return pipeline { details::safe_create_d<VkPipeline>(vkCreateGraphicsPipelines, cache, 1, &info) };
 }
 
 pipeline::builder & pipeline::builder::add_fragment_stage(const shader_module & sm, const char * name) {

@@ -2,11 +2,11 @@
 
 #include "m4c0/vulkan/handle.hpp"
 
-using VkSemaphore = struct VkSemaphore_T *;
+struct VkSemaphore_T;
 
 namespace m4c0::vulkan {
-  struct semaphore : details::handle<VkSemaphore> {
-    using handle::handle;
+  struct semaphore : details::nd_handle<VkSemaphore_T> {
+    using nd_handle::nd_handle;
     [[nodiscard]] static semaphore create();
   };
 }

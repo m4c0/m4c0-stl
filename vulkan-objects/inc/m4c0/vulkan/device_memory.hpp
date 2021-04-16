@@ -4,19 +4,20 @@
 
 #include <cstdint>
 
-using VkDeviceMemory = struct VkDeviceMemory_T *;
+struct VkDeviceMemory_T;
 
 namespace m4c0::vulkan {
   class memory_requirements;
   class physical_device;
 
-  struct device_memory : details::handle<VkDeviceMemory> {
+  struct device_memory : details::nd_handle<VkDeviceMemory_T> {
+    // TODO: move this guard to a different module
     class map_guard {
-      VkDeviceMemory m_handle;
+      type_t m_handle;
       void * m_ptr;
 
       friend class device_memory;
-      map_guard(VkDeviceMemory handle, std::uint64_t offset, std::uint64_t size);
+      map_guard(type_t handle, std::uint64_t offset, std::uint64_t size);
 
     public:
       ~map_guard();
@@ -32,7 +33,7 @@ namespace m4c0::vulkan {
       }
     };
 
-    using handle::handle;
+    using nd_handle::nd_handle;
     [[nodiscard]] static device_memory create_host_memory(const physical_device * pd, const memory_requirements * mr);
     [[nodiscard]] static device_memory create_local_memory(const physical_device * pd, const memory_requirements * mr);
 

@@ -4,19 +4,19 @@
 
 #include <vector>
 
-using VkFramebuffer = struct VkFramebuffer_T *;
-using VkImageView = struct VkImageView_T *;
+struct VkFramebuffer_T;
+struct VkImageView_T;
 
 namespace m4c0::vulkan {
   class image_view;
   class render_pass;
 
-  struct framebuffer : details::handle<VkFramebuffer> {
+  struct framebuffer : details::nd_handle<VkFramebuffer_T> {
     class builder {
       unsigned m_width;
       unsigned m_height;
       const render_pass * m_render_pass;
-      std::vector<VkImageView> m_attachments {};
+      std::vector<details::pointer_t<VkImageView_T>> m_attachments {};
 
     public:
       [[nodiscard]] builder & with_extent(unsigned w, unsigned h) {
@@ -33,6 +33,6 @@ namespace m4c0::vulkan {
       [[nodiscard]] framebuffer build() const;
     };
 
-    using handle::handle;
+    using nd_handle::nd_handle;
   };
 }

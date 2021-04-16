@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
+#include "m4c0/vulkan/handle.hpp"
 
-using VkDescriptorSet = struct VkDescriptorSet_T *;
+struct VkDescriptorSet_T;
 
 namespace m4c0::vulkan {
   class descriptor_pool;
@@ -24,6 +24,6 @@ namespace m4c0::vulkan::actions {
       return *this;
     }
 
-    [[nodiscard]] VkDescriptorSet now() const;
+    [[nodiscard]] details::pointer_t<VkDescriptorSet_T> now() const;
   };
 }
