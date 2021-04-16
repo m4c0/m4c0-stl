@@ -11,6 +11,6 @@ semaphore semaphore::create() {
 }
 
 template<>
-void details::handle<VkSemaphore>::reset() {
+void details::base_handle<VkSemaphore>::reset() {
   safe_destroy_d(vkDestroySemaphore, this);
 }

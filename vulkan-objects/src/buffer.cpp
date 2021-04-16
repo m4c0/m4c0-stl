@@ -25,7 +25,7 @@ buffer buffer::create_vertex_buffer_with_size(unsigned int size) {
 }
 
 template<>
-void details::handle<VkBuffer>::reset() {
+void details::base_handle<VkBuffer>::reset() {
   safe_destroy_d(vkDestroyBuffer, this);
 }
 

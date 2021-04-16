@@ -16,7 +16,7 @@ descriptor_pool descriptor_pool::builder::build() const {
 }
 
 template<>
-void details::handle<VkDescriptorPool>::reset() {
+void details::base_handle<VkDescriptorPool>::reset() {
   safe_destroy_d(vkDestroyDescriptorPool, this);
 }
 

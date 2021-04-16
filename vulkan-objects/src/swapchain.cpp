@@ -57,7 +57,7 @@ swapchain swapchain::best_for(const physical_device * pd, const surface * s, uns
 }
 
 template<>
-void details::handle<VkSwapchainKHR>::reset() {
+void details::base_handle<VkSwapchainKHR>::reset() {
   safe_destroy_d(vkDestroySwapchainKHR, this);
 }
 

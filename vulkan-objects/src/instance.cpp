@@ -82,6 +82,6 @@ instance instance::create_for_app(const char * app_name) {
   return instance { i };
 }
 template<>
-void details::handle<VkInstance>::reset() {
+void details::base_handle<VkInstance>::reset() {
   vkDestroyInstance(pointer(), nullptr);
 }

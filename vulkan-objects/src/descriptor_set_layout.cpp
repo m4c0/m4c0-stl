@@ -16,7 +16,7 @@ descriptor_set_layout descriptor_set_layout::builder::build() const {
 }
 
 template<>
-void details::handle<VkDescriptorSetLayout>::reset() {
+void details::base_handle<VkDescriptorSetLayout>::reset() {
   safe_destroy_d(vkDestroyDescriptorSetLayout, this);
 }
 

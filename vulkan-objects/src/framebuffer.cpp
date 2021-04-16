@@ -19,7 +19,7 @@ framebuffer framebuffer::builder::build() const {
 }
 
 template<>
-void details::handle<VkFramebuffer>::reset() {
+void details::base_handle<VkFramebuffer>::reset() {
   safe_destroy_d(vkDestroyFramebuffer, this);
 }
 

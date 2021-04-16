@@ -2,7 +2,7 @@
 
 namespace m4c0::vulkan::details {
   template<class Tp>
-  struct handle {
+  struct base_handle {
     using type_t = Tp;
 
   private:
@@ -11,46 +11,52 @@ namespace m4c0::vulkan::details {
     void reset();
 
   protected:
-    explicit constexpr handle(type_t ptr) : m_ptr(ptr) {
+    explicit constexpr base_handle(type_t ptr) : m_ptr(ptr) {
     }
 
   public:
-    ~handle() {
+    ~base_handle() {
       if (m_ptr) reset();
     }
 
-    constexpr handle() = default;
-    handle(handle && o) noexcept : m_ptr(o.m_ptr) {
+    constexpr base_handle() = default;
+    base_handle(base_handle && o) noexcept : m_ptr(o.m_ptr) {
       o.m_ptr = {};
     }
-    handle & operator=(handle && o) noexcept {
+    base_handle & operator=(base_handle && o) noexcept {
       if (m_ptr && m_ptr != o.m_ptr) reset();
       m_ptr = o.m_ptr;
       o.m_ptr = {};
       return *this;
     }
 
-    handle(const handle &) = delete;
-    handle & operator=(const handle &) = delete;
+    base_handle(const base_handle &) = delete;
+    base_handle & operator=(const base_handle &) = delete;
 
     [[nodiscard]] constexpr type_t pointer() const noexcept {
       return m_ptr;
     }
   };
 
-  template<class Tp, unsigned PtSize = sizeof(void *)>
-  class nd_handle : public handle<Tp *> {
+  template<class Tp>
+  class handle : public base_handle<Tp *> {
   protected:
-    using handle<Tp *>::handle;
+    using base_handle<Tp *>::base_handle;
+  };
+
+  template<class Tp, unsigned PtSize = sizeof(void *)>
+  class nd_handle : public base_handle<Tp *> {
+  protected:
+    using base_handle<Tp *>::base_handle;
   };
 
   using ndh_t = unsigned long long;  // NOLINT(google-runtime-int)
   static_assert(sizeof(ndh_t) == 8); // NOLINT
 
   template<class Tp>
-  class nd_handle<Tp, 4> : public handle<ndh_t> {
+  class nd_handle<Tp, 4> : public base_handle<ndh_t> {
   protected:
-    using handle<ndh_t>::handle;
+    using base_handle<ndh_t>::base_handle;
   };
 
   template<class Tp>

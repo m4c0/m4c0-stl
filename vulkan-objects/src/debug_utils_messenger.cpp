@@ -68,6 +68,6 @@ debug_utils_messenger debug_utils_messenger::create() {
   };
 }
 template<>
-void details::handle<VkDebugUtilsMessengerEXT>::reset() {
+void details::base_handle<VkDebugUtilsMessengerEXT>::reset() {
   vkDestroyDebugUtilsMessengerEXT(loader::get_instance(), pointer(), nullptr);
 }

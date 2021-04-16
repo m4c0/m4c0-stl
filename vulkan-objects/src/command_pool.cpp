@@ -15,6 +15,6 @@ command_pool command_pool::create_resettable_for_queue_family(int qf) {
 }
 
 template<>
-void details::handle<VkCommandPool>::reset() {
+void details::base_handle<VkCommandPool>::reset() {
   safe_destroy_d(vkDestroyCommandPool, this);
 }

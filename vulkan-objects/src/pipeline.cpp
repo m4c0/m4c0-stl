@@ -16,7 +16,7 @@ struct pipeline::builder::bindings : std::vector<VkVertexInputBindingDescription
 struct pipeline::builder::shaders : std::vector<VkPipelineShaderStageCreateInfo> {};
 
 template<>
-void details::handle<VkPipeline>::reset() {
+void details::base_handle<VkPipeline>::reset() {
   safe_destroy_d(vkDestroyPipeline, this);
 }
 
