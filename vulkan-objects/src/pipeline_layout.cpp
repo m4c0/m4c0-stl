@@ -21,7 +21,7 @@ pipeline_layout pipeline_layout::builder::build() {
 }
 
 template<>
-void details::base_handle<VkPipelineLayout>::reset() {
+void details::base_handle<VkPipelineLayout_T>::reset() {
   safe_destroy_d(vkDestroyPipelineLayout, this);
 }
 

@@ -4,6 +4,6 @@
 using namespace m4c0::vulkan;
 
 template<>
-void details::base_handle<VkSurfaceKHR>::reset() {
+void details::base_handle<VkSurfaceKHR_T>::reset() {
   vkDestroySurfaceKHR(loader::get_instance(), pointer(), nullptr);
 }

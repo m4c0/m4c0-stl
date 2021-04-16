@@ -13,6 +13,6 @@ shader_module shader_module::create_from_spv(std::span<const std::uint32_t> spv)
 }
 
 template<>
-void details::base_handle<VkShaderModule>::reset() {
+void details::base_handle<VkShaderModule_T>::reset() {
   safe_destroy_d(vkDestroyShaderModule, this);
 }

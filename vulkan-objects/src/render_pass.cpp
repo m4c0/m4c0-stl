@@ -102,6 +102,6 @@ render_pass render_pass::create_with_opiniated_defaults_and_format(const surface
 }
 
 template<>
-void details::base_handle<VkRenderPass>::reset() {
+void details::base_handle<VkRenderPass_T>::reset() {
   safe_destroy_d(vkDestroyRenderPass, this);
 }

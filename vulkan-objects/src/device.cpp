@@ -40,6 +40,6 @@ device device::create_for_physical_device(const physical_device * pd) {
 }
 
 template<>
-void details::base_handle<VkDevice>::reset() {
+void details::base_handle<VkDevice_T>::reset() {
   vkDestroyDevice(pointer(), nullptr);
 }

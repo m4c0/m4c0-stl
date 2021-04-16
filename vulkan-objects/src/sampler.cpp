@@ -24,6 +24,6 @@ sampler sampler::create_with_opiniated_defaults() {
 }
 
 template<>
-void details::base_handle<VkSampler>::reset() {
+void details::base_handle<VkSampler_T>::reset() {
   safe_destroy_d(vkDestroySampler, this);
 }

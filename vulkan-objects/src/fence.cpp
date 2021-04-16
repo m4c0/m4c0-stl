@@ -14,7 +14,7 @@ fence fence::create_signaled() {
 }
 
 template<>
-void details::base_handle<VkFence>::reset() {
+void details::base_handle<VkFence_T>::reset() {
   safe_destroy_d(vkDestroyFence, this);
 }
 

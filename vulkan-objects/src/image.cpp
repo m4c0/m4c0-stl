@@ -33,7 +33,7 @@ image image::create_rgba_with_extent(unsigned int w, unsigned int h) {
 }
 
 template<>
-void details::base_handle<VkImage>::reset() {
+void details::base_handle<VkImage_T>::reset() {
   safe_destroy_d(vkDestroyImage, this);
 }
 

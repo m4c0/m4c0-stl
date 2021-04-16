@@ -1,9 +1,30 @@
 #pragma once
 
+struct VkDevice_T;
+struct VkInstance_T;
+
 namespace m4c0::vulkan::details {
   template<class Tp>
+  struct ptr_type_traits {
+    using handle_t = Tp *;
+  };
+  template<class Tp>
+  struct u64_type_traits {
+    using handle_t = unsigned long long; // NOLINT(google-runtime-int)
+  };
+
+  template<class Tp, bool IsPtr = true>
+  struct type_traits : ptr_type_traits<Tp> {};
+  template<>
+  struct type_traits<VkDevice_T> : ptr_type_traits<VkDevice_T> {};
+  template<>
+  struct type_traits<VkInstance_T> : ptr_type_traits<VkInstance_T> {};
+  template<class Tp>
+  struct type_traits<Tp, sizeof(void *) == 4> : u64_type_traits<Tp> {};
+
+  template<class Tp>
   struct base_handle {
-    using type_t = Tp;
+    using type_t = typename type_traits<Tp>::handle_t;
 
   private:
     type_t m_ptr;
@@ -39,24 +60,15 @@ namespace m4c0::vulkan::details {
   };
 
   template<class Tp>
-  class handle : public base_handle<Tp *> {
+  class handle : public base_handle<Tp> {
   protected:
-    using base_handle<Tp *>::base_handle;
+    using base_handle<Tp>::base_handle;
   };
-
-  template<class Tp, unsigned PtSize = sizeof(void *)>
-  class nd_handle : public base_handle<Tp *> {
-  protected:
-    using base_handle<Tp *>::base_handle;
-  };
-
-  using ndh_t = unsigned long long;  // NOLINT(google-runtime-int)
-  static_assert(sizeof(ndh_t) == 8); // NOLINT
 
   template<class Tp>
-  class nd_handle<Tp, 4> : public base_handle<ndh_t> {
+  class nd_handle : public base_handle<Tp> {
   protected:
-    using base_handle<ndh_t>::base_handle;
+    using base_handle<Tp>::base_handle;
   };
 
   template<class Tp>
