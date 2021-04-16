@@ -51,6 +51,8 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(
 }
 
 debug_utils_messenger debug_utils_messenger::create() {
+  if (vkCreateDebugUtilsMessengerEXT == nullptr) return {};
+
   VkDebugUtilsMessengerCreateInfoEXT info {};
   info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
   info.pfnUserCallback = debug_callback;
