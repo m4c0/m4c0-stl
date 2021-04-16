@@ -26,7 +26,7 @@ jobs:
         extra_configure_flags: -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 -DM4C0_ENABLE_TESTS=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64
         extra_build_flags: -- -sdk iphonesimulator
 
-  android:
+  android-x86_64:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -41,6 +41,26 @@ jobs:
         extra_configure_flags: >
           -DM4C0_ENABLE_TESTS=OFF
           -DANDROID_ABI=x86_64 
+          -DANDROID_NATIVE_API_LEVEL=26 
+          -DANDROID_TOOLCHAIN=clang 
+          -DANDROID_NDK=${{ env.ndk }}
+          -DCMAKE_TOOLCHAIN_FILE=${{ env.ndk }}/build/cmake/android.toolchain.cmake
+
+  android-x86:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - id: ndk
+      run: echo "::set-output name=ANDROID_NDK::${ANDROID_SDK_ROOT}/ndk-bundle"
+    - uses: m4c0/gha-simple-cmake@e3ac067bb0eb9eb5fbd71bfe8d3ab6d629b873db
+      env:
+        ndk: ${{ steps.ndk.outputs.ANDROID_NDK }}
+      with:
+        extra_configure_flags: >
+          -DM4C0_ENABLE_TESTS=OFF
+          -DANDROID_ABI=x86 
           -DANDROID_NATIVE_API_LEVEL=26 
           -DANDROID_TOOLCHAIN=clang 
           -DANDROID_NDK=${{ env.ndk }}
