@@ -4,4 +4,5 @@ m4c0_add_interface(
   LIBRARIES
     m4c0::vulkan::actions
     m4c0::vulkan::commands
-    m4c0::vulkan::objects)
+    m4c0::vulkan::objects
+    m4c0::vulkan::tools)

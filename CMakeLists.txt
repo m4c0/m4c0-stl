@@ -21,6 +21,7 @@ add_subdirectory(vulkan-commands)
 add_subdirectory(vulkan-dynamic)
 add_subdirectory(vulkan-objects)
 add_subdirectory(vulkan-static)
+add_subdirectory(vulkan-tools)
 
 if(APPLE)
   enable_language(OBJC OBJCXX)
