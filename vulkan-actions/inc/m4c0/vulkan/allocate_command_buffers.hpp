@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <span>
 
 using VkCommandBuffer = struct VkCommandBuffer_T *;
 
@@ -11,7 +11,6 @@ namespace m4c0::vulkan {
 namespace m4c0::vulkan::actions {
   class allocate_command_buffers {
     const command_pool * m_pool {};
-    unsigned m_size {};
 
   public:
     constexpr allocate_command_buffers() = default;
@@ -20,12 +19,9 @@ namespace m4c0::vulkan::actions {
       m_pool = cp;
       return *this;
     }
-    [[nodiscard]] allocate_command_buffers & with_size(unsigned s) noexcept {
-      m_size = s;
-      return *this;
-    }
 
-    [[nodiscard]] std::vector<VkCommandBuffer> as_primary() const;
-    [[nodiscard]] std::vector<VkCommandBuffer> as_secondary() const;
+    using span_t = std::span<VkCommandBuffer>;
+    void as_primary_into(span_t s) const;
+    void as_secondary_into(span_t s) const;
   };
 }

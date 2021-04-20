@@ -12,7 +12,8 @@ int main() {
   m4c0::vulkan::actions::device_wait_idle();
 
   m4c0::vulkan::command_pool * cp {};
-  auto cbs = m4c0::vulkan::actions::allocate_command_buffers().with_command_pool(cp).with_size(3).as_primary();
+  std::array<VkCommandBuffer, 3> cbs {};
+  m4c0::vulkan::actions::allocate_command_buffers().with_command_pool(cp).as_primary_into(cbs);
 
   auto * ds = m4c0::vulkan::actions::allocate_descriptor_sets().now();
 

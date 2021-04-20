@@ -4,29 +4,21 @@
 
 using namespace m4c0::vulkan::actions;
 
-std::vector<VkCommandBuffer> allocate_command_buffers::as_primary() const {
-  std::vector<VkCommandBuffer> result;
-  result.resize(m_size);
-
+void allocate_command_buffers::as_primary_into(span_t s) const {
   VkCommandBufferAllocateInfo info {};
   info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  info.commandBufferCount = m_size;
+  info.commandBufferCount = s.size();
   info.commandPool = m_pool->pointer();
   info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 
-  details::safe_call_d(vkAllocateCommandBuffers, &info, result.data());
-  return result;
+  details::safe_call_d(vkAllocateCommandBuffers, &info, s.data());
 }
-std::vector<VkCommandBuffer> allocate_command_buffers::as_secondary() const {
-  std::vector<VkCommandBuffer> result;
-  result.resize(m_size);
-
+void allocate_command_buffers::as_secondary_into(span_t s) const {
   VkCommandBufferAllocateInfo info {};
   info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  info.commandBufferCount = m_size;
+  info.commandBufferCount = s.size();
   info.commandPool = m_pool->pointer();
   info.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
 
-  details::safe_call_d(vkAllocateCommandBuffers, &info, result.data());
-  return result;
+  details::safe_call_d(vkAllocateCommandBuffers, &info, s.data());
 }
