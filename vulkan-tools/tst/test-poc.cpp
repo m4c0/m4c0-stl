@@ -15,4 +15,10 @@ int main() {
 
   m4c0::vulkan::tools::primary_command_buffer_list<3> pcb { d.unified_queue_family() };
   m4c0::vulkan::tools::secondary_command_buffer_list<3> scb { d.unified_queue_family() };
+
+  {
+    auto pg = pcb.begin(0);
+    // I feel like there should be some compiler-enforced way of setting the second only be achievable via the primary
+    auto sg = scb.begin(0, nullptr, nullptr);
+  }
 }
