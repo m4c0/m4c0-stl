@@ -9,11 +9,13 @@ namespace m4c0::vulkan {
 }
 namespace m4c0::vulkan::cmd {
   class set_viewport : base_command {
-    float m_width;
-    float m_height;
+    float m_width {};
+    float m_height {};
 
   public:
     using base_command::base_command;
+    explicit constexpr set_viewport(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr set_viewport & with_size(float w, float h) noexcept {
       m_width = w;

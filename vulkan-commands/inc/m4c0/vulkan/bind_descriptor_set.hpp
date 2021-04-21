@@ -13,12 +13,14 @@ namespace m4c0::vulkan::cmd {
   class bind_descriptor_set : base_command {
     using desc_set_t = details::pointer_t<VkDescriptorSet_T>;
 
-    const pipeline_layout * m_pipeline_layout;
-    desc_set_t m_descriptor_set;
+    const pipeline_layout * m_pipeline_layout {};
+    desc_set_t m_descriptor_set {};
     unsigned m_first_set {};
 
   public:
     using base_command::base_command;
+    explicit constexpr bind_descriptor_set(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr bind_descriptor_set & with_descriptor_set(desc_set_t p) noexcept {
       m_descriptor_set = p;

@@ -4,13 +4,15 @@
 
 namespace m4c0::vulkan::cmd {
   class draw : base_command {
-    unsigned m_vtx_count;
+    unsigned m_vtx_count {};
     unsigned m_vtx_first = 0;
     unsigned m_inst_count = 1;
     unsigned m_inst_first = 0;
 
   public:
     using base_command::base_command;
+    explicit constexpr draw(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr draw & with_vertex_count(unsigned v) noexcept {
       m_vtx_count = v;

@@ -8,13 +8,15 @@ namespace m4c0::vulkan {
 
 namespace m4c0::vulkan::cmd {
   class push_constants : base_command {
-    const pipeline_layout * m_pipeline_layout;
+    const pipeline_layout * m_pipeline_layout {};
     unsigned m_offset {};
-    unsigned m_length;
-    const void * m_data;
+    unsigned m_length {};
+    const void * m_data {};
 
   public:
     using base_command::base_command;
+    explicit constexpr push_constants(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr push_constants & with_pipeline_layout(const pipeline_layout * p) noexcept {
       m_pipeline_layout = p;

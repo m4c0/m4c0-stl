@@ -9,12 +9,14 @@ namespace m4c0::vulkan {
 }
 namespace m4c0::vulkan::cmd {
   class update_buffer : base_command {
-    const buffer * m_buffer;
-    unsigned m_offset;
-    std::span<void *> m_data;
+    const buffer * m_buffer {};
+    unsigned m_offset {};
+    std::span<void *> m_data {};
 
   public:
     using base_command::base_command;
+    explicit constexpr update_buffer(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr update_buffer & with_buffer(const buffer * b) noexcept {
       m_buffer = b;

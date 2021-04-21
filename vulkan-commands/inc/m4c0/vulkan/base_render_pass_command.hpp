@@ -15,8 +15,8 @@ namespace m4c0::vulkan::cmd {
 
   template<>
   class base_render_pass_command<void> : public base_command {
-    const framebuffer * m_framebuffer;
-    const render_pass * m_render_pass;
+    const framebuffer * m_framebuffer {};
+    const render_pass * m_render_pass {};
 
   protected:
     [[nodiscard]] constexpr auto * framebuffer() const noexcept {
@@ -28,6 +28,8 @@ namespace m4c0::vulkan::cmd {
 
   public:
     using base_command::base_command;
+    explicit base_render_pass_command(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] auto & with_framebuffer(const vulkan::framebuffer * fb) noexcept {
       m_framebuffer = fb;
@@ -44,6 +46,8 @@ namespace m4c0::vulkan::cmd {
     using base_render_pass_command<void>::base_render_pass_command;
 
     explicit base_render_pass_command(const base_render_pass_command<void> & o) : base_render_pass_command<void>(o) {
+    }
+    explicit base_render_pass_command(const base_command & o) : base_render_pass_command<void>(o) {
     }
 
     [[nodiscard]] Tp & with_framebuffer(const vulkan::framebuffer * fb) noexcept {

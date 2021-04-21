@@ -11,6 +11,8 @@ namespace m4c0::vulkan::cmd {
   public:
     explicit execute_commands(VkCommandBuffer cb) : base_command(cb) {
     }
+    explicit execute_commands(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] execute_commands & add_command_buffer(VkCommandBuffer cb) {
       m_cmds.push_back(cb);

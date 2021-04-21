@@ -7,12 +7,14 @@ namespace m4c0::vulkan {
 }
 namespace m4c0::vulkan::cmd {
   class bind_vertex_buffer : base_command {
-    const buffer * m_buffer;
+    const buffer * m_buffer {};
     unsigned m_first_index {};
     unsigned m_offset {};
 
   public:
     using base_command::base_command;
+    explicit constexpr bind_vertex_buffer(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr bind_vertex_buffer & with_buffer(const buffer * p) noexcept {
       m_buffer = p;

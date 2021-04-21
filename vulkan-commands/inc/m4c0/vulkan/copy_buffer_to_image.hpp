@@ -8,14 +8,16 @@ namespace m4c0::vulkan {
 }
 namespace m4c0::vulkan::cmd {
   class copy_buffer_to_image : base_command {
-    const buffer * m_source;
-    unsigned m_source_offset;
-    const image * m_target;
-    unsigned m_target_width;
-    unsigned m_target_height;
+    const buffer * m_source {};
+    unsigned m_source_offset {};
+    const image * m_target {};
+    unsigned m_target_width {};
+    unsigned m_target_height {};
 
   public:
     using base_command::base_command;
+    explicit constexpr copy_buffer_to_image(const base_command & o) : base_command(o) {
+    }
 
     [[nodiscard]] constexpr copy_buffer_to_image & with_source_buffer(const buffer * src) noexcept {
       m_source = src;
