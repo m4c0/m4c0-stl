@@ -44,10 +44,12 @@ int main() {
   end_command_buffer(cb).now();
 
   VkCommandBuffer cb2 {};
-  begin_render_pass_continue(cb2).with_render_pass(&rp).with_framebuffer(&fb).now();
+  auto base_rpc = base_render_pass_command<void>(cb2).with_framebuffer(&fb).with_render_pass(&rp);
 
-  begin_render_pass(cb2).with_render_pass(&rp).with_framebuffer(&fb).with_clear_color(1, 1, 0, 0).now();
-  end_render_pass(cb2).now();
+  begin_render_pass_continue(base_rpc).now();
+
+  begin_render_pass(base_rpc).with_clear_color(1, 1, 0, 0).now();
+  end_render_pass(base_rpc).now();
 
   execute_commands(cb).add_command_buffer(cb2).now();
 

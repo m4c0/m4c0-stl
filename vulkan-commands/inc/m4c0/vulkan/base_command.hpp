@@ -2,7 +2,7 @@
 
 using VkCommandBuffer = struct VkCommandBuffer_T *;
 
-namespace m4c0::vulkan {
+namespace m4c0::vulkan::cmd {
   class base_command {
     VkCommandBuffer m_cmd_buf;
 

@@ -14,8 +14,8 @@ void begin_render_pass::now() const {
 
   VkRenderPassBeginInfo info {};
   info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-  info.renderPass = m_render_pass->pointer();
-  info.framebuffer = m_framebuffer->pointer();
+  info.renderPass = render_pass()->pointer();
+  info.framebuffer = framebuffer()->pointer();
   info.renderArea.extent.width = m_width;
   info.renderArea.extent.height = m_height;
   info.clearValueCount = values.size();

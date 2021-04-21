@@ -8,8 +8,8 @@ using namespace m4c0::vulkan::cmd;
 void begin_render_pass_continue::now() const {
   VkCommandBufferInheritanceInfo inheritance {};
   inheritance.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
-  inheritance.framebuffer = m_framebuffer->pointer();
-  inheritance.renderPass = m_render_pass->pointer();
+  inheritance.framebuffer = framebuffer()->pointer();
+  inheritance.renderPass = render_pass()->pointer();
 
   VkCommandBufferBeginInfo info {};
   info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
