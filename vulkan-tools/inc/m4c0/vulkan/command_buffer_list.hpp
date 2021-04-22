@@ -27,6 +27,7 @@ namespace m4c0::vulkan::tools {
       : m_pool(command_pool::create_resettable_for_queue_family(queue_family)) {
     }
 
+  public:
     [[nodiscard]] auto at(unsigned idx) const noexcept {
       return m_buffers[idx];
     }
