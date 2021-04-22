@@ -18,6 +18,10 @@ namespace m4c0::vulkan::cmd {
       m_cmds.push_back(cb);
       return *this;
     }
+    [[nodiscard]] execute_commands & add_command_buffer(base_command cb) {
+      m_cmds.push_back(cb.pointer());
+      return *this;
+    }
 
     void now() const;
   };
