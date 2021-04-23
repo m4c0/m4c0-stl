@@ -7,6 +7,8 @@
 #include "m4c0/vulkan/queue_submit.hpp"
 #include "m4c0/vulkan/update_descriptor_sets.hpp"
 
+#include <array>
+
 // TODO: improve these with a more realistic example
 int main() {
   m4c0::vulkan::actions::device_wait_idle();

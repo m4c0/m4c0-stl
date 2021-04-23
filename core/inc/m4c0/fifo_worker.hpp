@@ -3,6 +3,7 @@
 #include "m4c0/function.hpp"
 
 #include <mutex>
+#include <vector>
 
 namespace m4c0 {
   template<typename Param>

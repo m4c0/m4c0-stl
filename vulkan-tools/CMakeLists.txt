@@ -7,8 +7,10 @@ m4c0_add_interface(
     m4c0::vulkan::objects
   )
 
-m4c0_add_test(
-  TARGET m4c0-vulkan-tools-test-poc
-  SOURCES tst/test-poc.cpp
-  LIBRARIES m4c0::vulkan::tools
-  )
+if(NOT(CMAKE_SYSTEM_NAME STREQUAL "iOS"))
+  m4c0_add_test(
+    TARGET m4c0-vulkan-tools-test-poc
+    SOURCES tst/test-poc.cpp
+    LIBRARIES m4c0::vulkan::tools
+    )
+endif()
