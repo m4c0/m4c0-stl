@@ -9,7 +9,7 @@
 using namespace m4c0::vulkan;
 
 static std::vector<const char *> get_layers() {
-  const char * dump_api_env = std::getenv("BSG_VULKAN_API_DUMP");
+  const char * dump_api_env = std::getenv("M4C0_VULKAN_API_DUMP");
   const bool dump_api = (dump_api_env != nullptr) && (std::string_view { dump_api_env } == "1");
   if (dump_api) {
     m4c0::log::debug("API dump requested");
