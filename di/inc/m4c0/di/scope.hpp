@@ -66,4 +66,39 @@ namespace m4c0::di {
     static_bind & operator=(static_bind &&) = delete;
     static_bind & operator=(const static_bind &) = delete;
   };
+
+  /// \brief RAII guard of a scope
+  ///
+  /// This helps defining the lifecycle of a scope. Example:
+  ///
+  ///   m4c0::di::scope * my_scope();
+  ///
+  ///   struct my_obj {
+  ///     void do_something();
+  ///   };
+  ///   static m4c0::di::static_bind<my_scope, my_object> b;
+  ///
+  ///   void use_scope() {
+  ///     m4c0::di::scope_guard<my_scope> guard;
+  ///     guard->get<my_obj>()->do_something();
+  ///   }
+  ///
+  /// The scope gets reset when the guard is destructed.
+  template<m4c0::di::scope * (*Scope)()>
+  struct scope_guard {
+    scope_guard() noexcept = default;
+    ~scope_guard() {
+      Scope()->reset();
+    }
+
+    scope_guard(scope_guard &&) = delete;
+    scope_guard(const scope_guard &) = delete;
+    scope_guard & operator=(scope_guard &&) = delete;
+    scope_guard & operator=(const scope_guard &) = delete;
+
+    template<class Tp>
+    auto get() const {
+      return Scope()->get<Tp>();
+    }
+  };
 }
