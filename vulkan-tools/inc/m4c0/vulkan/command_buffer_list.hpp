@@ -58,6 +58,12 @@ namespace m4c0::vulkan::tools {
       parent_t::allocate().as_secondary_into(parent_t::buffers());
     }
 
+    [[nodiscard]] command_buffer_guard begin(unsigned index, const render_pass * rp) const {
+      auto cb = parent_t::at(index);
+      cmd::begin_render_pass_continue(cb).with_render_pass(rp).now();
+      return command_buffer_guard { cb };
+    }
+
     [[nodiscard]] command_buffer_guard begin(unsigned index, const framebuffer * fb, const render_pass * rp) const {
       auto cb = parent_t::at(index);
       cmd::begin_render_pass_continue(cb).with_framebuffer(fb).with_render_pass(rp).now();
