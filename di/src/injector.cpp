@@ -25,12 +25,11 @@ namespace {
 
 class injector::data {
   type_map<linked_instance> m_map {};
-  std::vector<char> m_buffer {};
+  std::vector<char> m_buffer;
   linked_instance * m_top {};
 
 public:
-  explicit data(unsigned size) {
-    m_buffer.reserve(size);
+  explicit data(unsigned size) : m_buffer(size, '\0') {
   }
   ~data() {
     cleanup();
