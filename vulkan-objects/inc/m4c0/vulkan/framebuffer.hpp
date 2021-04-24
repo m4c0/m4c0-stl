@@ -11,7 +11,8 @@ namespace m4c0::vulkan {
   class image_view;
   class render_pass;
 
-  struct framebuffer : details::nd_handle<VkFramebuffer_T> {
+  class framebuffer : public details::nd_handle<VkFramebuffer_T> {
+  public:
     class builder {
       unsigned m_width;
       unsigned m_height;

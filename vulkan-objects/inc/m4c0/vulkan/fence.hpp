@@ -5,7 +5,8 @@
 struct VkFence_T;
 
 namespace m4c0::vulkan {
-  struct fence : details::nd_handle<VkFence_T> {
+  class fence : public details::nd_handle<VkFence_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static fence create_signaled();
 

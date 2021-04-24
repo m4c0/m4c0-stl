@@ -6,7 +6,8 @@
 struct VkDescriptorSetLayout_T;
 
 namespace m4c0::vulkan {
-  struct descriptor_set_layout : details::nd_handle<VkDescriptorSetLayout_T> {
+  class descriptor_set_layout : public details::nd_handle<VkDescriptorSetLayout_T> {
+  public:
     class builder {
       class set_layout_bindings;
       pimpl<set_layout_bindings> m_bindings {};

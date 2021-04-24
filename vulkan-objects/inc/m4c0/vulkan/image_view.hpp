@@ -9,7 +9,8 @@ namespace m4c0::vulkan {
   class image;
   class surface_format;
 
-  struct image_view : details::nd_handle<VkImageView_T> {
+  class image_view : public details::nd_handle<VkImageView_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static image_view create_rgba_for_image_and_format(
         details::pointer_t<VkImage_T> img,

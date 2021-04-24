@@ -7,7 +7,8 @@ struct VkDevice_T;
 namespace m4c0::vulkan {
   class physical_device;
 
-  struct device : details::handle<VkDevice_T> {
+  class device : public details::handle<VkDevice_T> {
+  public:
     using handle::handle;
 
     [[nodiscard]] static device create_for_physical_device(const physical_device * pd);

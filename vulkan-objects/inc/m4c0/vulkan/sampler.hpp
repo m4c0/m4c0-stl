@@ -5,7 +5,8 @@
 struct VkSampler_T;
 
 namespace m4c0::vulkan {
-  struct sampler : details::nd_handle<VkSampler_T> {
+  class sampler : public details::nd_handle<VkSampler_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static sampler create_with_opiniated_defaults();
   };

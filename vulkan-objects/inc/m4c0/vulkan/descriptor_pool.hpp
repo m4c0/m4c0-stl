@@ -6,7 +6,8 @@
 struct VkDescriptorPool_T;
 
 namespace m4c0::vulkan {
-  struct descriptor_pool : details::nd_handle<VkDescriptorPool_T> {
+  class descriptor_pool : public details::nd_handle<VkDescriptorPool_T> {
+  public:
     class builder {
       class pool_sizes;
 

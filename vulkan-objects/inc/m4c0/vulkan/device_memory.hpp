@@ -10,7 +10,8 @@ namespace m4c0::vulkan {
   class memory_requirements;
   class physical_device;
 
-  struct device_memory : details::nd_handle<VkDeviceMemory_T> {
+  class device_memory : public details::nd_handle<VkDeviceMemory_T> {
+  public:
     // TODO: move this guard to a different module
     class map_guard {
       type_t m_handle;

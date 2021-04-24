@@ -7,7 +7,8 @@ struct VkBuffer_T;
 namespace m4c0::vulkan {
   struct memory_requirements;
 
-  struct buffer : details::nd_handle<VkBuffer_T> {
+  class buffer : public details::nd_handle<VkBuffer_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static buffer create_transfer_source_with_size(unsigned size);
     [[nodiscard]] static buffer create_vertex_buffer_with_size(unsigned size);

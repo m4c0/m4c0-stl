@@ -23,7 +23,8 @@ namespace m4c0::vulkan::details {
   struct type_traits<Tp, sizeof(void *) == 4> : u64_type_traits<Tp> {};
 
   template<class Tp>
-  struct base_handle {
+  class base_handle {
+  public:
     using type_t = typename type_traits<Tp>::handle_t;
 
   private:

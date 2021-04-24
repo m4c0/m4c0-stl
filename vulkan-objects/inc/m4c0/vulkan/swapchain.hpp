@@ -12,7 +12,8 @@ namespace m4c0::vulkan {
   class semaphore;
   class surface;
 
-  struct swapchain : details::nd_handle<VkSwapchainKHR_T> {
+  class swapchain : public details::nd_handle<VkSwapchainKHR_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static swapchain best_for(const physical_device * pd, const surface * s, unsigned w, unsigned h);
 

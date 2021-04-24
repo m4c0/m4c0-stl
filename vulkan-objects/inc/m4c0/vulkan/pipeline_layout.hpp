@@ -8,7 +8,8 @@ struct VkPipelineLayout_T;
 namespace m4c0::vulkan {
   class descriptor_set_layout;
 
-  struct pipeline_layout : details::nd_handle<VkPipelineLayout_T> {
+  class pipeline_layout : public details::nd_handle<VkPipelineLayout_T> {
+  public:
     class builder {
       class set_layouts;
       class push_constants;

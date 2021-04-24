@@ -5,7 +5,8 @@
 struct VkDebugUtilsMessengerEXT_T;
 
 namespace m4c0::vulkan {
-  struct debug_utils_messenger : details::nd_handle<VkDebugUtilsMessengerEXT_T> {
+  class debug_utils_messenger : public details::nd_handle<VkDebugUtilsMessengerEXT_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static debug_utils_messenger create();
   };

@@ -5,7 +5,8 @@
 struct VkCommandPool_T;
 
 namespace m4c0::vulkan {
-  struct command_pool : details::nd_handle<VkCommandPool_T> {
+  class command_pool : public details::nd_handle<VkCommandPool_T> {
+  public:
     using nd_handle::nd_handle;
     [[nodiscard]] static command_pool create_resettable_for_queue_family(int qf);
   };

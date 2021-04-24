@@ -10,7 +10,8 @@ namespace m4c0::vulkan {
   class render_pass;
   class shader_module;
 
-  struct pipeline : details::nd_handle<VkPipeline_T> {
+  class pipeline : public details::nd_handle<VkPipeline_T> {
+  public:
     using nd_handle::nd_handle;
 
     class builder {
