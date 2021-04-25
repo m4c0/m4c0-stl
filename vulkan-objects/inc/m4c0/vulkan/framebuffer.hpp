@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/vulkan/extent_2d.hpp"
 #include "m4c0/vulkan/handle.hpp"
 
 #include <vector>
@@ -24,6 +25,9 @@ namespace m4c0::vulkan {
         m_width = w;
         m_height = h;
         return *this;
+      }
+      [[nodiscard]] builder & with_extent(extent_2d e) {
+        return with_extent(e.width(), e.height());
       }
       [[nodiscard]] builder & with_render_pass(const render_pass * rp) {
         m_render_pass = rp;

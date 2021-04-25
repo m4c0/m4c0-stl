@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/vulkan/base_command.hpp"
+#include "m4c0/vulkan/extent_2d.hpp"
 
 #include <span>
 
@@ -21,6 +22,9 @@ namespace m4c0::vulkan::cmd {
       m_width = w;
       m_height = h;
       return *this;
+    }
+    [[nodiscard]] constexpr set_viewport & with_size(extent_2d e) noexcept {
+      return with_size(e.width(), e.height());
     }
 
     void now() const;

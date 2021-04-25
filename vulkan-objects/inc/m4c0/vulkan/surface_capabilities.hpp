@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/pimpl.hpp"
+#include "m4c0/vulkan/extent_2d.hpp"
 
 struct VkSurfaceCapabilitiesKHR;
 
@@ -20,5 +21,8 @@ namespace m4c0::vulkan {
 
     [[nodiscard]] unsigned normalize_height(unsigned h) const;
     [[nodiscard]] unsigned normalize_width(unsigned w) const;
+    [[nodiscard]] extent_2d normalize_extent(extent_2d e) const {
+      return { normalize_width(e.width()), normalize_height(e.height()) };
+    }
   };
 }

@@ -42,6 +42,9 @@ namespace m4c0::vulkan::tools {
     [[nodiscard]] swapchain best_swapchain_with_size(unsigned w, unsigned h) const {
       return swapchain::best_for(&m_physical_device, &m_surface, w, h);
     }
+    [[nodiscard]] swapchain best_swapchain_with_size(extent_2d e) const {
+      return best_swapchain_with_size(e.width(), e.height());
+    }
 
     [[nodiscard]] constexpr const physical_device * physical_device() const noexcept {
       return &m_physical_device;

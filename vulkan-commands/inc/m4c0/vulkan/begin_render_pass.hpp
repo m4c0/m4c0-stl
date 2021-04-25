@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/vulkan/base_render_pass_command.hpp"
+#include "m4c0/vulkan/extent_2d.hpp"
 
 #include <cstdint>
 
@@ -23,6 +24,9 @@ namespace m4c0::vulkan::cmd {
       m_width = w;
       m_height = h;
       return *this;
+    }
+    [[nodiscard]] begin_render_pass & with_extent(extent_2d e) noexcept {
+      return with_extent(e.width(), e.height());
     }
     [[nodiscard]] begin_render_pass & with_clear_color(float r, float g, float b, float a) noexcept {
       m_clear_color_r = r;
