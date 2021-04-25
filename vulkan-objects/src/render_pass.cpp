@@ -100,6 +100,10 @@ render_pass render_pass::create_with_opiniated_defaults_and_format(const surface
   info.pDependencies = dependencies.data();
   return render_pass { details::safe_create_d<VkRenderPass>(vkCreateRenderPass, &info) };
 }
+render_pass render_pass::create_opiniated(const physical_device * pd, const surface * s) {
+  auto sf = surface_format::best_from_device_and_surface(pd, s);
+  return create_with_opiniated_defaults_and_format(&sf);
+}
 
 template<>
 void details::base_handle<VkRenderPass_T>::reset() {

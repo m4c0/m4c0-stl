@@ -5,6 +5,7 @@
 #include "m4c0/vulkan/instance.hpp"
 #include "m4c0/vulkan/physical_device.hpp"
 #include "m4c0/vulkan/queue.hpp"
+#include "m4c0/vulkan/render_pass.hpp"
 #include "m4c0/vulkan/surface.hpp"
 #include "m4c0/vulkan/surface_capabilities.hpp"
 #include "m4c0/vulkan/surface_format.hpp"
@@ -29,6 +30,9 @@ namespace m4c0::vulkan::tools {
       , m_unified_queue(queue::get_for_family(m_physical_device.unified_queue_family())) {
     }
 
+    [[nodiscard]] render_pass best_render_pass() const {
+      return render_pass::create_opiniated(&m_physical_device, &m_surface);
+    }
     [[nodiscard]] surface_capabilities best_surface_capabilities() const {
       return surface_capabilities::for_physical_device_and_surface(&m_physical_device, &m_surface);
     }
