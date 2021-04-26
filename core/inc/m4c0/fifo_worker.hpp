@@ -6,9 +6,9 @@
 #include <vector>
 
 namespace m4c0 {
-  template<typename Param>
+  template<typename... Param>
   class fifo_worker {
-    using action = function<void(Param)>;
+    using action = function<void(Param...)>;
 
     std::mutex m_mutex {};
     std::vector<action> m_prev_q {};
@@ -27,11 +27,12 @@ namespace m4c0 {
       std::lock_guard lock { m_mutex };
       m_next_q.push_back(std::forward<action>(a));
     }
-    void process(Param p) {
+    template<class... Args>
+    void process(Args &&... p) {
       flip();
 
       for (auto & q : m_cur_q) {
-        q(p);
+        q(std::forward<Args>(p)...);
       }
     }
   };
