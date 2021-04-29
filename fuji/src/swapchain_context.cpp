@@ -13,7 +13,7 @@ swapchain_context::swapchain_context(const device_context * ld, vulkan::extent_2
   , m_depth_buffer(ld, m_render_extent)
   , m_present_q { ld->unified_queue() } {
   int i = 0;
-  for (auto * img : m_swapchain.get_images()) {
+  for (vulkan::details::pointer_t<VkImage_T> img : m_swapchain.get_images()) {
     m_frames.emplace_back(ld, m_render_extent, img, m_depth_buffer.image_view(), i++);
   }
 }
