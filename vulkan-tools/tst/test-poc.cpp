@@ -1,4 +1,9 @@
+#include "m4c0/vulkan/buffer.hpp"
+#include "m4c0/vulkan/buffer_memory_bind.hpp"
 #include "m4c0/vulkan/command_buffer_list.hpp"
+#include "m4c0/vulkan/device_memory.hpp"
+#include "m4c0/vulkan/image.hpp"
+#include "m4c0/vulkan/image_memory_bind.hpp"
 #include "m4c0/vulkan/logical_device.hpp"
 #include "m4c0/vulkan/queue_submit.hpp"
 #include "m4c0/vulkan/typed_semaphore.hpp"
@@ -9,6 +14,17 @@ struct other_semaphore : public m4c0::vulkan::tools::typed_semaphore<other_semap
 void use_my_semaphore(const my_semaphore * signal, const other_semaphore * wait) {
   m4c0::vulkan::actions::queue_submit().with_signal_semaphore(signal).with_wait_semaphore(wait).now();
 }
+
+class bound_image {
+  m4c0::vulkan::image img { /* ... */ };
+  m4c0::vulkan::device_memory mem { /* ... */ };
+  m4c0::vulkan::tools::image_memory_bind bind { &img, &mem };
+};
+class bound_buffer {
+  m4c0::vulkan::buffer buf { /* ... */ };
+  m4c0::vulkan::device_memory mem { /* ... */ };
+  m4c0::vulkan::tools::buffer_memory_bind bind { &buf, &mem };
+};
 
 int main() {
   m4c0::vulkan::tools::logical_device d { "test-app", nullptr };
