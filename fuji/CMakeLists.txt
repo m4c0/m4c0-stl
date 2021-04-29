@@ -5,7 +5,9 @@ m4c0_add_library(
     m4c0::vulkan
   SOURCES
     src/device_context.cpp
+    src/depth_buffer.cpp
     src/frame_context.cpp
+    src/swapchain_context.cpp
   )
 
 if(NOT(CMAKE_SYSTEM_NAME STREQUAL "iOS"))
