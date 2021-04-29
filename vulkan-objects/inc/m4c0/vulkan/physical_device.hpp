@@ -5,7 +5,7 @@
 using VkPhysicalDevice = struct VkPhysicalDevice_T *;
 
 namespace m4c0::vulkan {
-  struct surface;
+  class surface;
 
   class physical_device {
     VkPhysicalDevice m_handle;

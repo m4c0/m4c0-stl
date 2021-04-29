@@ -6,7 +6,7 @@
 struct VkImage_T;
 
 namespace m4c0::vulkan {
-  struct memory_requirements;
+  class memory_requirements;
 
   class image : public details::nd_handle<VkImage_T> {
   public:

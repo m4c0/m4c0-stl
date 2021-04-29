@@ -5,7 +5,7 @@
 struct VkBuffer_T;
 
 namespace m4c0::vulkan {
-  struct memory_requirements;
+  class memory_requirements;
 
   class buffer : public details::nd_handle<VkBuffer_T> {
   public:
