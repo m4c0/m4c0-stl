@@ -12,13 +12,14 @@ namespace m4c0::fuji {
   class swapchain_context;
 
   class main_loop {
-    using cmd_buf = VkCommandBuffer;
-
     class interrupted_exception : public std::exception {};
 
     m4c0::fifo_worker<> m_notifications {};
     std::atomic_uint32_t m_window_width {};
     std::atomic_uint32_t m_window_height {};
+
+  protected:
+    using cmd_buf = VkCommandBuffer;
 
     virtual void build_primary(cmd_buf cb) {
     }
@@ -38,6 +39,7 @@ namespace m4c0::fuji {
   public:
     void interrupt();
     void window_resized(unsigned w, unsigned h);
+
     virtual void run_global(const char * name, vulkan::native_ptr_t native_ptr);
   };
 }
