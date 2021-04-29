@@ -15,6 +15,8 @@ Take everything here as unstable (or, at least WIP).
 
 * **Core** - Convenience classes
 * **DI** - Dependency injection with some scope management
+* **Fuji** - Small Vulkan framework which provides a small overridable main 
+  loop
 * **iOS Main** - Main loop for Metal-based iOS apps. It does **not** sign or
   package.
 * **Log** - Simple native logging. It wraps each supported platform log API in
