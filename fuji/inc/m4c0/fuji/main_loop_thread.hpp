@@ -14,6 +14,7 @@ namespace m4c0::fuji {
   template<>
   class main_loop_thread<void> {
   public:
+    virtual void start(const char * name, vulkan::native_ptr_t native_ptr) = 0;
     virtual void interrupt() = 0;
     virtual void window_resized(unsigned w, unsigned h) = 0;
   };
@@ -25,16 +26,20 @@ namespace m4c0::fuji {
     std::thread m_thread;
 
   public:
-    explicit main_loop_thread(const char * name, vulkan::native_ptr_t native_ptr)
-      : m_loop()
-      , m_thread(&main_loop::run_global, &m_loop, name, native_ptr) {
+    void start(const char * name, vulkan::native_ptr_t native_ptr) override {
+      if (m_thread.joinable()) {
+        interrupt();
+      }
+      m_thread = std::thread { &main_loop::run_global, &m_loop, name, native_ptr };
       m4c0::log::info("Vulkan thread starting");
     }
 
     void interrupt() override {
+      m4c0::log::info("Vulkan thread ending");
       m_loop.interrupt();
       m_thread.join();
     }
+
     void window_resized(unsigned w, unsigned h) override {
       m_loop.window_resized(w, h);
     }

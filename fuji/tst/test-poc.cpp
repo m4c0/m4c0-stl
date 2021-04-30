@@ -14,7 +14,8 @@ class my_main_loop : public m4c0::fuji::main_loop {
 int main() {
   m4c0::vulkan::native_ptr_t native_stuff {}; // Get this somewhere else
 
-  m4c0::fuji::main_loop_thread<my_main_loop> thread { "My App", native_stuff };
+  m4c0::fuji::main_loop_thread<my_main_loop> thread {};
+  thread.start("My App", native_stuff);
   thread.window_resized(800, 600); // NOLINT
   // Wait somewhere else
   thread.interrupt();
