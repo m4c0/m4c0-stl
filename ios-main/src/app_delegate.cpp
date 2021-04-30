@@ -42,7 +42,7 @@ static void * create_window() {
   return objc_msg_send<void *>(wnd, "retain");
 }
 
-static BOOL app_did_finish_launching(void * self) {
+static BOOL app_did_finish_launching(void * self, void * sel) {
   window = create_window();
   return YES;
 }

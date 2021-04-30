@@ -3,7 +3,7 @@
 #include "m4c0/objc/inject.hpp"
 #include "m4c0/objc/middleware.hpp"
 
-static auto dummy(void * /*self*/) {
+static auto dummy(void * /*self*/, void * /*sel*/) {
   return 3;
 }
 
@@ -13,5 +13,5 @@ int main() {
   m4c0::objc::autorelease_pool pool;
 
   void * obj = m4c0::objc::middleware::instance().create_for_class("NSString");
-  return dummy(nullptr) - m4c0::objc::objc_msg_send<int>(obj, "length");
+  return dummy(nullptr, nullptr) - m4c0::objc::objc_msg_send<int>(obj, "length");
 }
