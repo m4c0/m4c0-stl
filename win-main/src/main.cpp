@@ -30,7 +30,7 @@ static void register_class(HINSTANCE h_instance) {
 static void create_window(HINSTANCE h_instance, int show) {
   auto hwnd = CreateWindow(
       _T(window_class),
-      _T(m4c0::win::window_title()),
+      _T("App"),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,
@@ -64,6 +64,6 @@ int CALLBACK WinMain(
   create_window(h_instance, cmd_show);
   return main_loop();
 } catch (const std::exception & e) {
-  MessageBox(NULL, _T(e.what()), _T(m4c0::win::window_title()), NULL);
+  MessageBox(NULL, _T(e.what()), _T("Unhandled error"), NULL);
   return 1;
 }
