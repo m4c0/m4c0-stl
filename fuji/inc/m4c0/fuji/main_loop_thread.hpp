@@ -16,7 +16,6 @@ namespace m4c0::fuji {
   public:
     virtual void start(const char * name, vulkan::native_ptr_t native_ptr) = 0;
     virtual void interrupt() = 0;
-    virtual void window_resized(unsigned w, unsigned h) = 0;
   };
 
   /// \brief Convenience for running a main_loop in a different thread
@@ -38,10 +37,6 @@ namespace m4c0::fuji {
       m4c0::log::info("Vulkan thread ending");
       m_loop.interrupt();
       m_thread.join();
-    }
-
-    void window_resized(unsigned w, unsigned h) override {
-      m_loop.window_resized(w, h);
     }
   };
 }

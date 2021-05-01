@@ -77,9 +77,6 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
 }
 
 void main_loop::run_device(const m4c0::fuji::device_context * ld) {
-  while (m_window_width == 0) {
-    std::this_thread::yield();
-  }
   while (true) {
     m4c0::fuji::swapchain_context sc { ld };
     run_extent(ld, &sc);
@@ -100,8 +97,4 @@ void main_loop::interrupt() {
     m4c0::vulkan::actions::device_wait_idle();
     throw interrupted_exception();
   });
-}
-void main_loop::window_resized(unsigned w, unsigned h) {
-  m_window_height = h;
-  m_window_width = w;
 }
