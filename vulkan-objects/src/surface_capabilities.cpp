@@ -18,6 +18,10 @@ surface_capabilities surface_capabilities::for_physical_device_and_surface(
   return surface_capabilities { cap };
 }
 
+extent_2d surface_capabilities::current_extent() const {
+  return extent_2d { m_data->currentExtent.width, m_data->currentExtent.height };
+}
+
 unsigned surface_capabilities::normalize_height(unsigned h) const {
   if (m_data->currentExtent.height != std::numeric_limits<uint32_t>::max()) {
     return m_data->currentExtent.height;

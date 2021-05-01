@@ -81,7 +81,7 @@ void main_loop::run_device(const m4c0::fuji::device_context * ld) {
     std::this_thread::yield();
   }
   while (true) {
-    m4c0::fuji::swapchain_context sc { ld, { m_window_width, m_window_height } };
+    m4c0::fuji::swapchain_context sc { ld };
     run_extent(ld, &sc);
   }
 }

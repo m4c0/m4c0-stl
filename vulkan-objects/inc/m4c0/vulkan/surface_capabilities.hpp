@@ -19,6 +19,8 @@ namespace m4c0::vulkan {
         const physical_device * pd,
         const surface * s);
 
+    [[nodiscard]] extent_2d current_extent() const;
+
     [[nodiscard]] unsigned normalize_height(unsigned h) const;
     [[nodiscard]] unsigned normalize_width(unsigned w) const;
     [[nodiscard]] extent_2d normalize_extent(extent_2d e) const {
