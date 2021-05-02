@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/library-utils.cmake)
 include(cmake/test-utils.cmake)
 
+add_subdirectory(assets)
 add_subdirectory(core)
 add_subdirectory(di)
 add_subdirectory(ext)
