@@ -1,4 +1,9 @@
+#include "m4c0/droid/main.hpp"
+
 #include <cstdint>
+
+void m4c0::droid::handle_command(glue_app * app, glue_command cmd) {
+}
 
 class ANativeActivity;
 extern "C" void ANativeActivity_onCreate(ANativeActivity * activity, void * saved_state, size_t saved_state_size);

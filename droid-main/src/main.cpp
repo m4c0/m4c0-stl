@@ -1,14 +1,13 @@
 #include "glue/android_native_app_glue.h"
+#include "m4c0/droid/main.hpp"
 
 static void handle_command(android_app * app, int32_t cmd) {
-  switch (cmd) {
-  case APP_CMD_INIT_WINDOW:
-    break;
-  case APP_CMD_STOP:
+  m4c0::droid::glue_app ga { app };
+  m4c0::droid::glue_command gc { cmd };
+  m4c0::droid::handle_command(&ga, gc);
+
+  if (cmd == APP_CMD_STOP) {
     ANativeActivity_finish(app->activity);
-    break;
-  case APP_CMD_TERM_WINDOW:
-    break;
   }
 }
 
