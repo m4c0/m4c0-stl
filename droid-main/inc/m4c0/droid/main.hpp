@@ -2,6 +2,9 @@
 
 class android_app;
 
+struct AAssetManager;
+struct ANativeWindow;
+
 namespace m4c0::droid {
   class glue_app {
     android_app * m_glue;
@@ -9,6 +12,9 @@ namespace m4c0::droid {
   public:
     glue_app(android_app * app) : m_glue(app) {
     }
+
+    [[nodiscard]] AAssetManager * asset_manager();
+    [[nodiscard]] ANativeWindow * window();
   };
 
   // This is in the same order as defined by the "glue" to allow a direct conversion from an int

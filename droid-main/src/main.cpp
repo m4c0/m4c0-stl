@@ -28,3 +28,10 @@ void android_main(android_app * app) {
     process_command(app);
   } while (app->destroyRequested == 0);
 }
+
+struct AAssetManager * m4c0::droid::glue_app::asset_manager() {
+  return m_glue->activity->assetManager;
+}
+struct ANativeWindow * m4c0::droid::glue_app::window() {
+  return m_glue->window;
+}
