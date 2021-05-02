@@ -4,7 +4,7 @@
 static void handle_command(android_app * app, int32_t cmd) {
   m4c0::droid::glue_app ga { app };
   m4c0::droid::glue_command gc { cmd };
-  m4c0::droid::handle_command(&ga, gc);
+  m4c0::droid::handle_command(ga, gc);
 
   if (cmd == APP_CMD_STOP) {
     ANativeActivity_finish(app->activity);

@@ -10,8 +10,14 @@ namespace m4c0::droid {
     android_app * m_glue;
 
   public:
-    glue_app(android_app * app) : m_glue(app) {
+    explicit glue_app(android_app * app) : m_glue(app) {
     }
+
+    ~glue_app() = default;
+    glue_app(const glue_app &) = default;
+    glue_app(glue_app &&) = delete;
+    glue_app & operator=(const glue_app &) = default;
+    glue_app & operator=(glue_app &&) = delete;
 
     [[nodiscard]] AAssetManager * asset_manager();
     [[nodiscard]] ANativeWindow * window();
@@ -37,5 +43,5 @@ namespace m4c0::droid {
     destroy,
   };
 
-  void handle_command(glue_app * app, glue_command cmd);
+  void handle_command(glue_app app, glue_command cmd);
 }
