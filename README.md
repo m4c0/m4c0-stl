@@ -15,6 +15,8 @@ Take everything here as unstable (or, at least WIP).
 
 * **Core** - Convenience classes
 * **DI** - Dependency injection with some scope management
+* **Droid Main** - Main loop for Android apps. Uses Android's glue code, but
+  this will be eventually replaced
 * **Fuji** - Small Vulkan framework which provides a small overridable main 
   loop
 * **iOS Main** - Main loop for Metal-based iOS apps. It does **not** sign or
@@ -42,3 +44,9 @@ Take everything here as unstable (or, at least WIP).
   provides the same signature but it is compatible with static linkage. Mainly
   used in iOS/OSX to avoid codesigning MoltenVK independently.
 
+## Third-party code
+
+This is a list of code that is included as-is under a different license:
+
+* `droid-main/src/glue` - distributed under the terms of the NOTICE file
+  contained in that directory
