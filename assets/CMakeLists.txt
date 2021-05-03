@@ -5,6 +5,7 @@ m4c0_add_library(
 
 if(ANDROID)
   target_sources(m4c0-assets PRIVATE src/simple_asset.android.cpp)
+  target_link_libraries(m4c0-assets PUBLIC android)
 elseif(APPLE)
   target_sources(m4c0-assets PRIVATE src/simple_asset.apple.cpp)
   target_link_libraries(m4c0-assets PUBLIC "-framework CoreFoundation")
