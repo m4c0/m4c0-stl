@@ -14,7 +14,7 @@ namespace m4c0::fuji {
   template<>
   class main_loop_thread<void> {
   public:
-    virtual void start(const char * name, vulkan::native_ptr_t native_ptr) = 0;
+    virtual void start(const char * name, const vulkan::native_provider * native_ptr) = 0;
     virtual void interrupt() = 0;
   };
 
@@ -25,7 +25,7 @@ namespace m4c0::fuji {
     std::thread m_thread;
 
   public:
-    void start(const char * name, vulkan::native_ptr_t native_ptr) override {
+    void start(const char * name, const vulkan::native_provider * native_ptr) override {
       if (m_thread.joinable()) {
         interrupt();
       }

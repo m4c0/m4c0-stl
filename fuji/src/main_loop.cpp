@@ -1,7 +1,8 @@
+#include "m4c0/fuji/main_loop.hpp"
+
 #include "in_flight_list.hpp"
 #include "m4c0/fuji/device_context.hpp"
 #include "m4c0/fuji/frame_context.hpp"
-#include "m4c0/fuji/main_loop.hpp"
 #include "m4c0/fuji/swapchain_context.hpp"
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/base_command.hpp"
@@ -83,9 +84,9 @@ void main_loop::run_device(const m4c0::fuji::device_context * ld) {
   }
 }
 
-void main_loop::run_global(const char * name, m4c0::vulkan::native_ptr_t native_ptr) {
+void main_loop::run_global(const char * name, const m4c0::vulkan::native_provider * np) {
   try {
-    m4c0::fuji::device_context ld { name, native_ptr };
+    m4c0::fuji::device_context ld { name, np };
     run_device(&ld);
   } catch (const interrupted_exception &) {
     m4c0::log::debug("Vulkan loop will end");

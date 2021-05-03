@@ -37,6 +37,6 @@ namespace m4c0::fuji {
   public:
     void interrupt();
 
-    virtual void run_global(const char * name, vulkan::native_ptr_t native_ptr);
+    virtual void run_global(const char * name, const vulkan::native_provider * np);
   };
 }

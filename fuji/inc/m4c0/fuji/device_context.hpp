@@ -13,8 +13,8 @@ namespace m4c0::fuji {
     m4c0::vulkan::render_pass m_render_pass;
 
   public:
-    device_context(const char * app_name, vulkan::native_ptr_t native_ptr)
-      : m4c0::vulkan::tools::logical_device(app_name, native_ptr)
+    device_context(const char * app_name, const vulkan::native_provider * np)
+      : m4c0::vulkan::tools::logical_device(app_name, np)
       , m_render_pass(best_render_pass()) {
     }
     [[nodiscard]] m4c0::vulkan::device_memory create_local_memory(const m4c0::vulkan::image * img) const;

@@ -21,10 +21,10 @@ namespace m4c0::vulkan::tools {
     queue m_unified_queue;
 
   public:
-    logical_device(const char * app_name, native_ptr_t native_handle)
+    logical_device(const char * app_name, const native_provider * np)
       : m_instance(instance::create_for_app(app_name))
       , m_debug(debug_utils_messenger::create())
-      , m_surface(surface::for_native_ptr(native_handle))
+      , m_surface(surface::for_native_ptr(np))
       , m_physical_device(physical_device::best_for(&m_surface))
       , m_device(device::create_for_physical_device(&m_physical_device))
       , m_unified_queue(queue::get_for_family(m_physical_device.unified_queue_family())) {
