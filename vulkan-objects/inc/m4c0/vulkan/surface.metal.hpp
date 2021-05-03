@@ -1,6 +1,6 @@
 #pragma once
 
-class CAMetalLayer;
+using CAMetalLayer = void;
 
 namespace m4c0::vulkan {
   class native_provider {
