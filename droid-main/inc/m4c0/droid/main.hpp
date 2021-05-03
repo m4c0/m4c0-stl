@@ -10,7 +10,7 @@ namespace m4c0::droid {
     android_app * m_glue;
 
   public:
-    explicit glue_app(android_app * app) : m_glue(app) {
+    explicit constexpr glue_app(android_app * app) : m_glue(app) {
     }
 
     ~glue_app() = default;
@@ -19,8 +19,8 @@ namespace m4c0::droid {
     glue_app & operator=(const glue_app &) = default;
     glue_app & operator=(glue_app &&) = delete;
 
-    [[nodiscard]] AAssetManager * asset_manager();
-    [[nodiscard]] ANativeWindow * window();
+    [[nodiscard]] AAssetManager * asset_manager() const noexcept;
+    [[nodiscard]] ANativeWindow * window() const noexcept;
   };
 
   // This is in the same order as defined by the "glue" to allow a direct conversion from an int

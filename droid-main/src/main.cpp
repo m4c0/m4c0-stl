@@ -29,9 +29,9 @@ void android_main(android_app * app) {
   } while (app->destroyRequested == 0);
 }
 
-struct AAssetManager * m4c0::droid::glue_app::asset_manager() {
+struct AAssetManager * m4c0::droid::glue_app::asset_manager() const noexcept {
   return m_glue->activity->assetManager;
 }
-struct ANativeWindow * m4c0::droid::glue_app::window() {
+struct ANativeWindow * m4c0::droid::glue_app::window() const noexcept {
   return m_glue->window;
 }
