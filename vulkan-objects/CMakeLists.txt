@@ -31,6 +31,8 @@ m4c0_add_library(
   LIBRARIES
     m4c0::core
     m4c0::log
+  PRIVATE_LIBRARIES
+    m4c0::assets
   )
 
 if(ANDROID)

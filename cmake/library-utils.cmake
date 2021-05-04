@@ -27,7 +27,7 @@ endfunction()
 function(m4c0_add_library)
   set(options OBJCXX)
   set(one_value_args TARGET ALIAS)
-  set(multi_value_args SOURCES LIBRARIES)
+  set(multi_value_args SOURCES LIBRARIES PRIVATE_LIBRARIES)
   cmake_parse_arguments(MAL "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
   _m4c0_add_library(
@@ -36,6 +36,7 @@ function(m4c0_add_library)
     LIBRARIES ${MAL_LIBRARIES}
     TYPE STATIC
     SCOPE PUBLIC)
+  target_link_libraries(${MAL_TARGET} PRIVATE ${MAL_PRIVATE_LIBRARIES})
   target_sources(${MAL_TARGET} PRIVATE ${MAL_SOURCES})
 
   if(MAL_OBJCXX)
