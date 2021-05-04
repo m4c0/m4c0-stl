@@ -20,7 +20,7 @@ namespace m4c0::assets {
     [[nodiscard]] virtual unsigned size() const noexcept = 0;
 
     template<class Tp>
-    [[nodiscard]] std::span<const Tp> typed_data() const noexcept {
+    [[nodiscard]] std::span<const Tp> span() const noexcept {
       return { static_cast<const Tp *>(data()), size() };
     }
 
