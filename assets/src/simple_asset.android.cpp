@@ -1,3 +1,4 @@
+#include "m4c0/assets/simple_asset.android.hpp"
 #include "m4c0/assets/simple_asset.hpp"
 
 #include <android/asset_manager.h>
@@ -28,7 +29,7 @@ namespace m4c0::assets {
     }
   };
 
-  std::unique_ptr<simple_asset> simple_asset::load(native_ptr_t nptr, const char * name, const char * ext) {
-    return std::make_unique<concrete_simple_asset>(reinterpret_cast<AAssetManager *>(nptr), name, ext);
+  std::unique_ptr<simple_asset> simple_asset::load(const native_provider * nptr, const char * name, const char * ext) {
+    return std::make_unique<concrete_simple_asset>(nptr->asset_manager(), name, ext);
   }
 }

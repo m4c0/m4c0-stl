@@ -4,10 +4,10 @@
 #include <span>
 
 namespace m4c0::assets {
+  class native_provider;
+
   class simple_asset {
   public:
-    using native_ptr_t = struct native_ptr *;
-
     simple_asset() = default;
     virtual ~simple_asset() = default;
 
@@ -24,6 +24,6 @@ namespace m4c0::assets {
       return { static_cast<const Tp *>(data()), size() };
     }
 
-    static std::unique_ptr<simple_asset> load(native_ptr_t nptr, const char * name, const char * ext);
+    static std::unique_ptr<simple_asset> load(const native_provider * nptr, const char * name, const char * ext);
   };
 }

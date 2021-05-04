@@ -39,7 +39,10 @@ namespace m4c0::assets {
     }
   };
 
-  std::unique_ptr<simple_asset> simple_asset::load(native_ptr_t /*nptr*/, const char * name, const char * ext) {
+  std::unique_ptr<simple_asset> simple_asset::load(
+      const native_provider * /*nptr*/,
+      const char * name,
+      const char * ext) {
     return std::make_unique<concrete_simple_asset>(name, ext);
   }
 }
