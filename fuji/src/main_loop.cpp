@@ -1,8 +1,7 @@
-#include "m4c0/fuji/main_loop.hpp"
-
 #include "in_flight_list.hpp"
 #include "m4c0/fuji/device_context.hpp"
 #include "m4c0/fuji/frame_context.hpp"
+#include "m4c0/fuji/main_loop.hpp"
 #include "m4c0/fuji/swapchain_context.hpp"
 #include "m4c0/log.hpp"
 #include "m4c0/vulkan/base_command.hpp"
@@ -16,11 +15,11 @@
 
 using namespace m4c0::fuji;
 
-main_loop::cmd_buf main_loop::run_primary(
+VkCommandBuffer main_loop::run_primary(
     const m4c0::fuji::device_context * ld,
     const m4c0::fuji::swapchain_context * sc,
     const m4c0::fuji::frame_context * f,
-    main_loop::cmd_buf secondary) {
+    VkCommandBuffer secondary) {
   auto primary = f->begin_primary_command_buffer();
 
   build_primary(primary.command_buffer());
@@ -33,7 +32,7 @@ main_loop::cmd_buf main_loop::run_primary(
   return primary.command_buffer();
 }
 
-main_loop::cmd_buf main_loop::run_secondary(const m4c0::fuji::device_context * ld, const m4c0::fuji::in_flight * inf) {
+VkCommandBuffer main_loop::run_secondary(const m4c0::fuji::device_context * ld, const m4c0::fuji::in_flight * inf) {
   auto guard = inf->begin_secondary_command_buffer(ld->render_pass());
   build_secondary(guard.command_buffer());
   return guard.command_buffer();

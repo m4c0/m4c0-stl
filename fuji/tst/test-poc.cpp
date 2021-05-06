@@ -3,13 +3,28 @@
 #include "m4c0/fuji/main_loop_thread.hpp"
 #include "m4c0/vulkan/surface.hpp"
 
-class my_main_loop : public m4c0::fuji::main_loop {
-  void build_primary(cmd_buf cb) override {
+class my_objects {
+public:
+  void create(...) { // NOLINT
   }
-  void build_secondary(cmd_buf cb) override {
+  void render(...) { // NOLINT
+  }
+};
+
+class my_main_loop : public m4c0::fuji::main_loop {
+  my_objects * o {};
+
+  void build_primary(VkCommandBuffer cb) override {
+    o->create(cb); // NOLINT
+  }
+  void build_secondary(VkCommandBuffer cb) override {
+    o->render(cb); // NOLINT
   }
 
   void run_device(const m4c0::fuji::device_context * ld) override {
+    my_objects os {};
+    o = &os;
+
     // Do some stuff...
     main_loop::run_device(ld);
     // Do more stuff...

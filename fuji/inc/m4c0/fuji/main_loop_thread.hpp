@@ -7,25 +7,14 @@
 #include <thread>
 
 namespace m4c0::fuji {
-  template<class MainLoopTp>
-  class main_loop_thread;
-
-  /// \brief Base virtual class to allow type erasure of MainLoopTp
-  template<>
-  class main_loop_thread<void> {
-  public:
-    virtual void start(const char * name, const vulkan::native_provider * native_ptr) = 0;
-    virtual void interrupt() = 0;
-  };
-
   /// \brief Convenience for running a main_loop in a different thread
   template<class MainLoopTp>
-  class main_loop_thread : public main_loop_thread<void> {
+  class main_loop_thread {
     MainLoopTp m_loop;
     std::thread m_thread;
 
   public:
-    void start(const char * name, const vulkan::native_provider * native_ptr) override {
+    void start(const char * name, const vulkan::native_provider * native_ptr) {
       if (m_thread.joinable()) {
         interrupt();
       }
@@ -33,7 +22,7 @@ namespace m4c0::fuji {
       m4c0::log::info("Vulkan thread starting");
     }
 
-    void interrupt() override {
+    void interrupt() {
       m4c0::log::info("Vulkan thread ending");
       m_loop.interrupt();
       m_thread.join();
