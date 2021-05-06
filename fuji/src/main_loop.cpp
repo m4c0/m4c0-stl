@@ -14,29 +14,6 @@
 
 using namespace m4c0::fuji;
 
-VkCommandBuffer main_loop::run_primary(
-    const m4c0::fuji::device_context * ld,
-    const m4c0::fuji::swapchain_context * sc,
-    const m4c0::fuji::frame_context * f,
-    VkCommandBuffer secondary) {
-  auto primary = f->begin_primary_command_buffer();
-
-  build_primary(primary.command_buffer());
-
-  m4c0::vulkan::tools::render_pass_guard rpg { primary.command_buffer(),
-                                               f->framebuffer(),
-                                               ld->render_pass(),
-                                               sc->render_extent() };
-  m4c0::vulkan::cmd::execute_commands(primary.command_buffer()).add_command_buffer(secondary).now();
-  return primary.command_buffer();
-}
-
-VkCommandBuffer main_loop::run_secondary(const m4c0::fuji::device_context * ld, const m4c0::fuji::in_flight * inf) {
-  auto guard = inf->begin_secondary_command_buffer(ld->render_pass());
-  build_secondary(guard.command_buffer());
-  return guard.command_buffer();
-}
-
 void main_loop::run_frame(
     const m4c0::fuji::device_context * ld,
     const m4c0::fuji::swapchain_context * sc,
@@ -45,8 +22,14 @@ void main_loop::run_frame(
 
   const auto * frame = sc->acquire_next_frame(inf->image_available_semaphore());
 
-  auto * secondary = run_secondary(ld, inf);
-  auto * primary = run_primary(ld, sc, frame, secondary);
+  const auto * rp = ld->render_pass();
+
+  auto * secondary = inf->build_secondary_command_buffer(rp, [this](auto cb) {
+    build_secondary(cb);
+  });
+  auto * primary = frame->build_primary_command_buffer(rp, sc->render_extent(), secondary, [this](auto cb) {
+    build_primary(cb);
+  });
 
   inf->queue_submit(ld->unified_queue(), primary);
   sc->present(frame->index(), inf->render_finished_semaphore());
