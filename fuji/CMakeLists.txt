@@ -7,6 +7,7 @@ m4c0_add_library(
     src/device_context.cpp
     src/depth_buffer.cpp
     src/frame_context.cpp
+    src/in_flight.cpp
     src/main_loop.cpp
     src/swapchain_context.cpp
   )

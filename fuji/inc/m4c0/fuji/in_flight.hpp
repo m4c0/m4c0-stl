@@ -3,6 +3,7 @@
 #include "m4c0/fuji/semaphores.hpp"
 #include "m4c0/vulkan/command_buffer_list.hpp"
 #include "m4c0/vulkan/fence.hpp"
+#include "m4c0/vulkan/queue.hpp"
 
 namespace m4c0::fuji {
   class in_flight {
@@ -35,5 +36,7 @@ namespace m4c0::fuji {
     [[nodiscard]] auto begin_secondary_command_buffer(const vulkan::render_pass * rp) const noexcept {
       return m_cmd_pool.begin(0, rp);
     }
+
+    void queue_submit(const vulkan::queue * queue, VkCommandBuffer cmd_buf) const;
   };
 }

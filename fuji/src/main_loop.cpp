@@ -8,7 +8,6 @@
 #include "m4c0/vulkan/device_wait_idle.hpp"
 #include "m4c0/vulkan/execute_commands.hpp"
 #include "m4c0/vulkan/out_of_date_error.hpp"
-#include "m4c0/vulkan/queue_submit.hpp"
 #include "m4c0/vulkan/render_pass_guard.hpp"
 
 #include <thread>
@@ -42,19 +41,14 @@ void main_loop::run_frame(
     const m4c0::fuji::device_context * ld,
     const m4c0::fuji::swapchain_context * sc,
     const m4c0::fuji::in_flight * inf) {
+  inf->wait_for_fence();
+
   const auto * frame = sc->acquire_next_frame(inf->image_available_semaphore());
 
   auto * secondary = run_secondary(ld, inf);
   auto * primary = run_primary(ld, sc, frame, secondary);
 
-  m4c0::vulkan::actions::queue_submit()
-      .with_queue(ld->unified_queue())
-      .with_command_buffer(primary)
-      .with_fence(inf->fence())
-      .with_wait_semaphore(inf->image_available_semaphore())
-      .with_signal_semaphore(inf->render_finished_semaphore())
-      .now();
-
+  inf->queue_submit(ld->unified_queue(), primary);
   sc->present(frame->index(), inf->render_finished_semaphore());
 }
 
@@ -66,8 +60,6 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
       m_notifications.process();
 
       auto * inf = in_flights.flip();
-      inf->wait_for_fence();
-
       run_frame(ld, sc, inf);
     }
   } catch (const m4c0::vulkan::out_of_date_error &) {
