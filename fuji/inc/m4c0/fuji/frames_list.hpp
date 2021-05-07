@@ -10,9 +10,8 @@ namespace m4c0::fuji {
 
   public:
     frames_list(const device_context * ld, const swapchain_context * sc) {
-      unsigned i = 0;
       for (vulkan::details::pointer_t<VkImage_T> img : sc->images()) {
-        m_frames.emplace_back(ld, sc, img, i++);
+        m_frames.emplace_back(ld, sc, img);
       }
     }
 

@@ -15,15 +15,10 @@ namespace m4c0::fuji {
     vulkan::image_view m_image_view {};
     vulkan::tools::primary_command_buffer_list<1> m_command_pool;
     vulkan::framebuffer m_framebuffer;
-    unsigned m_index;
 
   public:
     using image_t = vulkan::details::pointer_t<VkImage_T>;
-    frame_context(const device_context * ld, const swapchain_context * sc, image_t image, unsigned index);
-
-    [[nodiscard]] constexpr auto index() const noexcept {
-      return m_index;
-    }
+    frame_context(const device_context * ld, const swapchain_context * sc, image_t image);
 
     template<typename Fn>
     [[nodiscard]] VkCommandBuffer build_primary_command_buffer(

@@ -10,7 +10,7 @@ static auto create_image_view(frame_context::image_t image, m4c0::vulkan::surfac
   return m4c0::vulkan::image_view::create_rgba_for_image_and_format(image, &sfmt);
 }
 
-frame_context::frame_context(const device_context * ld, const swapchain_context * sc, image_t image, unsigned index)
+frame_context::frame_context(const device_context * ld, const swapchain_context * sc, image_t image)
   : m_image_view { create_image_view(image, ld->best_surface_format()) }
   , m_command_pool { ld->unified_queue_family() }
   , m_framebuffer { m4c0::vulkan::framebuffer::builder()
@@ -18,6 +18,5 @@ frame_context::frame_context(const device_context * ld, const swapchain_context 
                         .with_render_pass(ld->render_pass())
                         .add_attachment(&m_image_view)
                         .add_attachment(sc->depth_buffer()->image_view())
-                        .build() }
-  , m_index { index } {
+                        .build() } {
 }

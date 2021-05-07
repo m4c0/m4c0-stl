@@ -31,7 +31,6 @@ void main_loop::run_frame(
   });
 
   inf->queue_submit(ld->unified_queue(), primary);
-  sc->present(frame->index(), inf->render_finished_semaphore());
 }
 
 void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fuji::swapchain_context * sc) {
@@ -44,9 +43,13 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
 
       auto * inf = in_flights.flip();
       inf->wait_for_fence();
-      const auto * frame = frames.at(sc->acquire_next_frame(inf->image_available_semaphore()));
+
+      auto index = sc->acquire_next_frame(inf->image_available_semaphore());
+      const auto * frame = frames.at(index);
 
       run_frame(ld, sc, frame, inf);
+
+      sc->present(index, inf->render_finished_semaphore());
     }
   } catch (const m4c0::vulkan::out_of_date_error &) {
     m4c0::log::debug("Refreshing state after swapchain changes");
