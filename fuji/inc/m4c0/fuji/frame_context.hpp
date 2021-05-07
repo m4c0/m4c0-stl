@@ -9,6 +9,7 @@
 
 namespace m4c0::fuji {
   class device_context;
+  class swapchain_context;
 
   class frame_context {
     vulkan::image_view m_image_view {};
@@ -18,12 +19,7 @@ namespace m4c0::fuji {
 
   public:
     using image_t = vulkan::details::pointer_t<VkImage_T>;
-    frame_context(
-        const device_context * ld,
-        vulkan::extent_2d re,
-        image_t image,
-        const vulkan::image_view * depth_buffer,
-        unsigned index);
+    frame_context(const device_context * ld, const swapchain_context * sc, image_t image, unsigned index);
 
     [[nodiscard]] constexpr auto index() const noexcept {
       return m_index;

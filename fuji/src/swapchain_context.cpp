@@ -14,7 +14,7 @@ swapchain_context::swapchain_context(const device_context * ld)
   , m_present_q { ld->unified_queue() } {
   int i = 0;
   for (vulkan::details::pointer_t<VkImage_T> img : m_swapchain.get_images()) {
-    m_frames.emplace_back(ld, m_render_extent, img, m_depth_buffer.image_view(), i++);
+    m_frames.emplace_back(ld, this, img, i++);
   }
 }
 

@@ -29,6 +29,13 @@ namespace m4c0::fuji {
 
     void present(unsigned idx, const render_finished_semaphore * rfs) const;
 
+    [[nodiscard]] auto images() const noexcept {
+      return m_swapchain.get_images();
+    }
+
+    [[nodiscard]] constexpr const auto * depth_buffer() const noexcept {
+      return &m_depth_buffer;
+    }
     [[nodiscard]] constexpr auto render_extent() const noexcept {
       return m_render_extent;
     }
