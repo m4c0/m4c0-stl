@@ -1,7 +1,6 @@
 #pragma once
 
 #include "m4c0/fuji/depth_buffer.hpp"
-#include "m4c0/fuji/frame_context.hpp"
 #include "m4c0/vulkan/extent_2d.hpp"
 #include "m4c0/vulkan/swapchain.hpp"
 
@@ -20,13 +19,10 @@ namespace m4c0::fuji {
     depth_buffer m_depth_buffer;
     const vulkan::queue * m_present_q {};
 
-    std::vector<frame_context> m_frames;
-
   public:
     explicit swapchain_context(const device_context * ld);
 
-    [[nodiscard]] const frame_context * acquire_next_frame(const image_available_semaphore * ias) const;
-
+    [[nodiscard]] unsigned acquire_next_frame(const image_available_semaphore * s) const;
     void present(unsigned idx, const render_finished_semaphore * rfs) const;
 
     [[nodiscard]] auto images() const noexcept {
@@ -38,6 +34,9 @@ namespace m4c0::fuji {
     }
     [[nodiscard]] constexpr auto render_extent() const noexcept {
       return m_render_extent;
+    }
+    [[nodiscard]] constexpr const auto * swapchain() const noexcept {
+      return &m_swapchain;
     }
   };
 }

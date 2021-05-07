@@ -12,15 +12,10 @@ swapchain_context::swapchain_context(const device_context * ld)
   , m_swapchain(ld->best_swapchain_with_size(m_render_extent))
   , m_depth_buffer(ld, m_render_extent)
   , m_present_q { ld->unified_queue() } {
-  int i = 0;
-  for (vulkan::details::pointer_t<VkImage_T> img : m_swapchain.get_images()) {
-    m_frames.emplace_back(ld, this, img, i++);
-  }
 }
 
-const frame_context * swapchain_context::acquire_next_frame(const image_available_semaphore * s) const {
-  auto img = m_swapchain.acquire_next_image(s);
-  return &m_frames[img];
+unsigned swapchain_context::acquire_next_frame(const image_available_semaphore * s) const {
+  return m_swapchain.acquire_next_image(s);
 }
 
 void swapchain_context::present(unsigned idx, const render_finished_semaphore * rfs) const {

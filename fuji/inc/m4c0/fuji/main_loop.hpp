@@ -23,7 +23,11 @@ namespace m4c0::fuji {
     virtual void build_primary(VkCommandBuffer cb) = 0;
     virtual void build_secondary(VkCommandBuffer cb) = 0;
 
-    virtual void run_frame(const device_context * ld, const swapchain_context * sc, const in_flight * inf);
+    virtual void run_frame(
+        const device_context * ld,
+        const swapchain_context * sc,
+        const frame_context * frame,
+        const in_flight * inf);
     virtual void run_extent(const device_context * ld, const swapchain_context * sc);
     virtual void run_device(const device_context * ld);
 

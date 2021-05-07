@@ -1,6 +1,7 @@
 #include "in_flight_list.hpp"
 #include "m4c0/fuji/device_context.hpp"
 #include "m4c0/fuji/frame_context.hpp"
+#include "m4c0/fuji/frames_list.hpp"
 #include "m4c0/fuji/main_loop.hpp"
 #include "m4c0/fuji/swapchain_context.hpp"
 #include "m4c0/log.hpp"
@@ -17,10 +18,8 @@ using namespace m4c0::fuji;
 void main_loop::run_frame(
     const m4c0::fuji::device_context * ld,
     const m4c0::fuji::swapchain_context * sc,
+    const m4c0::fuji::frame_context * frame,
     const m4c0::fuji::in_flight * inf) {
-  inf->wait_for_fence();
-
-  const auto * frame = sc->acquire_next_frame(inf->image_available_semaphore());
 
   const auto * rp = ld->render_pass();
 
@@ -37,13 +36,17 @@ void main_loop::run_frame(
 
 void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fuji::swapchain_context * sc) {
   in_flight_list in_flights { ld };
+  frames_list frames { ld, sc };
 
   try {
     while (true) {
       m_notifications.process();
 
       auto * inf = in_flights.flip();
-      run_frame(ld, sc, inf);
+      inf->wait_for_fence();
+      const auto * frame = frames.at(sc->acquire_next_frame(inf->image_available_semaphore()));
+
+      run_frame(ld, sc, frame, inf);
     }
   } catch (const m4c0::vulkan::out_of_date_error &) {
     m4c0::log::debug("Refreshing state after swapchain changes");
