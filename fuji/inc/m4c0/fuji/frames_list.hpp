@@ -5,6 +5,7 @@
 #include "m4c0/fuji/swapchain_context.hpp"
 
 #include <algorithm>
+#include <iterator>
 #include <vector>
 
 namespace m4c0::fuji {
