@@ -3,24 +3,23 @@
 #include "m4c0/fuji/main_loop_thread.hpp"
 #include "m4c0/vulkan/surface.hpp"
 
-class my_objects {
+class my_objects : public m4c0::fuji::main_loop_listener {
 public:
-  void create(...) { // NOLINT
+  void build_primary_command_buffer(VkCommandBuffer cb) override {
+    // Transfer textures, etc
   }
-  void render(...) { // NOLINT
+  void build_secondary_command_buffer(VkCommandBuffer cb) override {
+    // Render stuff
+  }
+  void on_render_extent_change(m4c0::vulkan::extent_2d e) override {
+    // Update uniforms
   }
 };
 
 class my_main_loop : public m4c0::fuji::main_loop {
   void run_device(const m4c0::fuji::device_context * ld) override {
     my_objects os {};
-    set_primary_cbb([&os](VkCommandBuffer cb) {
-      os.create(cb); // NOLINT
-    });
-    set_secondary_cbb([&os](VkCommandBuffer cb) {
-      os.create(cb); // NOLINT
-    });
-
+    listener() = &os;
     // Do some stuff...
     main_loop::run_device(ld);
     // Do more stuff...

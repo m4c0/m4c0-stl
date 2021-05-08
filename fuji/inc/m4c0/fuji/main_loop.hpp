@@ -1,7 +1,7 @@
 #pragma once
 
 #include "m4c0/fifo_worker.hpp"
-#include "m4c0/function.hpp"
+#include "m4c0/vulkan/extent_2d.hpp"
 
 using VkCommandBuffer = struct VkCommandBuffer_T *;
 
@@ -13,24 +13,24 @@ namespace m4c0::fuji {
   class device_context;
   class swapchain_context;
 
+  struct main_loop_listener {
+    virtual void build_primary_command_buffer(VkCommandBuffer cb) = 0;
+    virtual void build_secondary_command_buffer(VkCommandBuffer cb) = 0;
+    virtual void on_render_extent_change(vulkan::extent_2d e) = 0;
+  };
+
   class main_loop {
     class interrupted_exception : public std::exception {};
 
     m4c0::fifo_worker<> m_notifications {};
-    m4c0::function<void(VkCommandBuffer)> m_primary_cbb {};
-    m4c0::function<void(VkCommandBuffer)> m_secondary_cbb {};
+    main_loop_listener * m_listener {};
 
   protected:
     virtual void run_extent(const device_context * ld, const swapchain_context * sc);
     virtual void run_device(const device_context * ld);
 
-    template<typename Fn>
-    void set_primary_cbb(Fn && fn) {
-      m_primary_cbb = std::forward<Fn>(fn);
-    }
-    template<typename Fn>
-    void set_secondary_cbb(Fn && fn) {
-      m_secondary_cbb = std::forward<Fn>(fn);
+    [[nodiscard]] main_loop_listener *& listener() noexcept {
+      return m_listener;
     }
 
   public:

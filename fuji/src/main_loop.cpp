@@ -18,6 +18,7 @@ using namespace m4c0::fuji;
 void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fuji::swapchain_context * sc) {
   in_flight_list in_flights { ld };
   frames_list frames { ld, sc };
+  m_listener->on_render_extent_change(sc->render_extent());
 
   try {
     while (true) {
@@ -30,8 +31,12 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
       const auto * frame = frames.at(index);
 
       const auto * rp = ld->render_pass();
-      auto * secondary = inf->build_secondary_command_buffer(rp, m_secondary_cbb);
-      auto * primary = frame->build_primary_command_buffer(rp, sc->render_extent(), secondary, m_primary_cbb);
+      auto * secondary = inf->build_secondary_command_buffer(rp, [this](auto cb) {
+        m_listener->build_secondary_command_buffer(cb);
+      });
+      auto * primary = frame->build_primary_command_buffer(rp, sc->render_extent(), secondary, [this](auto cb) {
+        m_listener->build_primary_command_buffer(cb);
+      });
 
       inf->queue_submit(ld->unified_queue(), primary);
 
