@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/fifo_worker.hpp"
+#include "m4c0/function.hpp"
 
 using VkCommandBuffer = struct VkCommandBuffer_T *;
 
@@ -10,26 +11,27 @@ namespace m4c0::vulkan {
 
 namespace m4c0::fuji {
   class device_context;
-  class frame_context;
-  class in_flight;
   class swapchain_context;
 
   class main_loop {
     class interrupted_exception : public std::exception {};
 
     m4c0::fifo_worker<> m_notifications {};
+    m4c0::function<void(VkCommandBuffer)> m_primary_cbb {};
+    m4c0::function<void(VkCommandBuffer)> m_secondary_cbb {};
 
   protected:
-    virtual void build_primary(VkCommandBuffer cb) = 0;
-    virtual void build_secondary(VkCommandBuffer cb) = 0;
-
-    virtual void run_frame(
-        const device_context * ld,
-        const swapchain_context * sc,
-        const frame_context * frame,
-        const in_flight * inf);
     virtual void run_extent(const device_context * ld, const swapchain_context * sc);
     virtual void run_device(const device_context * ld);
+
+    template<typename Fn>
+    void set_primary_cbb(Fn && fn) {
+      m_primary_cbb = std::forward<Fn>(fn);
+    }
+    template<typename Fn>
+    void set_secondary_cbb(Fn && fn) {
+      m_secondary_cbb = std::forward<Fn>(fn);
+    }
 
   public:
     void interrupt();

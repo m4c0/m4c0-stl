@@ -25,7 +25,7 @@ namespace m4c0::fuji {
         const vulkan::render_pass * rp,
         vulkan::extent_2d extent,
         VkCommandBuffer secondary,
-        Fn builder) const {
+        Fn && builder) const {
       auto guard = m_command_pool.begin(0);
       builder(guard.command_buffer());
 

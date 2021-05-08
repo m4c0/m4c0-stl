@@ -12,18 +12,14 @@ public:
 };
 
 class my_main_loop : public m4c0::fuji::main_loop {
-  my_objects * o {};
-
-  void build_primary(VkCommandBuffer cb) override {
-    o->create(cb); // NOLINT
-  }
-  void build_secondary(VkCommandBuffer cb) override {
-    o->render(cb); // NOLINT
-  }
-
   void run_device(const m4c0::fuji::device_context * ld) override {
     my_objects os {};
-    o = &os;
+    set_primary_cbb([&os](VkCommandBuffer cb) {
+      os.create(cb); // NOLINT
+    });
+    set_secondary_cbb([&os](VkCommandBuffer cb) {
+      os.create(cb); // NOLINT
+    });
 
     // Do some stuff...
     main_loop::run_device(ld);

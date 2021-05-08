@@ -34,7 +34,7 @@ namespace m4c0::fuji {
     }
 
     template<typename Fn>
-    [[nodiscard]] VkCommandBuffer build_secondary_command_buffer(const vulkan::render_pass * rp, Fn builder) const {
+    [[nodiscard]] VkCommandBuffer build_secondary_command_buffer(const vulkan::render_pass * rp, Fn && builder) const {
       auto guard = m_cmd_pool.begin(0, rp);
       builder(guard.command_buffer());
       return guard.command_buffer();

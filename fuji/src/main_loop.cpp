@@ -15,24 +15,6 @@
 
 using namespace m4c0::fuji;
 
-void main_loop::run_frame(
-    const m4c0::fuji::device_context * ld,
-    const m4c0::fuji::swapchain_context * sc,
-    const m4c0::fuji::frame_context * frame,
-    const m4c0::fuji::in_flight * inf) {
-
-  const auto * rp = ld->render_pass();
-
-  auto * secondary = inf->build_secondary_command_buffer(rp, [this](auto cb) {
-    build_secondary(cb);
-  });
-  auto * primary = frame->build_primary_command_buffer(rp, sc->render_extent(), secondary, [this](auto cb) {
-    build_primary(cb);
-  });
-
-  inf->queue_submit(ld->unified_queue(), primary);
-}
-
 void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fuji::swapchain_context * sc) {
   in_flight_list in_flights { ld };
   frames_list frames { ld, sc };
@@ -47,7 +29,11 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
       auto index = sc->acquire_next_frame(inf->image_available_semaphore());
       const auto * frame = frames.at(index);
 
-      run_frame(ld, sc, frame, inf);
+      const auto * rp = ld->render_pass();
+      auto * secondary = inf->build_secondary_command_buffer(rp, m_secondary_cbb);
+      auto * primary = frame->build_primary_command_buffer(rp, sc->render_extent(), secondary, m_primary_cbb);
+
+      inf->queue_submit(ld->unified_queue(), primary);
 
       sc->present(index, inf->render_finished_semaphore());
     }
@@ -58,19 +44,19 @@ void main_loop::run_extent(const m4c0::fuji::device_context * ld, const m4c0::fu
 }
 
 void main_loop::run_device(const m4c0::fuji::device_context * ld) {
-  while (true) {
-    m4c0::fuji::swapchain_context sc { ld };
-    run_extent(ld, &sc);
+  try {
+    while (true) {
+      m4c0::fuji::swapchain_context sc { ld };
+      run_extent(ld, &sc);
+    }
+  } catch (const interrupted_exception &) {
+    m4c0::log::debug("Vulkan loop will end");
   }
 }
 
 void main_loop::run_global(const char * name, const m4c0::vulkan::native_provider * np) {
-  try {
-    m4c0::fuji::device_context ld { name, np };
-    run_device(&ld);
-  } catch (const interrupted_exception &) {
-    m4c0::log::debug("Vulkan loop will end");
-  }
+  m4c0::fuji::device_context ld { name, np };
+  run_device(&ld);
 }
 
 void main_loop::interrupt() {
