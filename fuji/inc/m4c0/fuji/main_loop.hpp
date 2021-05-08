@@ -38,4 +38,15 @@ namespace m4c0::fuji {
 
     virtual void run_global(const char * name, const vulkan::native_provider * np);
   };
+
+  template<class StuffTp>
+  class main_loop_with_stuff : public main_loop {
+  public:
+    void run_device(const device_context * ld) override {
+      StuffTp s { ld };
+      listener() = &s;
+
+      main_loop::run_device(ld);
+    }
+  };
 }

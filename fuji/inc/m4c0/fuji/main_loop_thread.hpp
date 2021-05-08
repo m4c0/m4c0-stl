@@ -14,11 +14,12 @@ namespace m4c0::fuji {
     std::thread m_thread;
 
   public:
-    void start(const char * name, const vulkan::native_provider * native_ptr) {
+    template<typename... Args>
+    void start(Args &&... args) {
       if (m_thread.joinable()) {
         interrupt();
       }
-      m_thread = std::thread { &main_loop::run_global, &m_loop, name, native_ptr };
+      m_thread = std::thread { &MainLoopTp::run_global, &m_loop, std::forward<Args>(args)... };
       m4c0::log::info("Vulkan thread starting");
     }
 
