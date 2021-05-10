@@ -1,6 +1,11 @@
-#include "m4c0/objc/inject.hpp"
+#include "m4c0/osx/main.hpp"
 
-static void dummy() {
+int main(int argc, char ** argv) {
+  static struct : public m4c0::osx::delegate {
+    void start(void * view) override {
+    }
+    void stop() override {
+    }
+  } d;
+  m4c0::osx::main(argc, argv, &d);
 }
-static const m4c0::objc::static_inject i { "mtkView:drawableSizeWillChange:", &dummy };
-static const m4c0::objc::static_inject j { "drawInMTKView:", &dummy };

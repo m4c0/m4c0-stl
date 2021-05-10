@@ -3,9 +3,10 @@ m4c0_add_library(
   ALIAS m4c0::osx::main
   OBJCXX
   SOURCES
-    src/M4C0AppDelegate.mm
-    src/M4C0Window.mm
-    src/main.mm
+    src/M4C0AppDelegate.m
+    src/M4C0Window.m
+    src/main.cpp
+    src/main.m
   LIBRARIES
     m4c0::objc::bridge
     "-framework Cocoa"

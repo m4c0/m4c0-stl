@@ -1,21 +1,11 @@
 #import "M4C0AppDelegate.h"
 #import "M4C0Window.h"
+#include "main.h"
 
 #import <MetalKit/MetalKit.h>
-#include <m4c0/objc/middleware.hpp>
-
-const id m4c0_dummy = @[ @protocol(NSWindowDelegate), @protocol(MTKViewDelegate) ];
-
-static id create_class(const char * base_class) {
-  return (__bridge id)m4c0::objc::middleware::instance().create_for_class(base_class);
-}
-static id create_proto(const char * base_class) {
-  return (__bridge id)m4c0::objc::middleware::instance().create_for_protocol(base_class);
-}
 
 @interface M4C0AppDelegate ()
 @property (nonatomic, strong) M4C0Window * window;
-@property (nonatomic, strong) id viewDelegate;
 @property (nonatomic, strong) id windowDelegate;
 
 - (void)createAppleMenu:(NSString *)appName;
@@ -28,26 +18,26 @@ static id create_proto(const char * base_class) {
   return YES;
 }
 
+- (void)applicationWillTerminate:(NSNotification *)notification {
+  m4c0_osx_main_stop();
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
   NSDictionary * info = [[NSBundle mainBundle] infoDictionary];
   NSString * appName = [info objectForKey:@"CFBundleName"];
-  if (appName == nullptr) appName = @"App";
+  if (appName == nil) appName = @"App";
 
   [self createWindow:appName];
   [self createAppleMenu:appName];
 
   [NSApp activateIgnoringOtherApps:YES];
+
+  m4c0_osx_main_start((__bridge void *)(self.window.contentView));
 }
 
 - (void)createWindow:(NSString *)appName {
-  self.windowDelegate = create_proto("NSWindowDelegate");
-  self.viewDelegate = create_proto("MTKViewDelegate");
-
-  id view = create_class("MTKView");
-  [view setDelegate:self.viewDelegate];
-
   self.window = [[M4C0Window alloc] init];
-  self.window.contentView = view;
+  self.window.contentView = [[MTKView alloc] init];
   [self.window setDelegate:self.windowDelegate];
   [self.window setupWithTitle:appName];
 }
