@@ -1,3 +1,4 @@
 #pragma once
 
-void objc_main(int argc, char ** argv, const char * delegate);
+void m4c0_ios_main_start(void * view);
+void m4c0_ios_main_stop();

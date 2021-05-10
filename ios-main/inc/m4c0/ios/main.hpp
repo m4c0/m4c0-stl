@@ -1,9 +1,11 @@
 #pragma once
 
-#include "m4c0/objc/inject.hpp"
-
 namespace m4c0::ios {
-  struct inject_app_did_finish_launch_with_options : objc::static_inject {
-    inject_app_did_finish_launch_with_options();
+  class delegate {
+  public:
+    virtual void start(void * view) = 0;
+    virtual void stop() = 0;
   };
+
+  int main(int argc, char ** argv, delegate * d);
 }
