@@ -45,9 +45,19 @@ namespace m4c0::vulkan {
       [[nodiscard]] builder & add_vertex_binding_with_stride(unsigned stride);
       [[nodiscard]] builder & add_vertex_binding_instanced_with_stride(unsigned stride);
 
+      // Attributes must be 32bit aligned, normally. Then it makes more sense to avoid attribute types that won't align
+
       [[nodiscard]] builder & add_vec2_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
       [[nodiscard]] builder & add_vec3_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
       [[nodiscard]] builder & add_vec4_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+
+      [[nodiscard]] builder & add_s8vec4_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+      [[nodiscard]] builder & add_u8vec4_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+
+      [[nodiscard]] builder & add_s16vec2_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+      [[nodiscard]] builder & add_u16vec2_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+      [[nodiscard]] builder & add_s16vec4_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
+      [[nodiscard]] builder & add_u16vec4_attribute_with_bind_and_offset(unsigned binding, unsigned offset);
 
       [[nodiscard]] pipeline build();
     };

@@ -5,6 +5,7 @@
 #include "m4c0/vulkan/render_pass.hpp"
 #include "m4c0/vulkan/safe_calls.hpp"
 #include "m4c0/vulkan/shader_module.hpp"
+#include "vulkan/vulkan_core.h"
 
 #include <array>
 #include <vector>
@@ -133,36 +134,69 @@ pipeline::builder & pipeline::builder::add_vertex_binding_instanced_with_stride(
   return *this;
 }
 
+void add(std::vector<VkVertexInputAttributeDescription> * attrs, unsigned binding, unsigned offset, VkFormat format) {
+  VkVertexInputAttributeDescription viad {};
+  viad.binding = binding;
+  viad.location = attrs->size();
+  viad.offset = offset;
+  viad.format = format;
+  attrs->push_back(viad);
+}
+
 pipeline::builder & pipeline::builder::add_vec2_attribute_with_bind_and_offset(
     unsigned int binding,
     unsigned int offset) {
-  VkVertexInputAttributeDescription viad {};
-  viad.binding = binding;
-  viad.location = m_attributes->size();
-  viad.offset = offset;
-  viad.format = VK_FORMAT_R32G32_SFLOAT;
-  m_attributes->push_back(viad);
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R32G32_SFLOAT);
   return *this;
 }
 pipeline::builder & pipeline::builder::add_vec3_attribute_with_bind_and_offset(
     unsigned int binding,
     unsigned int offset) {
-  VkVertexInputAttributeDescription viad {};
-  viad.binding = binding;
-  viad.location = m_attributes->size();
-  viad.offset = offset;
-  viad.format = VK_FORMAT_R32G32B32_SFLOAT;
-  m_attributes->push_back(viad);
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R32G32B32_SFLOAT);
   return *this;
 }
 pipeline::builder & pipeline::builder::add_vec4_attribute_with_bind_and_offset(
     unsigned int binding,
     unsigned int offset) {
-  VkVertexInputAttributeDescription viad {};
-  viad.binding = binding;
-  viad.location = m_attributes->size();
-  viad.offset = offset;
-  viad.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-  m_attributes->push_back(viad);
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R32G32B32A32_SFLOAT);
+  return *this;
+}
+
+pipeline::builder & pipeline::builder::add_s8vec4_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R8G8B8A8_SINT);
+  return *this;
+}
+pipeline::builder & pipeline::builder::add_u8vec4_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R8G8B8A8_UINT);
+  return *this;
+}
+
+pipeline::builder & pipeline::builder::add_s16vec2_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R16G16_SINT);
+  return *this;
+}
+pipeline::builder & pipeline::builder::add_u16vec2_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R16G16_UINT);
+  return *this;
+}
+
+pipeline::builder & pipeline::builder::add_s16vec4_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R16G16B16A16_SINT);
+  return *this;
+}
+pipeline::builder & pipeline::builder::add_u16vec4_attribute_with_bind_and_offset(
+    unsigned int binding,
+    unsigned int offset) {
+  add(m_attributes.get(), binding, offset, VK_FORMAT_R16G16B16A16_UINT);
   return *this;
 }
