@@ -1,4 +1,5 @@
 #include "m4c0/assets/simple_asset.hpp"
+#include "m4c0/native_handles.win32.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -40,7 +41,7 @@ namespace m4c0::assets {
   };
 
   std::unique_ptr<simple_asset> simple_asset::load(
-      const native_provider * /*nptr*/,
+      const native_handles * /*nptr*/,
       const char * name,
       const char * ext) {
     return std::make_unique<concrete_simple_asset>(name, ext);

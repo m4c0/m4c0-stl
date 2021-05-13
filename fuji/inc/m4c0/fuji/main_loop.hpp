@@ -1,13 +1,10 @@
 #pragma once
 
 #include "m4c0/fifo_worker.hpp"
+#include "m4c0/native_handles.hpp"
 #include "m4c0/vulkan/extent_2d.hpp"
 
 using VkCommandBuffer = struct VkCommandBuffer_T *;
-
-namespace m4c0::vulkan {
-  class native_provider;
-}
 
 namespace m4c0::fuji {
   class device_context;
@@ -36,7 +33,7 @@ namespace m4c0::fuji {
   public:
     void interrupt();
 
-    virtual void run_global(const char * name, const vulkan::native_provider * np);
+    virtual void run_global(const char * name, const native_handles * np);
   };
 
   template<class StuffTp>

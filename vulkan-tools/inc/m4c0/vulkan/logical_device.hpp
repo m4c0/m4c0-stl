@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/native_handles.hpp"
 #include "m4c0/vulkan/debug_utils_messenger.hpp"
 #include "m4c0/vulkan/device.hpp"
 #include "m4c0/vulkan/instance.hpp"
@@ -21,7 +22,7 @@ namespace m4c0::vulkan::tools {
     queue m_unified_queue;
 
   public:
-    logical_device(const char * app_name, const native_provider * np)
+    logical_device(const char * app_name, const native_handles * np)
       : m_instance(instance::create_for_app(app_name))
       , m_debug(debug_utils_messenger::create())
       , m_surface(surface::for_native_ptr(np))

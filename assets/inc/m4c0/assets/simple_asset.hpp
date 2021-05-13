@@ -1,11 +1,11 @@
 #pragma once
 
+#include "m4c0/native_handles.hpp"
+
 #include <memory>
 #include <span>
 
 namespace m4c0::assets {
-  class native_provider;
-
   class simple_asset {
   public:
     simple_asset() = default;
@@ -24,6 +24,6 @@ namespace m4c0::assets {
       return { static_cast<const Tp *>(data()), size() };
     }
 
-    static std::unique_ptr<simple_asset> load(const native_provider * nptr, const char * name, const char * ext);
+    static std::unique_ptr<simple_asset> load(const native_handles * nptr, const char * name, const char * ext);
   };
 }

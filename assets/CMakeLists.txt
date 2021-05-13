@@ -1,6 +1,7 @@
 m4c0_add_library(
   TARGET m4c0-assets
   ALIAS m4c0::assets
+  LIBRARIES m4c0::native-handles
   )
 
 if(ANDROID)

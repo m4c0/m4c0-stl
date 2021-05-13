@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/native_handles.hpp"
 #include "m4c0/vulkan/logical_device.hpp"
 #include "m4c0/vulkan/surface.hpp"
 
@@ -13,7 +14,7 @@ namespace m4c0::fuji {
     m4c0::vulkan::render_pass m_render_pass;
 
   public:
-    device_context(const char * app_name, const vulkan::native_provider * np)
+    device_context(const char * app_name, const native_handles * np)
       : m4c0::vulkan::tools::logical_device(app_name, np)
       , m_render_pass(best_render_pass()) {
     }

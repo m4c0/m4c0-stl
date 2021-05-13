@@ -1,6 +1,7 @@
 #include "m4c0/fuji/device_context.hpp"
 #include "m4c0/fuji/main_loop.hpp"
 #include "m4c0/fuji/main_loop_thread.hpp"
+#include "m4c0/native_handles.hpp"
 #include "m4c0/vulkan/surface.hpp"
 
 class my_objects : public m4c0::fuji::main_loop_listener {
@@ -21,7 +22,7 @@ public:
 };
 
 int main() {
-  m4c0::vulkan::native_provider * native_stuff {}; // Get this somewhere else
+  m4c0::native_handles * native_stuff {}; // Get this somewhere else
 
   m4c0::fuji::main_loop_thread<m4c0::fuji::main_loop_with_stuff<my_objects>> thread {};
   thread.start("My App", native_stuff);

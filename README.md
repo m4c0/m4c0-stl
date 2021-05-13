@@ -25,6 +25,8 @@ Take everything here as unstable (or, at least WIP).
   a minimalistic cross-platform module. Apple (iOS+OSX) uses NSLog, Windows 
   creates a file at the same directory as the executable, and Android uses its
   log library.
+* **Native Handles** - Generic interface for sharing native handles (such as
+  HWND, NSView, etc)
 * **ObjC Bridge** - Hacks to inject C++ code in Obj-C
 * **OSX Main** - Main loop for Metal-based OSX apps
 * **Win Main** - Main loop for WIN32 apps. Eventually, `wndproc` instances will

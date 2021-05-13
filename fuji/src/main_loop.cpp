@@ -5,6 +5,7 @@
 #include "m4c0/fuji/main_loop.hpp"
 #include "m4c0/fuji/swapchain_context.hpp"
 #include "m4c0/log.hpp"
+#include "m4c0/native_handles.hpp"
 #include "m4c0/vulkan/base_command.hpp"
 #include "m4c0/vulkan/device_wait_idle.hpp"
 #include "m4c0/vulkan/execute_commands.hpp"
@@ -59,7 +60,7 @@ void main_loop::run_device(const m4c0::fuji::device_context * ld) {
   }
 }
 
-void main_loop::run_global(const char * name, const m4c0::vulkan::native_provider * np) {
+void main_loop::run_global(const char * name, const m4c0::native_handles * np) {
   m4c0::fuji::device_context ld { name, np };
   run_device(&ld);
 }

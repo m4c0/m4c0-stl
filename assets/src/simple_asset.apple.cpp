@@ -1,4 +1,5 @@
 #include "m4c0/assets/simple_asset.hpp"
+#include "m4c0/native_handles.metal.hpp"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <stdexcept>
@@ -82,9 +83,6 @@ namespace m4c0::assets {
   };
 }
 
-std::unique_ptr<simple_asset> simple_asset::load(
-    const native_provider * /*nptr*/,
-    const char * name,
-    const char * ext) {
+std::unique_ptr<simple_asset> simple_asset::load(const native_handles * /*nptr*/, const char * name, const char * ext) {
   return std::make_unique<concrete_simple_asset>(name, ext);
 }
