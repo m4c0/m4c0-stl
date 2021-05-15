@@ -1,4 +1,5 @@
 #import "M4C0AppDelegate.h"
+#import "M4C0View.h"
 #import "M4C0Window.h"
 #include "main.h"
 
@@ -37,7 +38,7 @@
 
 - (void)createWindow:(NSString *)appName {
   self.window = [[M4C0Window alloc] init];
-  self.window.contentView = [[MTKView alloc] init];
+  self.window.contentView = [[M4C0View alloc] init];
   [self.window setDelegate:self.windowDelegate];
   [self.window setupWithTitle:appName];
 }
