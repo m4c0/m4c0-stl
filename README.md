@@ -28,6 +28,7 @@ Take everything here as unstable (or, at least WIP).
 * **Native Handles** - Generic interface for sharing native handles (such as
   HWND, NSView, etc)
 * **ObjC Bridge** - Hacks to inject C++ code in Obj-C
+* **ObjC Wraps** - C++ wrappers of some Obj-C classes
 * **OSX Main** - Main loop for Metal-based OSX apps
 * **Win Main** - Main loop for WIN32 apps. Eventually, `wndproc` instances will
   be injectable.

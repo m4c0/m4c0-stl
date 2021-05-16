@@ -4,11 +4,10 @@
 #error "ARC is off"
 #endif
 
-void m4c0_osx_main() {
-  M4C0AppDelegate * delegate = [[M4C0AppDelegate alloc] init];
+#include "main.h"
 
-  NSApplication * app = [NSApplication sharedApplication];
-  app.delegate = delegate;
+#include <objc/runtime.h>
 
-  [app run];
+const char * m4c0_osx_get_delegate_name() { // NOLINT
+  return class_getName([M4C0AppDelegate class]);
 }

@@ -10,6 +10,7 @@ m4c0_add_library(
     src/main.m
   LIBRARIES
     m4c0::objc::bridge
+    m4c0::objc::wraps
     "-framework Cocoa"
     "-framework MetalKit"
   )

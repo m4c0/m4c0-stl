@@ -29,6 +29,7 @@ add_subdirectory(vulkan-tools)
 if(APPLE)
   enable_language(OBJC OBJCXX)
   add_subdirectory(objc-bridge)
+  add_subdirectory(objc-wraps)
 endif()
 
 if(ANDROID)
