@@ -8,8 +8,10 @@ namespace m4c0::objc {
   public:
     // [[cls alloc] init]
     explicit ns_object(const char * cls_name);
+    // [cls method] - ex: [NSApp sharedApp]
+    ns_object(const char * cls_name, const char * method);
     // [obj retain]
-    explicit ns_object(const char * cls_name, void * obj);
+    ns_object(const char * cls_name, void * obj);
     // [obj release]
     ~ns_object();
 
@@ -18,7 +20,7 @@ namespace m4c0::objc {
     ns_object & operator=(const ns_object & o);
     ns_object & operator=(ns_object && o) = delete;
 
-    [[nodiscard]] constexpr const auto * self() const noexcept {
+    [[nodiscard]] constexpr auto * self() const noexcept {
       return m_object;
     }
   };

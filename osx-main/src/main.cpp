@@ -1,5 +1,6 @@
 #include "m4c0/objc/autorelease_pool.hpp"
 #include "m4c0/objc/casts.hpp"
+#include "m4c0/objc/ns_application.hpp"
 #include "m4c0/objc/ns_object.hpp"
 #include "m4c0/osx/main.hpp"
 
@@ -24,11 +25,9 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * delega
   g_delegate = delegate;
 
   objc::ns_object app_del { m4c0_osx_get_delegate_name() };
-
-  auto * app_cls = objc_getClass("NSApplication");
-  auto app = objc::objc_msg_send<void *>(app_cls, "sharedApplication");
-  objc::objc_msg_send<void>(app, "setDelegate:", app_del.self());
-  objc::objc_msg_send<void>(app, "run");
+  auto app = objc::ns_application::shared_application();
+  app.set_delegate(&app_del);
+  app.run();
 
   return 0;
 }

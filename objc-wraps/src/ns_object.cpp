@@ -3,9 +3,12 @@
 
 using namespace m4c0::objc;
 
-ns_object::ns_object(const char * cls_name)
+ns_object::ns_object(const char * cls_name) : ns_object(cls_name, "alloc") {
+  objc_msg_send<void>(m_object, "init");
+}
+ns_object::ns_object(const char * cls_name, const char * method)
   : m_class(objc_getClass(cls_name))
-  , m_object(objc_msg_send<objc_object *>(m_class, "alloc")) {
+  , m_object(objc_msg_send<objc_object *>(m_class, method)) {
 }
 ns_object::~ns_object() {
   objc_msg_send<void>(m_object, "release");
