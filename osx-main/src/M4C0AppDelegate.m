@@ -29,7 +29,6 @@
   if (appName == nil) appName = @"App";
 
   [self createWindow:appName];
-  [self createAppleMenu:appName];
 
   [NSApp activateIgnoringOtherApps:YES];
 
