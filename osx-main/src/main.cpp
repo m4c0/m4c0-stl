@@ -32,6 +32,8 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * delega
   objc::ns_menu_item app_item;
   objc::ns_menu app_menu;
 
+  app_menu.add_item(objc::ns_menu_item::with_title_action_key("Hide", "hide:", "h"));
+  app_menu.add_item(objc::ns_menu_item::with_title_action_key("Hide Others", "hideOtherApplications:", "h"));
   app_menu.add_item(objc::ns_menu_item::with_title_action_key("Quit", "terminate:", "q"));
 
   app_item.set_submenu(&app_menu);
