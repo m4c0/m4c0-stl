@@ -5,7 +5,6 @@ m4c0_add_library(
   SOURCES
     src/M4C0AppDelegate.m
     src/M4C0View.m
-    src/M4C0Window.m
     src/main.cpp
     src/main.m
   LIBRARIES

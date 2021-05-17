@@ -1,12 +1,15 @@
 #import "M4C0AppDelegate.h"
 #import "M4C0View.h"
-#import "M4C0Window.h"
 #include "main.h"
 
+#import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
 @interface M4C0AppDelegate ()
-@property (nonatomic, strong) M4C0Window * window;
+@property (nonatomic, strong) NSWindow * window;
 @property (nonatomic, strong) id windowDelegate;
 
 - (void)createWindow:(NSString *)appName;
@@ -35,10 +38,18 @@
 }
 
 - (void)createWindow:(NSString *)appName {
-  self.window = [[M4C0Window alloc] init];
+  self.window = [[NSWindow alloc] init];
   self.window.contentView = [[M4C0View alloc] init];
-  [self.window setDelegate:self.windowDelegate];
-  [self.window setupWithTitle:appName];
+  self.window.delegate = self.windowDelegate;
+  self.window.acceptsMouseMovedEvents = YES;
+  self.window.title = appName;
+  self.window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
+                        | NSWindowStyleMaskResizable;
+  self.window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
+
+  [self.window setFrame:CGRectMake(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT) display:TRUE];
+  [self.window center];
+  [self.window makeKeyAndOrderFront:self.window];
 }
 
 @end
