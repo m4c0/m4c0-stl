@@ -1,6 +1,7 @@
 #include "m4c0/objc/autorelease_pool.hpp"
 #include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/ns_application.hpp"
+#include "m4c0/objc/ns_bundle.hpp"
 #include "m4c0/objc/ns_menu.hpp"
 #include "m4c0/objc/ns_menu_item.hpp"
 #include "m4c0/objc/ns_object.hpp"
@@ -37,17 +38,18 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * delega
   g_delegate = delegate;
 
   auto app = objc::ns_application::shared_application();
+  auto title = objc::ns_bundle::main_bundle().bundle_name();
 
   objc::ns_menu bar;
   objc::ns_menu_item app_item;
   objc::ns_menu app_menu;
 
   using namespace std::string_literals;
-  add_item(&app_menu, "Hide "s + "App", "hide:", "h");
+  add_item(&app_menu, "Hide "s + title.c_string_using_utf8(), "hide:", "h");
   auto ho = add_item(&app_menu, "Hide Others", "hideOtherApplications:", "h");
   add_item(&app_menu, "Show All", "unhideAllApplications:", "");
   app_menu.add_item(objc::ns_menu_item::separator_item());
-  add_item(&app_menu, "Quit "s + "App", "terminate:", "q");
+  add_item(&app_menu, "Quit "s + title.c_string_using_utf8(), "terminate:", "q");
 
   ho.key_equivalent_modifier_mask(ho.key_equivalent_modifier_mask() | objc::ns_event_modifier_flags::option);
 
