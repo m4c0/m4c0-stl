@@ -21,3 +21,10 @@ ns_menu_item ns_menu_item::with_title_action_key(const char * title, const char 
 void ns_menu_item::set_submenu(const ns_menu * menu) {
   objc_msg_send<void>(self(), "setSubmenu:", menu->self());
 }
+
+ns_event_modifier_flags ns_menu_item::key_equivalent_modifier_mask() {
+  return objc_msg_send<ns_event_modifier_flags>(self(), "keyEquivalentModifierMask");
+}
+void ns_menu_item::key_equivalent_modifier_mask(ns_event_modifier_flags mask) {
+  objc_msg_send<void>(self(), "setKeyEquivalentModifierMask:", mask);
+}
