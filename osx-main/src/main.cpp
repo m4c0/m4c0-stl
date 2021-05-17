@@ -46,7 +46,7 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * delega
   add_item(&app_menu, "Hide "s + "App", "hide:", "h");
   auto ho = add_item(&app_menu, "Hide Others", "hideOtherApplications:", "h");
   add_item(&app_menu, "Show All", "unhideAllApplications:", "");
-  // TODO: separator!!
+  app_menu.add_item(objc::ns_menu_item::separator_item());
   add_item(&app_menu, "Quit "s + "App", "terminate:", "q");
 
   ho.key_equivalent_modifier_mask(ho.key_equivalent_modifier_mask() | objc::ns_event_modifier_flags::option);
