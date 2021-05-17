@@ -14,6 +14,7 @@ namespace m4c0::objc {
     void set_delegate(const ns_object * d);
     void set_main_menu(const ns_menu * m);
 
+    void activate_ignoring_other_apps(bool b);
     void run();
   };
 }

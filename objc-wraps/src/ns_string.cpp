@@ -7,10 +7,10 @@ using namespace m4c0::objc;
 constexpr const auto utf8_encoding = 4;
 
 ns_string ns_string::with_cstring_utf8(const char * c_str) {
+  Class cls = objc_getClass("NSString");
 
-  ns_object res { "NSString", "alloc" };
-  void * obj = objc_msg_send<void *>(res.self(), "initWithCString:encoding:", c_str, utf8_encoding);
-  return ns_string { "NSString", obj };
+  void * obj = objc_msg_send<void *>(cls, "stringWithCString:encoding:", c_str, utf8_encoding);
+  return ns_string { obj };
 }
 
 const char * ns_string::c_string_using_utf8() {

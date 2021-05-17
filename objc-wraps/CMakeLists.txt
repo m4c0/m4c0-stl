@@ -8,5 +8,6 @@ m4c0_add_library(
     src/ns_menu_item.cpp
     src/ns_object.cpp
     src/ns_string.cpp
+    src/ns_window.cpp
   LIBRARIES m4c0::objc::bridge
   )

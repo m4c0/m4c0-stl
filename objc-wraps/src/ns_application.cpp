@@ -15,6 +15,9 @@ void ns_application::set_main_menu(const ns_menu * m) {
   objc_msg_send<void>(self(), "setMainMenu:", m->self());
 }
 
+void ns_application::activate_ignoring_other_apps(bool b) {
+  objc_msg_send<void>(self(), "activateIgnoringOtherApps:", b ? YES : NO);
+}
 void ns_application::run() {
   objc_msg_send<void>(self(), "run");
 }

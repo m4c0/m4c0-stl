@@ -1,4 +1,5 @@
 #include "apple_menu.hpp"
+#include "key_window.hpp"
 #include "m4c0/objc/autorelease_pool.hpp"
 #include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/ns_application.hpp"
@@ -28,14 +29,18 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * delega
   g_delegate = delegate;
 
   auto app = objc::ns_application::shared_application();
-  auto title = objc::ns_bundle::main_bundle().bundle_name();
-  if (title.self() == nullptr) title = objc::ns_string::with_cstring_utf8("App");
+  auto bundle_name = objc::ns_bundle::main_bundle().bundle_name();
 
-  setup_apple_menu(&app, title.c_string_using_utf8());
+  const char * title = (bundle_name.self() == nullptr) ? "App" : bundle_name.c_string_using_utf8();
+
+  setup_apple_menu(&app, title);
+  auto wnd = setup_window(title);
+  m4c0_osx_main_start(wnd.content_view().self());
 
   objc::ns_object app_del { m4c0_osx_get_delegate_name() };
   app.set_delegate(&app_del);
 
+  app.activate_ignoring_other_apps(true);
   app.run();
 
   return 0;
