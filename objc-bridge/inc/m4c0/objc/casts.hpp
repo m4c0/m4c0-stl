@@ -47,6 +47,25 @@ namespace m4c0::objc {
     return reinterpret_cast<Ret (*)(objc_super *, void *, SEL, Args...)>(objc_msgSendSuper)(&s, self, sel, args...);
   }
 
+  template<class Tp>
+  static Tp object_get_ivar(void * self, const char * ivar_name) {
+    id self_id = static_cast<id>(self);
+    Class cls = object_getClass(self_id);
+    Ivar ivar = class_getInstanceVariable(cls, ivar_name);
+    if (!ivar) return nullptr;
+
+    return *reinterpret_cast<Tp *>(static_cast<std::byte *>(self) + ivar_getOffset(ivar)); // NOLINT
+  }
+  template<class Tp>
+  static void object_set_ivar(void * self, const char * ivar_name, Tp && ptr) {
+    id self_id = static_cast<id>(self);
+    Class cls = object_getClass(self_id);
+    Ivar ivar = class_getInstanceVariable(cls, ivar_name);
+    if (!ivar) return;
+
+    *reinterpret_cast<Tp *>(static_cast<std::byte *>(self) + ivar_getOffset(ivar)) = ptr; // NOLINT
+  }
+
   template<typename Ret, typename... Args>
   static IMP to_imp(Ret (*fn)(Args...)) {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
