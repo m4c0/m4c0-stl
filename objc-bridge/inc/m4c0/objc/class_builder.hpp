@@ -2,6 +2,8 @@
 
 #include "m4c0/objc/casts.hpp"
 
+#include <cmath>
+
 namespace m4c0::objc {
   using imp_t = void (*)();
 
@@ -13,14 +15,10 @@ namespace m4c0::objc {
 
     class_builder & add_ivar(const char * name, unsigned size, unsigned align, const char * sign);
     class_builder & add_ptr_ivar(const char * name) {
-      return add_ivar(name, sizeof(void *), alignof(void *), "@");
+      return add_ivar(name, sizeof(void *), log2(sizeof(void *)), "^v");
     }
 
     class_builder & add_method(const char * sel, imp_t imp, const char * sign);
-    template<typename Fn>
-    class_builder & add_method(const char * sel, Fn && fn, const char * sign) {
-      return add_method(sel, to_imp(fn), sign);
-    }
 
     // static const auto * cls_name = class_builder(...).add(...).build();
     [[nodiscard]] const char * build();
@@ -35,9 +33,10 @@ namespace m4c0::objc {
     template<typename Ret, typename... Args>
     struct wrap<Ret (Tp::*)(Args...)> {
       template<auto M>
-      static auto call(void * self, void * /*sel*/, Args... args) -> Ret {
+      static auto call(id self, SEL /*sel*/, Args... args) -> Ret {
+        Tp * typed_self = object_get_ivar<Tp *>(self, cpp_ivar_name);
         // This can't be a perfect forward due to objc shenanigans
-        return (object_get_ivar<Tp *>(self, cpp_ivar_name)->*M)(args...);
+        return (typed_self->*M)(args...);
       }
     };
 
@@ -50,8 +49,8 @@ namespace m4c0::objc {
 
     template<auto M>
     delegated_class_builder & add_method(const char * sel, const char * sign) {
-      auto wrapper = wrap<decltype(M)>::template call<M>;
-      m_builder.add_method(sel, wrapper, sign);
+      auto wrapper = &wrap<decltype(M)>::template call<M>;
+      m_builder.add_method(sel, to_imp(wrapper), sign);
       return *this;
     }
 

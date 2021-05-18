@@ -8,12 +8,12 @@ namespace m4c0::osx::details {
     delegate * m_delegate;
 
   public:
-    explicit app_delegate(delegate * d) : m_delegate(d) {
+    explicit app_delegate(delegate * d) : ns_application_delegate(), m_delegate(d) {
     }
-    bool application_should_terminate_after_last_window_closed() override {
+    bool application_should_terminate_after_last_window_closed(void * /*app*/) override {
       return true;
     }
-    void application_will_terminate() override {
+    void application_will_terminate(void * /*not*/) override {
       m_delegate->stop();
     }
   };
