@@ -7,7 +7,7 @@ namespace m4c0::objc {
     using ns_object::ns_object;
 
   public:
-    explicit ns_string(void * o) : ns_object("NSString", o) {
+    explicit ns_string(void * o) : ns_object(o) {
     }
 
     [[nodiscard]] const char * c_string_using_utf8();

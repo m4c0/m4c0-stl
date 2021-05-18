@@ -8,7 +8,7 @@ using namespace m4c0::objc;
 
 ns_object ns_window::content_view() {
   void * obj = objc_msg_send<void *>(self(), "contentView");
-  return ns_object { "NSView", obj };
+  return ns_object { obj };
 }
 
 void ns_window::set_accepts_mouse_moved_events(bool accepts) {

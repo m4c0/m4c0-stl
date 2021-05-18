@@ -15,7 +15,7 @@ ns_menu_item ns_menu_item::with_title_action_key(const char * title, const char 
   auto k = ns_string::with_cstring_utf8(key);
 
   void * obj = objc_msg_send<void *>(res.self(), "initWithTitle:action:keyEquivalent:", t.self(), s, k.self());
-  return ns_menu_item { "NSMenuItem", obj };
+  return ns_menu_item { obj };
 }
 
 void ns_menu_item::set_submenu(const ns_menu * menu) {
