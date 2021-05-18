@@ -17,6 +17,12 @@ m4c0_add_test(
   LIBRARIES m4c0::objc::bridge m4c0::test)
 
 m4c0_add_test(
+  ALIAS m4c0::objc::bridge::class-builder
+  TARGET m4c0-test-objc-bridge-class-builder
+  SOURCES tst/test-class-builder.cpp
+  LIBRARIES m4c0::objc::bridge m4c0::test)
+
+m4c0_add_test(
   ALIAS m4c0::objc::bridge::middleware
   TARGET m4c0-test-objc-bridge-middleware
   SOURCES tst/test-middleware.cpp tst/test-middleware-protos.m

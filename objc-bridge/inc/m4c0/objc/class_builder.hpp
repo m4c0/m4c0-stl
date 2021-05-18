@@ -2,8 +2,6 @@
 
 #include "m4c0/objc/casts.hpp"
 
-#include <cmath>
-
 namespace m4c0::objc {
   using imp_t = void (*)();
 
@@ -14,8 +12,13 @@ namespace m4c0::objc {
     explicit class_builder(const char * parent);
 
     class_builder & add_ivar(const char * name, unsigned size, unsigned align, const char * sign);
+
+    template<typename Tp>
+    class_builder & add_typed_ivar(const char * name, const char * sign) {
+      return add_ivar(name, sizeof(Tp), sizeof(Tp), sign);
+    }
     class_builder & add_ptr_ivar(const char * name) {
-      return add_ivar(name, sizeof(void *), log2(sizeof(void *)), "^v");
+      return add_typed_ivar<void *>(name, "^v");
     }
 
     class_builder & add_method(const char * sel, imp_t imp, const char * sign);
@@ -26,12 +29,14 @@ namespace m4c0::objc {
 
   template<class Tp>
   class delegated_class_builder {
+    static constexpr const auto cpp_ivar_name = "m4c0_$$_cpp";
+
     class_builder m_builder;
 
     template<typename M>
     struct wrap;
     template<typename Ret, typename... Args>
-    struct wrap<Ret (Tp::*)(Args...)> {
+    struct wrap<Ret (Tp::*)(Args...) const> {
       template<auto M>
       static auto call(id self, SEL /*sel*/, Args... args) -> Ret {
         Tp * typed_self = object_get_ivar<Tp *>(self, cpp_ivar_name);
@@ -39,10 +44,10 @@ namespace m4c0::objc {
         return (typed_self->*M)(args...);
       }
     };
+    template<typename Ret, typename... Args>
+    struct wrap<Ret (Tp::*)(Args...)> : wrap<Ret (Tp::*)(Args...) const> {};
 
   public:
-    static constexpr const auto cpp_ivar_name = "m4c0_$$_cpp";
-
     explicit delegated_class_builder(const char * parent) : m_builder(parent) {
       m_builder.add_ptr_ivar(cpp_ivar_name);
     }
@@ -56,6 +61,10 @@ namespace m4c0::objc {
 
     [[nodiscard]] auto build() {
       return m_builder.build();
+    }
+
+    static void set_ivar(void * obj, Tp * cpp) {
+      object_set_ivar(obj, cpp_ivar_name, cpp);
     }
   };
 }

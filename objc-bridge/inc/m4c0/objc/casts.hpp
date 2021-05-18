@@ -52,12 +52,12 @@ namespace m4c0::objc {
     id self_id = static_cast<id>(self);
     Class cls = object_getClass(self_id);
     Ivar ivar = class_getInstanceVariable(cls, ivar_name);
-    if (!ivar) return nullptr;
+    if (!ivar) return Tp {};
 
     return *reinterpret_cast<Tp *>(static_cast<std::byte *>(self) + ivar_getOffset(ivar)); // NOLINT
   }
   template<class Tp>
-  static void object_set_ivar(void * self, const char * ivar_name, Tp && ptr) {
+  static void object_set_ivar(void * self, const char * ivar_name, Tp ptr) {
     id self_id = static_cast<id>(self);
     Class cls = object_getClass(self_id);
     Ivar ivar = class_getInstanceVariable(cls, ivar_name);

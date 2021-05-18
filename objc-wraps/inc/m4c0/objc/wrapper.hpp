@@ -15,7 +15,7 @@ namespace m4c0::objc {
 
   protected:
     explicit wrapper(builder_fn_t fn) : Base(get_class_name(fn)) {
-      object_set_ivar(Base::self(), builder_t::cpp_ivar_name, this);
+      builder_t::set_ivar(Base::self(), static_cast<Self *>(this));
     }
   };
 }

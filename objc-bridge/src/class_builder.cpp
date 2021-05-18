@@ -15,7 +15,7 @@ class_builder::class_builder(const char * parent)
 }
 
 class_builder & class_builder::add_ivar(const char * name, unsigned int size, unsigned int align, const char * sign) {
-  class_addIvar(static_cast<Class>(m_class), name, size, align, sign);
+  class_addIvar(static_cast<Class>(m_class), name, size, log2(align), sign);
   return *this;
 }
 

@@ -12,3 +12,10 @@ m4c0_add_library(
     src/ns_window.cpp
   LIBRARIES m4c0::objc::bridge
   )
+
+m4c0_add_test(
+  TARGET m4c0-test-objc-wraps-wrapping
+  ALIAS m4c0::objc::wraps::wrapping
+  SOURCES tst/test-wrapping.cpp
+  LIBRARIES m4c0::objc::wraps
+  )
