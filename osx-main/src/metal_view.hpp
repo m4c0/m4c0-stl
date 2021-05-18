@@ -1,23 +1,14 @@
 #pragma once
 
 #include "m4c0/objc/casts.hpp"
+#include "m4c0/objc/class_builder.hpp"
 #include "m4c0/objc/mtk_view.hpp"
 
 static constexpr const char * cpp_ivar_name = "m4c0_$$_cpp";
 
 static const char * get_view_name() {
-  static constexpr const char * view_name = "M4C0_$$_osx_main_view";
-
-  static class register_class {
-  public:
-    register_class() {
-      auto * cls = objc_allocateClassPair(objc_getClass("MTKView"), view_name, 0);
-      class_addIvar(cls, cpp_ivar_name, sizeof(void *), alignof(void *), "@");
-      objc_registerClassPair(cls);
-    }
-  } r;
-
-  return view_name;
+  static const auto * cls = m4c0::objc::class_builder("MTKView").add_ptr_ivar(cpp_ivar_name).build();
+  return cls;
 }
 
 namespace m4c0::osx::details {

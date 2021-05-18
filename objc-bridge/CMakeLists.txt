@@ -3,6 +3,7 @@ m4c0_add_library(
   TARGET m4c0-objc-bridge
   SOURCES
     src/autorelease.cpp
+    src/class_builder.cpp
     src/inject.cpp
     src/middleware.cpp
   LIBRARIES
