@@ -7,6 +7,7 @@ m4c0_add_library(
     src/ns_bundle.cpp
     src/ns_menu.cpp
     src/ns_menu_item.cpp
+    src/ns_notification_center.cpp
     src/ns_object.cpp
     src/ns_string.cpp
     src/ns_window.cpp
