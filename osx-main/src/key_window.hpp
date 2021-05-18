@@ -2,10 +2,7 @@
 
 #include "m4c0/objc/geometry.hpp"
 #include "m4c0/objc/ns_window.hpp"
-
-extern "C" {
-#include "main.h"
-}
+#include "metal_view.hpp"
 
 [[nodiscard]] static m4c0::objc::ns_window setup_window(const char * title) {
   using namespace m4c0::objc;
@@ -14,7 +11,7 @@ extern "C" {
   constexpr const auto window_height = 600;
 
   ns_window wnd;
-  wnd.set_content_view(ns_object(m4c0_osx_get_view_name()));
+  wnd.set_content_view(m4c0::osx::details::view());
   wnd.set_accepts_mouse_moved_events(true);
   wnd.set_title(title);
   wnd.set_style_mask(

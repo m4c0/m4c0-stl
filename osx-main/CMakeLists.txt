@@ -5,7 +5,6 @@ m4c0_add_library(
   SOURCES
     src/M4C0View.m
     src/main.cpp
-    src/main.m
   LIBRARIES
     m4c0::objc::bridge
     m4c0::objc::wraps
