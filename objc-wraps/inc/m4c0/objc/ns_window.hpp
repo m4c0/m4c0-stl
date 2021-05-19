@@ -13,7 +13,7 @@ namespace m4c0::objc {
     explicit ns_window(void * obj) : ns_object(obj) {
     }
 
-    float backing_scale_factor();
+    cg_float backing_scale_factor();
     ns_object content_view();
 
     void set_accepts_mouse_moved_events(bool accepts);

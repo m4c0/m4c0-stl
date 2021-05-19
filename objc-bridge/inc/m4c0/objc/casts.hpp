@@ -5,15 +5,21 @@
 #include <utility>
 
 // ARM64, for reasons
-#ifndef objc_msgSend_stret
+#if !defined(__i386__) && !defined(__x86_64__)
 #define objc_msgSend_stret objc_msgSend
-#endif
-#ifndef objc_msgSend_fpret
 #define objc_msgSend_fpret objc_msgSend
 #endif
 
 namespace m4c0::objc {
   namespace details {
+    // This only works because we have three options (as of 2021) in Apple's world of things:
+    // x86 (which may be history by now), x86_64 (where it "just works") and arm64 (works
+    // because "stret" isn't a thing on ARM)
+    template<class Tp>
+    static constexpr const auto fits_in_intel_return_v = (sizeof(Tp) <= 2 * sizeof(void *));
+    template<>
+    static constexpr const auto fits_in_intel_return_v<void> = true;
+
     template<typename Ret, typename... Args>
     static Ret call(void (*fn)(), void * obj, const char * sel_name, Args... args) {
       SEL sel = sel_getUid(sel_name);
@@ -32,9 +38,19 @@ namespace m4c0::objc {
       -> std::enable_if_t<std::is_floating_point_v<Ret>, Ret> {
     return details::call<Ret>(&objc_msgSend_fpret, obj, sel_name, args...);
   }
+  // Welcome to the true dynamic nature of objc_msgSend: the ObjC compiler adds a lot of sugar to the syntax of
+  // messages. One of them regards how to deal with "structs" in return signatures while being C-compatible. The answer
+  // is: I'm glad this ABI is compatible with C++ for the same requirement. In a nutshell, anything smaller than two
+  // Intel CPU registers is returned inside registers (RAX+DAX and XMM0+XMM1) - anything bigger becomes a pointer to the
+  // caller's stack (i.e. require the stret call).
   template<typename Ret, typename... Args>
   static auto objc_msg_send(void * obj, const char * sel_name, Args... args)
-      -> std::enable_if_t<std::is_class_v<Ret>, Ret> {
+      -> std::enable_if_t<std::is_class_v<Ret> && details::fits_in_intel_return_v<Ret>, Ret> {
+    return details::call<Ret>(&objc_msgSend, obj, sel_name, args...);
+  }
+  template<typename Ret, typename... Args>
+  static auto objc_msg_send(void * obj, const char * sel_name, Args... args)
+      -> std::enable_if_t<std::is_class_v<Ret> && !details::fits_in_intel_return_v<Ret>, Ret> {
     return details::call<Ret>(&objc_msgSend_stret, obj, sel_name, args...);
   }
   template<typename Ret, typename... Args>

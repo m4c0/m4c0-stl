@@ -1,6 +1,8 @@
 #pragma once
 
 namespace m4c0::objc {
+  using cg_float = double; // except watchos
+
   class ns_object {
     void * m_object;
 

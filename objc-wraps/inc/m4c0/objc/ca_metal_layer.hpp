@@ -8,6 +8,6 @@ namespace m4c0::objc {
     explicit ca_metal_layer(void * o) : ns_object(o) {
     }
 
-    void set_contents_scale(float scale);
+    void set_contents_scale(cg_float scale);
   };
 }

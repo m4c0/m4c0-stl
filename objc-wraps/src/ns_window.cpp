@@ -6,8 +6,8 @@
 
 using namespace m4c0::objc;
 
-float ns_window::backing_scale_factor() {
-  return objc_msg_send<float>(self(), "backingScaleFactor");
+cg_float ns_window::backing_scale_factor() {
+  return objc_msg_send<cg_float>(self(), "backingScaleFactor");
 }
 ns_object ns_window::content_view() {
   void * obj = objc_msg_send<void *>(self(), "contentView");

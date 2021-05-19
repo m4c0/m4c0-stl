@@ -1,6 +1,7 @@
 #pragma once
 
 namespace m4c0::objc {
+  // It seems those are float, even though CGFloat is double
   struct cg_point {
     float x;
     float y;
