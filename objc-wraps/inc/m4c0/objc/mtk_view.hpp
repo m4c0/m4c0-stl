@@ -3,6 +3,7 @@
 #include "m4c0/objc/ns_object.hpp"
 
 namespace m4c0::objc {
+  class ca_metal_layer;
   class ns_window;
 
   class mtk_view : public ns_object {
@@ -15,5 +16,6 @@ namespace m4c0::objc {
     }
 
     [[nodiscard]] ns_window window();
+    [[nodiscard]] ca_metal_layer layer();
   };
 }

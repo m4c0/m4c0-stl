@@ -1,8 +1,10 @@
 #pragma once
 
+#include "m4c0/objc/ca_metal_layer.hpp"
 #include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/class_builder.hpp"
 #include "m4c0/objc/mtk_view.hpp"
+#include "m4c0/objc/ns_application.hpp"
 #include "m4c0/objc/ns_notification_center.hpp"
 #include "m4c0/objc/ns_window.hpp"
 #include "m4c0/objc/wrapper.hpp"
@@ -23,7 +25,13 @@ namespace m4c0::osx::details {
       objc::ns_notification_center::default_center().remove_observer(this, notif, &wnd);
     }
 
+    // http://smokyonion.github.io/blog/2012/11/11/how-to-make-your-mac-apps-retina-ready/
     void scale_did_change(void * /*notif*/) {
+      auto wnd = window();
+      if (!wnd) wnd = objc::ns_application::shared_application().main_window();
+      if (!wnd) return;
+
+      layer().set_contents_scale(wnd.backing_scale_factor());
     }
 
   public:

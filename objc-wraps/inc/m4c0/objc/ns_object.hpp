@@ -19,6 +19,10 @@ namespace m4c0::objc {
     ns_object & operator=(const ns_object & o);
     ns_object & operator=(ns_object && o) = delete;
 
+    [[nodiscard]] constexpr explicit operator bool() const noexcept {
+      return m_object != nullptr;
+    }
+
     [[nodiscard]] constexpr auto * self() const noexcept {
       return m_object;
     }

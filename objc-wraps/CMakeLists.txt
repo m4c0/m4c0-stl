@@ -2,6 +2,7 @@ m4c0_add_library(
   TARGET m4c0-objc-wraps
   ALIAS m4c0::objc::wraps
   SOURCES 
+    src/ca_metal_layer.cpp
     src/mtk_view.cpp
     src/ns_application.cpp
     src/ns_application_delegate.cpp
