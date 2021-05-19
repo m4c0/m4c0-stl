@@ -4,7 +4,7 @@
 using namespace m4c0::objc;
 
 ns_bundle ns_bundle::main_bundle() {
-  return ns_bundle { "NSBundle", "mainBundle" };
+  return ns_bundle { "NSBundle", "mainBundle", true };
 }
 
 ns_string ns_bundle::bundle_name() {

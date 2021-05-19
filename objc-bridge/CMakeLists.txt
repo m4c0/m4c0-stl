@@ -40,3 +40,9 @@ m4c0_add_test(
   SOURCES tst/test-poc.cpp
   LIBRARIES m4c0::objc::bridge)
 
+m4c0_add_test(
+  ALIAS m4c0::objc::bridge::swizzling
+  TARGET m4c0-test-objc-bridge-swizzling
+  SOURCES tst/test-swizzling.cpp
+  LIBRARIES m4c0::objc::bridge m4c0::test)
+

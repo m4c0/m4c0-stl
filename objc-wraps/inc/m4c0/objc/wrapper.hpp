@@ -17,5 +17,15 @@ namespace m4c0::objc {
     explicit wrapper(builder_fn_t fn) : Base(get_class_name(fn)) {
       builder_t::set_ivar(Base::self(), static_cast<Self *>(this));
     }
+
+  public:
+    ~wrapper() {
+      builder_t::set_ivar(Base::self(), static_cast<Self *>(nullptr));
+    }
+
+    wrapper(const wrapper &) = delete;
+    wrapper(wrapper &&) = delete;
+    wrapper & operator=(const wrapper &) = delete;
+    wrapper & operator=(wrapper &&) = delete;
   };
 }

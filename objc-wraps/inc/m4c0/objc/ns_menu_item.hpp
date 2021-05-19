@@ -19,7 +19,7 @@ namespace m4c0::objc {
 
     static ns_menu_item with_title_action_key(const char * title, const char * sel, const char * key);
     static ns_menu_item separator_item() {
-      return ns_menu_item { "NSMenuItem", "separatorItem" };
+      return ns_menu_item { "NSMenuItem", "separatorItem", true };
     }
   };
 }

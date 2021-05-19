@@ -12,7 +12,7 @@ namespace m4c0::objc {
     // [obj retain]
     explicit ns_object(void * obj);
     // [cls method] - ex: [NSApp sharedApp]
-    ns_object(const char * cls_name, const char * method);
+    ns_object(const char * cls_name, const char * method, bool retain);
     // [obj release]
     ~ns_object();
 

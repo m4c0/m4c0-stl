@@ -6,7 +6,7 @@
 using namespace m4c0::objc;
 
 ns_application ns_application::shared_application() {
-  return ns_application("NSApplication", "sharedApplication");
+  return ns_application("NSApplication", "sharedApplication", true);
 }
 
 ns_window ns_application::main_window() {

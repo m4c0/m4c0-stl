@@ -8,7 +8,7 @@
 using namespace m4c0::objc;
 
 ns_menu_item ns_menu_item::with_title_action_key(const char * title, const char * sel, const char * key) {
-  ns_object res { "NSMenuItem", "alloc" };
+  ns_object res { "NSMenuItem", "alloc", false };
 
   auto t = ns_string::with_cstring_utf8(title);
   SEL s = sel_getUid(sel);

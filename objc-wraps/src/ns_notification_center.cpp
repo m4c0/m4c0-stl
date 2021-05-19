@@ -7,7 +7,7 @@
 using namespace m4c0::objc;
 
 ns_notification_center ns_notification_center::default_center() {
-  return ns_notification_center { "NSNotificationCenter", "defaultCenter" };
+  return ns_notification_center { "NSNotificationCenter", "defaultCenter", true };
 }
 
 void ns_notification_center::add_observer(

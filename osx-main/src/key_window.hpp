@@ -4,23 +4,32 @@
 #include "m4c0/objc/ns_window.hpp"
 #include "metal_view.hpp"
 
-[[nodiscard]] static m4c0::objc::ns_window setup_window(const char * title) {
-  using namespace m4c0::objc;
+namespace m4c0::osx::details {
+  class window : public objc::ns_window {
+    view m_view {};
 
-  constexpr const auto window_width = 800;
-  constexpr const auto window_height = 600;
+  public:
+    explicit window(const char * title) : ns_window() {
+      using namespace m4c0::objc;
 
-  ns_window wnd;
-  wnd.set_content_view(m4c0::osx::details::view());
-  wnd.set_accepts_mouse_moved_events(true);
-  wnd.set_title(title);
-  wnd.set_style_mask(
-      ns_window_style_mask::titled | ns_window_style_mask::closable | ns_window_style_mask::miniaturizable
-      | ns_window_style_mask::resizable);
-  wnd.set_collection_behavior(ns_window_collection_behavior::full_screen_primary);
-  wnd.set_frame(cg_rect { {}, { window_width, window_height } }, true);
+      constexpr const auto window_width = 800;
+      constexpr const auto window_height = 600;
 
-  wnd.center();
-  wnd.make_key_and_order_front();
-  return wnd;
+      set_content_view(m_view);
+      set_accepts_mouse_moved_events(true);
+      set_title(title);
+      set_style_mask(
+          ns_window_style_mask::titled | ns_window_style_mask::closable | ns_window_style_mask::miniaturizable
+          | ns_window_style_mask::resizable);
+      set_collection_behavior(ns_window_collection_behavior::full_screen_primary);
+      set_frame(cg_rect { {}, { window_width, window_height } }, true);
+
+      center();
+      make_key_and_order_front();
+    }
+
+    [[nodiscard]] constexpr const auto * content_view() {
+      return &m_view;
+    }
+  };
 }
