@@ -38,7 +38,10 @@ namespace m4c0::objc {
     return details::call<Ret>(&objc_msgSend_stret, obj, sel_name, args...);
   }
   template<typename Ret, typename... Args>
-  static Ret objc_msg_send_super(id self, SEL sel, Args... args) {
+  static Ret objc_msg_send_super(void * obj, const char * sel_name, Args... args) {
+    id self = static_cast<id>(obj);
+    SEL sel = sel_getUid(sel_name);
+
     objc_super s {};
     s.super_class = class_getSuperclass(object_getClass(self));
     s.receiver = self;

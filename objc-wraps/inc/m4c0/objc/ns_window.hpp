@@ -10,6 +10,8 @@ namespace m4c0::objc {
   public:
     ns_window() : ns_object("NSWindow") {
     }
+    explicit ns_window(void * obj) : ns_object(obj) {
+    }
 
     ns_object content_view();
 
