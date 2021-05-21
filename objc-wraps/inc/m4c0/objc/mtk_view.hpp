@@ -15,7 +15,7 @@ namespace m4c0::objc {
     mtk_view() : ns_object("MTKView") {
     }
 
-    [[nodiscard]] ns_window window();
-    [[nodiscard]] ca_metal_layer layer();
+    [[nodiscard]] ns_window window() const;
+    [[nodiscard]] ca_metal_layer layer() const;
   };
 }

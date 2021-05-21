@@ -2,7 +2,7 @@
 
 int main(int argc, char ** argv) {
   static struct : public m4c0::osx::delegate {
-    void start(void * view) override {
+    void start(const m4c0::objc::mtk_view * view) override {
     }
     void stop() override {
     }

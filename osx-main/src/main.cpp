@@ -20,7 +20,7 @@ int m4c0::osx::main(int /*argc*/, char ** /*argv*/, m4c0::osx::delegate * d) {
 
   setup_apple_menu(&app, title);
   details::window wnd { title };
-  d->start(wnd.content_view()->self());
+  d->start(wnd.content_view());
 
   details::app_delegate app_del { d };
 

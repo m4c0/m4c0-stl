@@ -5,10 +5,10 @@
 
 using namespace m4c0::objc;
 
-ca_metal_layer mtk_view::layer() {
+ca_metal_layer mtk_view::layer() const {
   return ca_metal_layer { objc_msg_send<void *>(self(), "layer") };
 }
-ns_window mtk_view::window() {
+ns_window mtk_view::window() const {
   auto * obj = objc_msg_send<void *>(self(), "window");
   return ns_window { obj };
 }
