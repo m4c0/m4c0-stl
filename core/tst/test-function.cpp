@@ -1,6 +1,17 @@
 #include "m4c0/function.hpp"
 #include "m4c0/test.hpp"
 
+class cls {
+  int i;
+
+public:
+  explicit cls(int i) : i(i) {
+  }
+  int call() { // NOLINT
+    return i;
+  }
+};
+
 go_bandit([] { // NOLINT
   describe("function", [] {
     it("has a default constructor", [] {
@@ -19,6 +30,12 @@ go_bandit([] { // NOLINT
       m4c0::function<int()> fn([&i]() -> int {
         return i;
       });
+      AssertThat(fn(), Is().EqualTo(2));
+    });
+
+    it("calls a method ref", [] {
+      cls obj { 2 };
+      m4c0::function<int()> fn(&obj, &cls::call);
       AssertThat(fn(), Is().EqualTo(2));
     });
 

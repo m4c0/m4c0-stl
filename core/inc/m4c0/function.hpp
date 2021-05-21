@@ -40,6 +40,24 @@ namespace m4c0 {
       };
       m_deleter = nullptr;
     }
+    template<class ObjTp, class Fn>
+    function(ObjTp * obj, Fn fn) : m_buffer() {
+      struct holder {
+        ObjTp * obj;
+        Fn fn;
+      };
+      static_assert(sizeof(holder) <= sizeof(buffer));
+      auto * h = reinterpret_cast<holder *>(&m_buffer); // NOLINT
+      h->obj = obj;
+      h->fn = fn;
+
+      m_wrapper = [](void * ptr, Args &&... args) {
+        auto * b = static_cast<holder *>(ptr);
+        return (b->obj->*(b->fn))(std::forward<Args>(args)...);
+      };
+      m_deleter = [](void * ptr) {
+      };
+    }
     template<typename Fn, typename = std::enable_if_t<!is_same_v<Fn> && fits<Fn>, void>>
     function(Fn && fn) { // NOLINT TODO: Should we "explicit" this?
       ::new (&m_buffer) Fn(std::forward<Fn>(fn));
