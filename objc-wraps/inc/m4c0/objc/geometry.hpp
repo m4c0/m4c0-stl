@@ -1,14 +1,15 @@
 #pragma once
 
 namespace m4c0::objc {
-  // It seems those are float, even though CGFloat is double
+  using cg_float = double;
+
   struct cg_point {
-    float x;
-    float y;
+    cg_float x;
+    cg_float y;
   };
   struct cg_size {
-    float width;
-    float height;
+    cg_float width;
+    cg_float height;
   };
   struct cg_rect {
     cg_point origin;
