@@ -4,6 +4,12 @@ m4c0_add_interface(
   )
 
 m4c0_add_test(
+  ALIAS m4c0::core::callback-chain
+  TARGET m4c0-test-callback-chain
+  SOURCES tst/test-callback-chain.cpp
+  LIBRARIES m4c0::core m4c0::test)
+
+m4c0_add_test(
   ALIAS m4c0::core::fifo-worker
   TARGET m4c0-test-fifo-worker
   SOURCES tst/test-fifo-worker.cpp
