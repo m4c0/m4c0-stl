@@ -13,8 +13,9 @@ namespace m4c0::objc {
     explicit ns_window(void * obj) : ns_object(obj) {
     }
 
-    cg_float backing_scale_factor();
-    ns_object content_view();
+    [[nodiscard]] cg_float backing_scale_factor();
+    [[nodiscard]] ns_object content_view();
+    [[nodiscard]] cg_point mouse_location_outside_of_event_stream();
 
     void set_accepts_mouse_moved_events(bool accepts);
     void set_collection_behavior(ns_window_collection_behavior cb);

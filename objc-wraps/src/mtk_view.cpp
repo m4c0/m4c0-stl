@@ -5,6 +5,9 @@
 
 using namespace m4c0::objc;
 
+cg_rect mtk_view::bounds() const {
+  return objc_msg_send<cg_rect>(self(), "bounds");
+}
 ca_metal_layer mtk_view::layer() const {
   return ca_metal_layer { objc_msg_send<void *>(self(), "layer") };
 }

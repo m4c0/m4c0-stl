@@ -13,6 +13,9 @@ ns_object ns_window::content_view() {
   void * obj = objc_msg_send<void *>(self(), "contentView");
   return ns_object { obj };
 }
+cg_point ns_window::mouse_location_outside_of_event_stream() {
+  return objc_msg_send<cg_point>(self(), "mouseLocationOutsideOfEventStream");
+}
 
 void ns_window::set_accepts_mouse_moved_events(bool accepts) {
   objc_msg_send<void>(self(), "setAcceptsMouseMovedEvents:", accepts ? YES : NO);

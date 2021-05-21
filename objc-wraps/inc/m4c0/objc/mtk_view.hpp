@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/objc/geometry.hpp"
 #include "m4c0/objc/ns_object.hpp"
 
 namespace m4c0::objc {
@@ -15,7 +16,8 @@ namespace m4c0::objc {
     mtk_view() : ns_object("MTKView") {
     }
 
-    [[nodiscard]] ns_window window() const;
+    [[nodiscard]] cg_rect bounds() const;
     [[nodiscard]] ca_metal_layer layer() const;
+    [[nodiscard]] ns_window window() const;
   };
 }
