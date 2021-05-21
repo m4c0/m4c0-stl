@@ -1,5 +1,5 @@
 #include "m4c0/assets/simple_asset.hpp"
-#include "m4c0/native_handles.metal.hpp"
+#include "m4c0/native_handles.android.hpp"
 
 #include <android/asset_manager.h>
 #include <string>
