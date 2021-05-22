@@ -1,10 +1,19 @@
 #pragma once
 
+#include <TargetConditionals.h>
+
 namespace m4c0::objc {
   using cg_float = double; // except watchos
 
   class ns_object {
     void * m_object;
+
+  protected:
+    template<class Tp>
+    Tp get(const char * getter) const;
+    template<class Tp>
+    void set(const char * setter, const Tp & o) const;
+    void send(const char * msg) const;
 
   public:
     // [[cls alloc] init]
