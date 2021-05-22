@@ -2,10 +2,10 @@ m4c0_add_library(
   TARGET m4c0-ios-main
   ALIAS m4c0::ios::main
   SOURCES
-    src/M4C0AppDelegate.m
     src/main.cpp
   LIBRARIES
     m4c0::objc::bridge
+    m4c0::objc::wraps
     "-framework Metal"
     "-framework MetalKit"
     "-framework UIKit"

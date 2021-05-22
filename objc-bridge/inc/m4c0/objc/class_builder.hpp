@@ -20,8 +20,15 @@ namespace m4c0::objc {
     class_builder & add_ptr_ivar(const char * name) {
       return add_typed_ivar<void *>(name, "^v");
     }
+    class_builder & add_id_ivar(const char * name) {
+      return add_typed_ivar<void *>(name, "@");
+    }
 
     class_builder & add_method(const char * sel, imp_t imp, const char * sign);
+    template<typename Fn>
+    class_builder & add_method(const char * sel, Fn && fn, const char * sign) {
+      return add_method(sel, to_imp(fn), sign);
+    }
 
     // static const auto * cls_name = class_builder(...).add(...).build();
     [[nodiscard]] const char * build();
