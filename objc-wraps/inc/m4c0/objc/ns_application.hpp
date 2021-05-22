@@ -7,6 +7,7 @@ namespace m4c0::objc {
   class ns_window;
 
   class ns_application : public ns_object {
+  protected:
     using ns_object::ns_object;
 
   public:
