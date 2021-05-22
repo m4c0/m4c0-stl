@@ -2,7 +2,11 @@
 #include "m4c0/objc/autorelease_pool.hpp"
 #include "m4c0/objc/class_builder.hpp"
 #include "m4c0/objc/geometry.hpp"
+#include "m4c0/objc/mtk_view.hpp"
 #include "m4c0/objc/ns_string.hpp"
+#include "m4c0/objc/ui_screen.hpp"
+#include "m4c0/objc/ui_view_controller.hpp"
+#include "m4c0/objc/ui_window.hpp"
 
 extern "C" {
 int UIApplicationMain(int, char **, void *, void *);
@@ -11,20 +15,19 @@ int UIApplicationMain(int, char **, void *, void *);
 static m4c0::ios::delegate * g_delegate; // NOLINT
 
 static bool finish_launch(void * self, void * /*sel*/, void * /*app*/, void * /*opts*/) {
-  m4c0::objc::ns_object vc { "UIViewController", "new", false };
-  m4c0::objc::ns_object view = { "MTKView", "new", false };
-  m4c0::objc::objc_msg_send<void>(vc.self(), "setView:", view.self());
+  m4c0::objc::mtk_view view;
 
-  m4c0::objc::ns_object main_scr { "UIScreen", "mainScreen", true };
-  m4c0::objc::cg_rect frame = m4c0::objc::objc_msg_send<m4c0::objc::cg_rect>(main_scr.self(), "bounds");
+  m4c0::objc::ui_view_controller vc;
+  vc.set_view(view);
 
-  m4c0::objc::ns_object wnd { "UIWindow", "new", false };
-  m4c0::objc::object_set_ivar(self, "window", wnd.self());
-  m4c0::objc::objc_msg_send<void>(wnd.self(), "setFrame:", frame);
-  m4c0::objc::objc_msg_send<void>(wnd.self(), "setRootViewController:", vc.self());
-  m4c0::objc::objc_msg_send<void>(wnd.self(), "makeKeyAndVisible");
+  m4c0::objc::ui_window wnd;
+  wnd.set_frame(m4c0::objc::ui_screen::main_screen().bounds());
+  wnd.set_root_view_controller(vc);
+  wnd.make_key_and_visible();
 
-  g_delegate->start(view.self());
+  void * wnd_r = m4c0::objc::objc_msg_send<void *>(wnd.self(), "retain");
+  m4c0::objc::object_set_ivar(self, "window", wnd_r);
+  g_delegate->start(&view);
   return true;
 }
 static void will_term(void * /*self*/, void * /*sel*/, void * /*app*/) {
@@ -45,6 +48,5 @@ int m4c0::ios::main(int argc, char ** argv, m4c0::ios::delegate * delegate) {
   g_delegate = delegate;
 
   auto app_del = objc::ns_string::with_cstring_utf8(app_del_cls);
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-cstyle-cast)
   return UIApplicationMain(argc, argv, nullptr, app_del.self());
 }
