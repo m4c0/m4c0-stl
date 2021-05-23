@@ -19,7 +19,7 @@ namespace m4c0::osx::details {
       scale_did_change(nullptr);
     }
     void remove_from_superview() {
-      objc::objc_msg_send_super<void>(self(), "removeFromSuperview");
+      objc::objc_msg_send_super<void>("MTKView", self(), "removeFromSuperview");
 
       auto wnd = window();
       objc::ns_notification_center::default_center().remove_observer(this, notif, &wnd);

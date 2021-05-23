@@ -19,7 +19,7 @@ namespace m4c0::osx {
     void send_event(void * e) {
       auto nse = objc::ns_event(e);
       m_delegate->on_event(&nse);
-      objc::objc_msg_send_super<void>(self(), "sendEvent:", e);
+      objc::objc_msg_send_super<void>("NSApplication", self(), "sendEvent:", e);
     }
 
     delegate * m_delegate;
