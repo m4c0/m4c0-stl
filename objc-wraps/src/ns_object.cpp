@@ -31,8 +31,16 @@ ns_object & ns_object::operator=(const ns_object & o) {
 }
 
 template<>
+cg_point ns_object::get(const char * getter) const {
+  return objc_msg_send<cg_point>(self(), getter);
+}
+template<>
 cg_rect ns_object::get(const char * getter) const {
   return objc_msg_send<cg_rect>(self(), getter);
+}
+template<>
+unsigned ns_object::get(const char * getter) const {
+  return objc_msg_send<unsigned>(self(), getter);
 }
 template<>
 void ns_object::set(const char * setter, const ns_object & o) const {
