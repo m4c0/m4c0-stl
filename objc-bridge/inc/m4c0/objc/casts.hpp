@@ -63,7 +63,7 @@ namespace m4c0::objc {
     s.receiver = self;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    return reinterpret_cast<Ret (*)(objc_super *, void *, SEL, Args...)>(objc_msgSendSuper)(&s, self, sel, args...);
+    return reinterpret_cast<Ret (*)(objc_super *, SEL, Args...)>(objc_msgSendSuper)(&s, sel, args...);
   }
 
   template<class Tp>
