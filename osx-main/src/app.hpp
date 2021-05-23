@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/objc/casts.hpp"
 #include "m4c0/objc/class_builder.hpp"
 #include "m4c0/objc/ns_application.hpp"
 #include "m4c0/osx/main.hpp"
@@ -18,6 +19,7 @@ namespace m4c0::osx {
     void send_event(void * e) {
       auto nse = objc::ns_event(e);
       m_delegate->on_event(&nse);
+      objc::objc_msg_send_super<void>(self(), "sendEvent:", e);
     }
 
     delegate * m_delegate;
