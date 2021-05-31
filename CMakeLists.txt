@@ -10,6 +10,7 @@ include(cmake/library-utils.cmake)
 include(cmake/test-utils.cmake)
 
 add_subdirectory(assets)
+add_subdirectory(casein)
 add_subdirectory(core)
 add_subdirectory(di)
 add_subdirectory(ext)

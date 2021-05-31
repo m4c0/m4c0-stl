@@ -13,6 +13,7 @@ Take everything here as unstable (or, at least WIP).
 
 ## Modules
 
+* **Casein** - A simple library to glue different platforms together
 * **Core** - Convenience classes
 * **DI** - Dependency injection with some scope management
 * **Droid Main** - Main loop for Android apps. Uses Android's glue code, but

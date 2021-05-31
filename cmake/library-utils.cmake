@@ -30,6 +30,7 @@ function(m4c0_add_library)
   set(multi_value_args SOURCES LIBRARIES PRIVATE_LIBRARIES)
   cmake_parse_arguments(MAL "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
+  # TODO: PUBLIC/PRIVATE scopes needs to be revisited. I think this leads to duplicatecompilation
   _m4c0_add_library(
     TARGET ${MAL_TARGET}
     ALIAS ${MAL_ALIAS}
