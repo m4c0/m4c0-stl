@@ -1,4 +1,5 @@
 #include "m4c0/win/main.hpp"
+#include "m4c0/win/rc.h"
 
 #include <exception>
 #include <stdexcept>
@@ -28,9 +29,13 @@ static void register_class(HINSTANCE h_instance) {
 }
 
 static void create_window(HINSTANCE h_instance, int show) {
+  constexpr const auto title_max_len = 256;
+  TCHAR title[title_max_len];
+  int size = LoadString(h_instance, IDS_M4C0_APP_TITLE, title, title_max_len);
+
   auto hwnd = CreateWindow(
       _T(window_class),
-      _T("App"),
+      size > 0 ? static_cast<LPCTSTR>(title) : _T("App"),
       WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT,
       CW_USEDEFAULT,

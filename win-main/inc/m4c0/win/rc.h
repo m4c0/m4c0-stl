@@ -1,0 +1,4 @@
+#define IDS_M4C0_APP_TITLE 9930000
+
+// Example RC:
+// STRINGTABLE { IDS_M4C0_APP_TITLE "My App" }
