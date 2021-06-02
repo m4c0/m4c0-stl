@@ -7,6 +7,7 @@
 #include "m4c0/vulkan/surface_format.hpp"
 #include "m4c0/vulkan/swapchain.hpp"
 
+#include <limits>
 #include <stdexcept>
 
 using namespace m4c0::vulkan;

@@ -3,6 +3,7 @@
 #include "m4c0/vulkan/safe_calls.hpp"
 
 #include <array>
+#include <limits>
 
 using namespace m4c0::vulkan;
 

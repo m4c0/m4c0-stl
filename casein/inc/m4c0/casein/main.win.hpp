@@ -5,7 +5,7 @@
 #include "m4c0/win/main.hpp"
 
 namespace m4c0::casein::win {
-  class wnd_provider : public m4c0::vulkan::native_provider {
+  class wnd_provider : public m4c0::native_handles {
     HWND m_hwnd;
 
   public:
@@ -31,8 +31,8 @@ namespace m4c0::casein::win {
       h.reset();
       PostQuitMessage(0);
       return 0;
+    default:
+      return DefWindowProc(hwnd, msg, w_param, l_param);
     }
-
-    return DefWindowProc(hwnd, msg, w_param, l_param);
   }
 }

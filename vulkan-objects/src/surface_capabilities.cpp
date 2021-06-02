@@ -4,6 +4,7 @@
 #include "m4c0/vulkan/surface_capabilities.hpp"
 
 #include <algorithm>
+#include <limits>
 
 using namespace m4c0::vulkan;
 
