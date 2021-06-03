@@ -1,12 +1,13 @@
 #pragma once
 
 #include <TargetConditionals.h>
+#include <cstddef>
 
 namespace m4c0::objc {
   using cg_float = double; // except watchos
 
   class ns_object {
-    void * m_object;
+    void * m_object {};
 
   protected:
     template<class Tp>
@@ -16,6 +17,8 @@ namespace m4c0::objc {
     void send(const char * msg) const;
 
   public:
+    explicit constexpr ns_object(std::nullptr_t /*unused*/) {
+    }
     // [[cls alloc] init]
     explicit ns_object(const char * cls_name);
     // [obj retain]

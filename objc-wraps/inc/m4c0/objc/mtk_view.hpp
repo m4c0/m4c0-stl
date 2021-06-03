@@ -20,6 +20,8 @@ namespace m4c0::objc {
   public:
     mtk_view() : ns_object("MTKView") {
     }
+    explicit mtk_view(std::nullptr_t) : ns_object(nullptr) {
+    }
 
     [[nodiscard]] cg_rect bounds() const;
     [[nodiscard]] ca_metal_layer layer() const;
