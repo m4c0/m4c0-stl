@@ -9,11 +9,17 @@
 namespace m4c0::casein::osx {
   class main : public m4c0::osx::delegate, public m4c0::native_handles {
     std::unique_ptr<m4c0::casein::handler> m_handler;
-    CAMetalLayer * m_layer {};
+    objc::ca_metal_layer m_layer;
+    objc::mtk_view m_view;
+
+  protected:
+    [[nodiscard]] constexpr const auto & view() const noexcept {
+      return m_view;
+    }
 
   public:
     void start(const m4c0::objc::mtk_view * view) override {
-      m_layer = view->layer().self();
+      m_layer = view->layer();
       m_handler = m4c0::casein::main(this);
     }
     void on_event(const m4c0::objc::ns_event * e) override {
@@ -23,7 +29,7 @@ namespace m4c0::casein::osx {
     }
 
     [[nodiscard]] CAMetalLayer * layer() const noexcept override {
-      return m_layer;
+      return m_layer.self();
     }
   };
 }
