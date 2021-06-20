@@ -24,4 +24,5 @@ m4c0_add_library(
 m4c0_add_test(
   TARGET m4c0-test-casein-link
   SOURCES tst/dummy.cpp
-  LIBRARIES m4c0::casein::main)
+  LIBRARIES m4c0::casein::main
+  WIN32)
