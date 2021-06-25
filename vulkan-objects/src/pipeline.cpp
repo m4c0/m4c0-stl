@@ -44,8 +44,8 @@ pipeline pipeline::builder::build() {
 
   VkPipelineDepthStencilStateCreateInfo depth_stencil {};
   depth_stencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-  depth_stencil.depthTestEnable = VK_TRUE;
-  depth_stencil.depthWriteEnable = VK_TRUE;
+  depth_stencil.depthTestEnable = m_depth_enabled ? VK_TRUE : VK_FALSE;
+  depth_stencil.depthWriteEnable = m_depth_enabled ? VK_TRUE : VK_FALSE;
   depth_stencil.depthCompareOp = VK_COMPARE_OP_LESS;
 
   std::array<VkDynamicState, 2> states { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };

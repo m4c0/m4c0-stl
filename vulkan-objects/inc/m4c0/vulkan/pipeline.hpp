@@ -17,6 +17,7 @@ namespace m4c0::vulkan {
     class builder {
       const pipeline_layout * m_layout {};
       const render_pass * m_render_pass {};
+      bool m_depth_enabled = true;
 
       class shaders;
       pimpl<shaders> m_shaders;
@@ -36,6 +37,10 @@ namespace m4c0::vulkan {
       }
       [[nodiscard]] constexpr builder & with_render_pass(const render_pass * rp) noexcept {
         m_render_pass = rp;
+        return *this;
+      }
+      [[nodiscard]] constexpr builder & without_depth_test() noexcept {
+        m_depth_enabled = false;
         return *this;
       }
 
