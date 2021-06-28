@@ -20,8 +20,14 @@ namespace m4c0::assets {
     [[nodiscard]] virtual unsigned size() const noexcept = 0;
 
     template<class Tp>
-    [[nodiscard]] std::span<const Tp> span() const noexcept {
-      return { static_cast<const Tp *>(data()), size() };
+    [[nodiscard]] std::span<const Tp> span(unsigned offset = 0) const noexcept {
+      auto bytes = span<std::byte>(offset);
+      const void * data = bytes.data();
+      return { static_cast<const Tp *>(data), bytes.size() };
+    }
+    template<>
+    [[nodiscard]] std::span<const std::byte> span<std::byte>(unsigned offset) const noexcept {
+      return std::span { static_cast<const std::byte *>(data()), size() }.subspan(offset);
     }
 
     static std::unique_ptr<simple_asset> load(const native_handles * nptr, const char * name, const char * ext);
