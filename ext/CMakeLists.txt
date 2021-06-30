@@ -2,6 +2,10 @@ add_library(m4c0-ext-bandit INTERFACE)
 target_include_directories(m4c0-ext-bandit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/bandit)
 add_library(m4c0::ext::bandit ALIAS m4c0-ext-bandit)
 
+add_library(m4c0-ext-stb INTERFACE)
+target_include_directories(m4c0-ext-stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
+add_library(m4c0::ext::stb ALIAS m4c0-ext-stb)
+
 add_library(m4c0-ext-volk STATIC)
 target_include_directories(m4c0-ext-volk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/volk)
 target_link_libraries(m4c0-ext-volk PUBLIC m4c0::ext::vulkan)

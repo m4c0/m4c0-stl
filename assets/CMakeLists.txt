@@ -2,7 +2,9 @@ m4c0_add_library(
   TARGET m4c0-assets
   ALIAS m4c0::assets
   LIBRARIES m4c0::native-handles
+  SOURCES src/stb_image.cpp
   )
+target_link_libraries(m4c0-assets PRIVATE m4c0::ext::stb)
 
 if(ANDROID)
   target_sources(m4c0-assets PRIVATE src/simple_asset.android.cpp)

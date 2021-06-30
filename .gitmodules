@@ -8,3 +8,6 @@
 [submodule "ext/vulkan-headers"]
 	path = ext/vulkan-headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers.git
+[submodule "ext/stb"]
+	path = ext/stb
+	url = https://github.com/nothings/stb
