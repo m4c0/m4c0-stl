@@ -26,3 +26,8 @@ m4c0_add_test(
   SOURCES tst/dummy.cpp
   LIBRARIES m4c0::casein::main
   WIN32)
+m4c0_add_test(
+  TARGET m4c0-test-casein-fuji-link
+  SOURCES tst/fuji.cpp
+  LIBRARIES m4c0::casein::main m4c0::fuji
+  WIN32)
