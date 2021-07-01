@@ -1,7 +1,9 @@
+#include "m4c0/assets/stb_image.hpp"
 #include "m4c0/vulkan/buffer.hpp"
 #include "m4c0/vulkan/buffer_memory_bind.hpp"
 #include "m4c0/vulkan/command_buffer_list.hpp"
 #include "m4c0/vulkan/device_memory.hpp"
+#include "m4c0/vulkan/host_staged_image_buffer.hpp"
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/image_memory_bind.hpp"
 #include "m4c0/vulkan/local_image.hpp"
@@ -31,6 +33,9 @@ int main() {
   m4c0::vulkan::tools::logical_device d { "test-app", nullptr };
 
   m4c0::vulkan::tools::local_image img { &d, 4, 3 };
+
+  auto asset = m4c0::assets::typed_stb_image<>::load_from_asset(nullptr, "texture", "png");
+  m4c0::vulkan::tools::host_staged_image_buffer stg { &d, asset };
 
   m4c0::vulkan::tools::primary_command_buffer_list<3> pcb { d.unified_queue_family() };
   m4c0::vulkan::tools::secondary_command_buffer_list<3> scb { d.unified_queue_family() };
