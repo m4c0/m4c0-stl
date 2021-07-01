@@ -4,6 +4,7 @@
 #include "m4c0/vulkan/device_memory.hpp"
 #include "m4c0/vulkan/image.hpp"
 #include "m4c0/vulkan/image_memory_bind.hpp"
+#include "m4c0/vulkan/local_image.hpp"
 #include "m4c0/vulkan/logical_device.hpp"
 #include "m4c0/vulkan/queue_submit.hpp"
 #include "m4c0/vulkan/typed_semaphore.hpp"
@@ -28,6 +29,8 @@ class bound_buffer {
 
 int main() {
   m4c0::vulkan::tools::logical_device d { "test-app", nullptr };
+
+  m4c0::vulkan::tools::local_image img { &d, 4, 3 };
 
   m4c0::vulkan::tools::primary_command_buffer_list<3> pcb { d.unified_queue_family() };
   m4c0::vulkan::tools::secondary_command_buffer_list<3> scb { d.unified_queue_family() };

@@ -38,6 +38,13 @@ namespace m4c0::vulkan {
     [[nodiscard]] static device_memory create_host_memory(const physical_device * pd, const memory_requirements * mr);
     [[nodiscard]] static device_memory create_local_memory(const physical_device * pd, const memory_requirements * mr);
 
+    [[nodiscard]] static device_memory create_host_memory(const physical_device * pd, const memory_requirements & mr) {
+      return create_host_memory(pd, &mr);
+    }
+    [[nodiscard]] static device_memory create_local_memory(const physical_device * pd, const memory_requirements & mr) {
+      return create_local_memory(pd, &mr);
+    }
+
     [[nodiscard]] map_guard map_all();
     [[nodiscard]] map_guard map_from_beginning(std::uint64_t size);
     [[nodiscard]] map_guard map_with_offset_and_size(std::uint64_t offset, std::uint64_t size);
