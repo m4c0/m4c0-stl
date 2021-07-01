@@ -9,6 +9,7 @@
 #include "m4c0/vulkan/local_image.hpp"
 #include "m4c0/vulkan/logical_device.hpp"
 #include "m4c0/vulkan/queue_submit.hpp"
+#include "m4c0/vulkan/staged_image.hpp"
 #include "m4c0/vulkan/typed_semaphore.hpp"
 
 struct my_semaphore : public m4c0::vulkan::tools::typed_semaphore<my_semaphore> {};
@@ -37,11 +38,15 @@ int main() {
   auto asset = m4c0::assets::typed_stb_image<>::load_from_asset(nullptr, "texture", "png");
   m4c0::vulkan::tools::host_staged_image_buffer stg { &d, asset };
 
+  m4c0::vulkan::tools::staged_image txt { &d, nullptr, "texture", "png" };
+
   m4c0::vulkan::tools::primary_command_buffer_list<3> pcb { d.unified_queue_family() };
   m4c0::vulkan::tools::secondary_command_buffer_list<3> scb { d.unified_queue_family() };
 
   {
     auto pg = pcb.begin(0);
+    txt.build_primary_command_buffer(pg.command_buffer());
+
     // I feel like there should be some compiler-enforced way of setting the second only be achievable via the primary
     auto sg = scb.begin(0, nullptr, nullptr);
   }
