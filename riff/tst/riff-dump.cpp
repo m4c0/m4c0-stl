@@ -1,69 +1,14 @@
+#include "m4c0/riff/fs_reader.hpp"
+#include "m4c0/riff/reader.hpp"
+#include "m4c0/riff/subreader.hpp"
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <type_traits>
 
-class reader {
-  friend class subreader;
-
-protected:
-  [[nodiscard]] virtual bool read(void * buffer, unsigned len) = 0;
-
-public:
-  [[nodiscard]] virtual bool seekg(unsigned pos) = 0;
-  [[nodiscard]] virtual unsigned tellg() = 0;
-
-  template<class Tp>
-  [[nodiscard]] std::optional<Tp> read() {
-    static_assert(std::is_trivial_v<Tp>);
-    Tp res {};
-    if (read(&res, sizeof(res))) {
-      return { res };
-    }
-    return {};
-  }
-};
-
-class subreader : public reader {
-  reader * m_o;
-  unsigned m_start;
-  unsigned m_len;
-
-public:
-  constexpr subreader(reader * o, unsigned start, unsigned len) : m_o(o), m_start(start), m_len(len) {
-  }
-
-  [[nodiscard]] bool read(void * buffer, unsigned len) override {
-    if (m_o->tellg() + len >= m_start + m_len) return false;
-    return m_o->read(buffer, len);
-  }
-  [[nodiscard]] bool seekg(unsigned pos) override {
-    if (pos < 0) return false;
-    if (pos > m_len) return false;
-    return m_o->seekg(m_start + pos);
-  }
-  [[nodiscard]] unsigned tellg() override {
-    return m_o->tellg() - m_start;
-  }
-};
-class fs_reader : public reader {
-  std::ifstream & m_ifs;
-
-public:
-  explicit constexpr fs_reader(std::ifstream & ifs) : m_ifs(ifs) {
-  }
-
-  [[nodiscard]] bool read(void * buffer, unsigned len) override {
-    return static_cast<bool>(m_ifs.read(static_cast<char *>(buffer), len));
-  }
-  [[nodiscard]] bool seekg(unsigned pos) override {
-    return static_cast<bool>(m_ifs.seekg(pos));
-  }
-  [[nodiscard]] unsigned tellg() override {
-    return m_ifs.tellg();
-  }
-};
+using namespace m4c0::riff;
 
 struct header {
   std::uint32_t fourcc;
