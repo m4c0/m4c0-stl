@@ -9,7 +9,11 @@
 static AudioComponentInstance create_tone_unit() {
   AudioComponentDescription acd;
   acd.componentType = kAudioUnitType_Output;
+#if TARGET_OS_OSX
   acd.componentSubType = kAudioUnitSubType_DefaultOutput;
+#else
+  acd.componentSubType = kAudioUnitSubType_RemoteIO;
+#endif
   acd.componentManufacturer = kAudioUnitManufacturer_Apple;
   acd.componentFlags = 0;
   acd.componentFlagsMask = 0;
