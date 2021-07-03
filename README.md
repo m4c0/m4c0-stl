@@ -22,14 +22,13 @@ Take everything here as an unstable work-in-progress.
   a minimalistic cross-platform module. Apple (iOS+OSX) uses NSLog, Windows 
   creates a file at the same directory as the executable, and Android uses its
   log library.
+* **Maze** - Maze generation
 * **Native Handles** - Generic interface for sharing native handles (such as
   HWND, NSView, etc)
 * **ObjC Bridge** - Hacks to inject C++ code in Obj-C
 * **ObjC Wraps** - C++ wrappers of some Obj-C classes
 * **OSX Main** - Main loop for Metal-based OSX apps
-* **Win Main** - Main loop for WIN32 apps. Eventually, `wndproc` instances will
-  be injectable.
-* **Maze** - Maze generation
+* **Riff** - RIFF file read/write
 * **Test** - Conveniences for unit tests
 * **Vulkan** - Packages all Vulkan sub-libraries
 * **Vulkan Actions** - Fluent interfaces for Vulkan functions (submit queue,
@@ -43,6 +42,8 @@ Take everything here as an unstable work-in-progress.
 * **Vulkan Static** - An implementation of the dynamic counterpart. This
   provides the same signature but it is compatible with static linkage. Mainly
   used in iOS/OSX to avoid codesigning MoltenVK independently.
+* **Win Main** - Main loop for WIN32 apps. Eventually, `wndproc` instances will
+  be injectable.
 
 ## Third-party code
 
