@@ -10,6 +10,7 @@ namespace m4c0::riff {
     [[nodiscard]] virtual bool read(void * buffer, unsigned len) = 0;
 
   public:
+    [[nodiscard]] virtual bool eof() = 0;
     [[nodiscard]] virtual bool seekg(unsigned pos) = 0;
     [[nodiscard]] virtual unsigned tellg() = 0;
 
