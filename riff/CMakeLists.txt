@@ -9,3 +9,8 @@ m4c0_add_test(
   SOURCES tst/riff-dump.cpp
   LIBRARIES m4c0::riff
   )
+m4c0_add_test(
+  TARGET m4c0-riff-wavdump
+  SOURCES tst/wav-dump.cpp
+  LIBRARIES m4c0::riff
+  )
