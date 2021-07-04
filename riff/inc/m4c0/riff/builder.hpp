@@ -46,5 +46,10 @@ namespace m4c0::riff {
       m_w->write(data);
       return *this;
     }
+    riff_builder & write(fourcc_t fourcc, const void * data, unsigned len) {
+      chunk_writer cw(m_w, fourcc);
+      m_w->write(data, len);
+      return *this;
+    }
   };
 }

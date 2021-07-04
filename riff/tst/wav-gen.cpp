@@ -31,5 +31,5 @@ int main() {
   wav_fmt fmt {};
   std::array<std::uint8_t, freq> data {};
 
-  riff_builder(&w, 'EVAW').write(' tmf', fmt).write('atad', data);
+  riff_builder(&w, 'EVAW').write(' tmf', fmt).write('atad', data.data(), data.size());
 }
