@@ -3,17 +3,12 @@
 #include "m4c0/log.hpp"
 #include "m4c0/riff/reader.hpp"
 #include "m4c0/riff/subreader.hpp"
+#include "m4c0/riff/types.hpp"
 
 #include <cstdint>
 #include <unordered_map>
 
 namespace m4c0::riff {
-  using fourcc_t = std::uint32_t;
-  struct header {
-    fourcc_t fourcc;
-    std::uint32_t length;
-  };
-
   static bool warn(const char * msg) {
     m4c0::log::warning(msg);
     return false;
