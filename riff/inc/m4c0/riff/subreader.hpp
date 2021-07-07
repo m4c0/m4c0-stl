@@ -2,14 +2,21 @@
 
 #include "m4c0/riff/reader.hpp"
 
+#include <optional>
+
 namespace m4c0::riff {
   class subreader : public reader {
     reader * m_o;
     unsigned m_start;
     unsigned m_len;
 
-  public:
     constexpr subreader(reader * o, unsigned start, unsigned len) : m_o(o), m_start(start), m_len(len) {
+    }
+
+  public:
+    static std::optional<subreader> seek_and_create(reader * o, unsigned start, unsigned len) {
+      if (!o->seekg(start)) return {};
+      return { subreader { o, start, len } };
     }
 
     [[nodiscard]] bool eof() override {

@@ -29,10 +29,11 @@ static bool read_chunk(reader * r, bool (*callback)(header h, reader * r)) {
   auto start = r->tellg();
   auto end = start + (h->length + 1U & ~1U);
   if (!r->seekg(end)) return warn("Found truncated or misaligned chunk");
-  if (!r->seekg(start)) return warn("Failure rewinding stream");
 
-  subreader sr { r, start, h->length };
-  return callback(*h, &sr) && r->seekg(end);
+  auto sr = subreader::seek_and_create(r, start, h->length);
+  if (!sr) return warn("Failure rewinding stream");
+
+  return callback(*h, &sr.value()) && r->seekg(end);
 }
 static bool read_list(header h, reader * r, bool (*chunk_callback)(header h, reader * r)) {
   auto type = r->read<std::uint32_t>();

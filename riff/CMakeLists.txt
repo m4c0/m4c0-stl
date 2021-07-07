@@ -19,3 +19,10 @@ m4c0_add_test(
   SOURCES tst/wav-gen.cpp
   LIBRARIES m4c0::riff
   )
+
+m4c0_add_test(
+  TARGET m4c0-riff-test-subreader
+  ALIAS m4c0::riff::subreader
+  SOURCES tst/test-subreader.cpp
+  LIBRARIES m4c0::riff m4c0::test
+  )

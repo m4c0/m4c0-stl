@@ -43,13 +43,14 @@ namespace m4c0::riff {
       auto start = r->tellg();
       auto end = start + (h->length + 1U & ~1U);
       if (!r->seekg(end)) return warn("Found truncated or misaligned chunk");
-      if (!r->seekg(start)) return warn("Failure rewinding stream");
 
       auto m = callback_map<CbTp>::get(h->fourcc);
-      if (m == nullptr) return SucceedOnUnknown ? r->seekg(end) : warn("Unknown chunk type found");
+      if (m == nullptr) return SucceedOnUnknown ? true : warn("Unknown chunk type found");
 
-      subreader sr { r, start, h->length };
-      return (cb->*m)(&sr) && r->seekg(end);
+      auto sr = subreader::seek_and_create(r, start, h->length);
+      if (!sr) return warn("Failure rewinding stream");
+
+      return (cb->*m)(&sr.value()) && r->seekg(end);
     }
   };
   template<class CbTp>
