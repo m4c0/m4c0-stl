@@ -5,7 +5,21 @@
 
 namespace m4c0::maze::model {
   template<typename Room, typename Data>
-  class wall {
+  class wall : public wall<Room, void> {
+    Data m_data {};
+
+  public:
+    using wall<Room, void>::wall;
+
+    [[nodiscard]] Data & data() {
+      return m_data;
+    }
+    [[nodiscard]] const Data & data() const {
+      return m_data;
+    }
+  };
+  template<typename Room>
+  class wall<Room, void> {
     using room_t = Room;
     room_t * m_room {};
 
@@ -40,6 +54,9 @@ namespace m4c0::maze::model {
     room & operator=(room &&) = delete;
 
     [[nodiscard]] const auto & operator[](unsigned index) const {
+      return m_adj.at(index);
+    }
+    [[nodiscard]] auto & operator[](unsigned index) {
       return m_adj.at(index);
     }
     [[nodiscard]] explicit constexpr operator bool() const {

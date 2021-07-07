@@ -35,6 +35,18 @@ go_bandit([] { // NOLINT
       AssertThat(apt[1][0].room(), Is().EqualTo(&apt[0]));
     });
 
+    it("can store wall data independently for double-linked nodes", [] {
+      struct wall_data {
+      } a, b;
+      graph<room<char, 1, wall_data *>, 2> apt {};
+      apt.double_link(0, 1);
+      apt[0][0].data() = &a;
+      apt[1][0].data() = &b;
+
+      AssertThat(apt[0][0].data(), Is().EqualTo(&a));
+      AssertThat(apt[1][0].data(), Is().EqualTo(&b));
+    });
+
     describe("iterations", [] {
       graph_1_5 apt {};
       for (int i = 0; i <= 4; ++i) {
