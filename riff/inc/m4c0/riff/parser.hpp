@@ -86,8 +86,9 @@ namespace m4c0::riff {
       m_hdr_parser.emplace('FFIR', &hdr_cb::success);
     }
 
-    void emplace(fourcc_t fourcc, auto cb) {
-      m_data_parser.emplace(fourcc, cb);
+    template<class Cb>
+    void emplace(fourcc_t fourcc, Cb && cb) {
+      m_data_parser.emplace(fourcc, std::forward<Cb>(cb));
     }
 
     [[nodiscard]] bool parse(reader * r, CbTp * cb) const {

@@ -47,11 +47,11 @@ static bool read_list(header h, reader * r, bool (*chunk_callback)(header h, rea
   std::cerr << "end list\n";
   return true;
 }
-static bool read_list_chunks(auto h, auto * /*r*/) {
+static bool read_list_chunks(header h, reader * /*r*/) {
   std::cerr << "  " << fourcc_str(h.fourcc) << " - len=" << h.length << "\n";
   return true;
 }
-static bool read_riff_chunks(auto h, auto * r) {
+static bool read_riff_chunks(header h, reader * r) {
   if (h.fourcc == 'TSIL') return read_list(h, r, read_list_chunks);
   std::cerr << "  " << fourcc_str(h.fourcc) << " - len=" << h.length << "\n";
   return true;
