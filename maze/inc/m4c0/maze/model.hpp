@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 namespace m4c0::maze::model {
-  template<typename Room>
+  template<typename Room, typename Data>
   class wall {
     using room_t = Room;
     room_t * m_room {};
@@ -22,11 +22,12 @@ namespace m4c0::maze::model {
       return m_room;
     }
   };
-  template<typename Data, unsigned Adjacency>
+  template<typename Data, unsigned Adjacency, typename WallData>
   class room {
-    using self_t = room<Data, Adjacency>;
+    using self_t = room<Data, Adjacency, WallData>;
+    using wall_t = wall<self_t, WallData>;
 
-    std::array<wall<self_t>, Adjacency> m_adj {};
+    std::array<wall_t, Adjacency> m_adj {};
     bool m_has_degree { false };
     Data m_data {};
 
@@ -55,7 +56,7 @@ namespace m4c0::maze::model {
     void add_adjancency(self_t * t) {
       for (auto & adj : m_adj) {
         if (!adj) {
-          adj = wall { t };
+          adj = wall_t { t };
           m_has_degree = true;
           return;
         }

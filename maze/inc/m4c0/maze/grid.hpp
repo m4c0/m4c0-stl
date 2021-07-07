@@ -9,7 +9,7 @@ namespace m4c0::maze {
     static constexpr const auto grid_height = GridH;
     static constexpr const auto room_count = grid_width * grid_height;
 
-    using room_t = model::room<unsigned, 4>;
+    using room_t = model::room<unsigned, 4, void>;
     using graph_t = model::graph<room_t, room_count>;
 
     graph_t m_graph {};

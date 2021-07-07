@@ -4,9 +4,9 @@
 #include <vector>
 
 using namespace m4c0::maze::model;
-using graph_1_2 = graph<room<char, 1>, 2>;
-using graph_3_3 = graph<room<char, 3>, 3>;
-using graph_1_5 = graph<room<char, 1>, 5>; // NOLINT
+using graph_1_2 = graph<room<char, 1, void>, 2>;
+using graph_3_3 = graph<room<char, 3, void>, 3>;
+using graph_1_5 = graph<room<char, 1, void>, 5>; // NOLINT
 
 go_bandit([] { // NOLINT
   describe("maze::model", [] {
@@ -38,7 +38,7 @@ go_bandit([] { // NOLINT
     describe("iterations", [] {
       graph_1_5 apt {};
       for (int i = 0; i <= 4; ++i) {
-        apt[i].data() = '0' + i;
+        apt[i].data() = static_cast<char>('0' + i);
       }
       apt.link(0, 1);
       apt.link(1, 2);
