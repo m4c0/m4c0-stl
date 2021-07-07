@@ -23,7 +23,7 @@ namespace m4c0::riff {
       return tellg() >= m_len;
     }
     [[nodiscard]] bool read(void * buffer, unsigned len) override {
-      if (m_o->tellg() + len >= m_start + m_len) return false;
+      if (tellg() + len > m_len) return false;
       return m_o->read(buffer, len);
     }
     [[nodiscard]] bool seekg(unsigned pos) override {

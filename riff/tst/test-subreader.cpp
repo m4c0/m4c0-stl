@@ -2,6 +2,7 @@
 #include "m4c0/riff/subreader.hpp"
 #include "m4c0/test.hpp"
 
+#include <array>
 #include <sstream>
 
 using namespace m4c0::riff;
@@ -75,6 +76,24 @@ go_bandit([] { // NOLINT
     it("seeks to current pos", [] {
       holder h;
       assert_position(h->seekg(0), h, false, 0);
+    });
+    it("reads", [] {
+      holder h;
+      std::string buf { "12" };
+      AssertThat(h->read(buf.data(), buf.size()), Is().True());
+      AssertThat(buf.data(), Is().EqualTo("is"));
+    });
+    it("reads all", [] {
+      holder h;
+      std::string buf { "1234" };
+      AssertThat(h->read(buf.data(), buf.size()), Is().True());
+      AssertThat(buf.data(), Is().EqualTo("is a"));
+    });
+    it("doesnt read past limit", [] {
+      holder h;
+      std::string buf { "12345" };
+      AssertThat(h->read(buf.data(), buf.size()), Is().False());
+      AssertThat(buf.data(), Is().EqualTo("12345"));
     });
   });
 });
