@@ -1,6 +1,7 @@
-#include "m4c0/riff/fs_reader.hpp"
+#include "m4c0/riff/istr_reader.hpp"
 #include "m4c0/riff/parser.hpp"
 
+#include <fstream>
 #include <iostream>
 
 using namespace m4c0::riff;
@@ -34,7 +35,7 @@ int main(int argc, char ** argv) {
     return EXIT_FAILURE;
   }
 
-  fs_reader reader { in };
+  istr_reader reader { in };
 
   riff_parser<wav_dumper> rp('EVAW');
   rp.emplace(' tmf', &wav_dumper::dump_fmt);

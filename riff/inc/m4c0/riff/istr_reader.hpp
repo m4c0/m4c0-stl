@@ -2,14 +2,14 @@
 
 #include "m4c0/riff/reader.hpp"
 
-#include <fstream>
+#include <istream>
 
 namespace m4c0::riff {
-  class fs_reader : public reader {
-    std::ifstream & m_ifs;
+  class istr_reader : public reader {
+    std::istream & m_ifs;
 
   public:
-    explicit constexpr fs_reader(std::ifstream & ifs) : m_ifs(ifs) {
+    explicit constexpr istr_reader(std::istream & ifs) : m_ifs(ifs) {
     }
 
     [[nodiscard]] bool eof() override {

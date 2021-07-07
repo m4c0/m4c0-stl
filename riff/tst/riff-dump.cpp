@@ -1,5 +1,5 @@
 #include "m4c0/log.hpp"
-#include "m4c0/riff/fs_reader.hpp"
+#include "m4c0/riff/istr_reader.hpp"
 #include "m4c0/riff/reader.hpp"
 #include "m4c0/riff/subreader.hpp"
 
@@ -75,7 +75,7 @@ int main(int argc, char ** argv) {
     return EXIT_FAILURE;
   }
 
-  fs_reader reader { in };
+  istr_reader reader { in };
   if (!read_riff(&reader)) {
     return EXIT_FAILURE;
   }
