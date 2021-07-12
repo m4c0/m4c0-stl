@@ -1,15 +1,15 @@
 m4c0_add_library(
   TARGET m4c0-audio
   ALIAS m4c0::audio
-  LIBRARIES m4c0::log
+  SOURCES
+    $<$<PLATFORM_ID:Android>:src/droid.cpp>
+    $<$<PLATFORM_ID:Darwin,iOS>:src/osx.cpp>
+    $<$<PLATFORM_ID:Windows>:src/win.cpp>
+  LIBRARIES
+    m4c0::log
+    $<$<PLATFORM_ID:Android>:aaudio>
+    $<$<PLATFORM_ID:Darwin,iOS>:-framework\ AudioToolbox>
   )
-
-if (APPLE)
-  target_sources(m4c0-audio PRIVATE src/osx.cpp)
-  target_link_libraries(m4c0-audio PUBLIC "-framework AudioToolbox")
-elseif(WIN32)
-  target_sources(m4c0-audio PRIVATE src/win.cpp)
-endif()
 
 m4c0_add_test(
   TARGET m4c0-test-audio-link
