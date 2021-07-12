@@ -23,11 +23,15 @@ m4c0_add_library(
 
 m4c0_add_test(
   TARGET m4c0-test-casein-link
-  SOURCES tst/dummy.cpp
+  SOURCES 
+    tst/dummy.cpp
+    $<$<PLATFORM_ID:Android>:tst/dummy.droid.cpp>
   LIBRARIES m4c0::casein::main
   WIN32)
 m4c0_add_test(
   TARGET m4c0-test-casein-fuji-link
-  SOURCES tst/fuji.cpp
+  SOURCES
+    tst/fuji.cpp
+    $<$<PLATFORM_ID:Android>:tst/dummy.droid.cpp>
   LIBRARIES m4c0::casein::main m4c0::fuji
   WIN32)
