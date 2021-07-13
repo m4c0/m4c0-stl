@@ -24,10 +24,8 @@ m4c0_add_library(
     m4c0::vulkan::objects
   )
 
-if(NOT(CMAKE_SYSTEM_NAME STREQUAL "iOS"))
-  m4c0_add_test(
-    TARGET m4c0-test-vulkan-commands-poc
-    SOURCES tst/test-poc.cpp
-    LIBRARIES m4c0::vulkan::commands
-    )
-endif()
+m4c0_add_test(
+  TARGET m4c0-test-vulkan-commands-poc
+  SOURCES tst/test-poc.cpp
+  LIBRARIES m4c0::vulkan::commands
+  )

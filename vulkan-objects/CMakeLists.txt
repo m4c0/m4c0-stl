@@ -51,12 +51,12 @@ endif()
 
 # So far, it was easier to add a static MoltenVK instead of codesigning it in iOS
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
-  target_link_libraries(m4c0-vulkan-objects PUBLIC m4c0::vulkan::static)
+  target_link_libraries(m4c0-vulkan-objects PUBLIC m4c0::vulkan::static m4c0::ext::moltenvk)
 else()
   target_link_libraries(m4c0-vulkan-objects PUBLIC m4c0::vulkan::dynamic)
-
-  m4c0_add_test(
-    TARGET m4c0-test-vulkan-objects-poc
-    SOURCES tst/test-poc.cpp
-    LIBRARIES m4c0::vulkan::objects)
 endif()
+
+m4c0_add_test(
+  TARGET m4c0-test-vulkan-objects-poc
+  SOURCES tst/test-poc.cpp
+  LIBRARIES m4c0::vulkan::objects)
