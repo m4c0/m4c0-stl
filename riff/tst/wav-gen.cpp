@@ -1,5 +1,5 @@
+#include "m4c0/io/ostr_writer.hpp"
 #include "m4c0/riff/builder.hpp"
-#include "m4c0/riff/ostr_writer.hpp"
 #include "m4c0/riff/types.hpp"
 
 #include <array>
@@ -26,7 +26,7 @@ constexpr const auto size_of_fmt = 16;
 static_assert(sizeof(wav_fmt) == size_of_fmt);
 
 int main() {
-  ostr_writer w { std::cout };
+  m4c0::io::ostr_writer w { std::cout };
 
   wav_fmt fmt {};
   std::array<std::uint8_t, freq> data {};

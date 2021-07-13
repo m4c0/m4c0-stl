@@ -1,16 +1,16 @@
 #pragma once
 
+#include "m4c0/io/writer.hpp"
 #include "m4c0/riff/types.hpp"
-#include "m4c0/riff/writer.hpp"
 
 namespace m4c0::riff {
   class riff_builder {
     class chunk_writer {
-      writer * m_w;
+      io::writer * m_w;
       unsigned m_start;
 
     public:
-      chunk_writer(writer * w, fourcc_t fourcc) : m_w(w) {
+      chunk_writer(io::writer * w, fourcc_t fourcc) : m_w(w) {
         w->write(fourcc);
         w->write(static_cast<std::uint32_t>(0));
         m_start = w->tellp();
@@ -33,10 +33,10 @@ namespace m4c0::riff {
     };
 
     chunk_writer m_hdr;
-    writer * m_w;
+    io::writer * m_w;
 
   public:
-    riff_builder(writer * w, fourcc_t fourcc) : m_hdr(w, 'FFIR'), m_w(w) {
+    riff_builder(io::writer * w, fourcc_t fourcc) : m_hdr(w, 'FFIR'), m_w(w) {
       w->write(fourcc);
     }
 

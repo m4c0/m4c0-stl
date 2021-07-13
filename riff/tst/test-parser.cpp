@@ -1,10 +1,11 @@
-#include "m4c0/riff/istr_reader.hpp"
+#include "m4c0/io/istr_reader.hpp"
 #include "m4c0/riff/parser.hpp"
 #include "m4c0/test.hpp"
 
 #include <sstream>
 #include <string>
 
+using namespace m4c0::io;
 using namespace m4c0::riff;
 using namespace std::string_literals;
 

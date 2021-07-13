@@ -1,10 +1,10 @@
 #pragma once
 
-#include "m4c0/riff/reader.hpp"
+#include "m4c0/io/reader.hpp"
 
 #include <istream>
 
-namespace m4c0::riff {
+namespace m4c0::io {
   class istr_reader : public reader {
     std::istream & m_ifs;
 

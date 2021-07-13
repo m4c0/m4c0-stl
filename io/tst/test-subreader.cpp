@@ -1,11 +1,11 @@
-#include "m4c0/riff/istr_reader.hpp"
-#include "m4c0/riff/subreader.hpp"
+#include "m4c0/io/istr_reader.hpp"
+#include "m4c0/io/subreader.hpp"
 #include "m4c0/test.hpp"
 
 #include <array>
 #include <sstream>
 
-using namespace m4c0::riff;
+using namespace m4c0::io;
 
 class holder {
   std::istringstream m_str;

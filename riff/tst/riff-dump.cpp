@@ -1,7 +1,7 @@
+#include "m4c0/io/istr_reader.hpp"
+#include "m4c0/io/reader.hpp"
+#include "m4c0/io/subreader.hpp"
 #include "m4c0/log.hpp"
-#include "m4c0/riff/istr_reader.hpp"
-#include "m4c0/riff/reader.hpp"
-#include "m4c0/riff/subreader.hpp"
 
 #include <cstdlib>
 #include <fstream>
@@ -9,7 +9,7 @@
 #include <optional>
 #include <type_traits>
 
-using namespace m4c0::riff;
+using namespace m4c0::io;
 
 struct header {
   std::uint32_t fourcc;

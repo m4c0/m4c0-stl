@@ -2,7 +2,7 @@
 
 #include <optional>
 
-namespace m4c0::riff {
+namespace m4c0::io {
   class reader {
     friend class subreader;
 

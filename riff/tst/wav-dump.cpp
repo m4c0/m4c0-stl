@@ -1,4 +1,4 @@
-#include "m4c0/riff/istr_reader.hpp"
+#include "m4c0/io/istr_reader.hpp"
 #include "m4c0/riff/parser.hpp"
 
 #include <fstream>
@@ -8,15 +8,15 @@ using namespace m4c0::riff;
 
 class wav_dumper {
 public:
-  bool dump_fmt(reader * r) { // NOLINT
+  bool dump_fmt(m4c0::io::reader * r) { // NOLINT
     std::cout << "Found format\n";
     return true;
   }
-  bool dump_data(reader * r) { // NOLINT
+  bool dump_data(m4c0::io::reader * r) { // NOLINT
     std::cout << "Found data\n";
     return true;
   }
-  bool extra(reader * r) { // NOLINT
+  bool extra(m4c0::io::reader * r) { // NOLINT
     std::cout << "Ignoring extra chunk\n";
     return true;
   }
@@ -35,7 +35,7 @@ int main(int argc, char ** argv) {
     return EXIT_FAILURE;
   }
 
-  istr_reader reader { in };
+  m4c0::io::istr_reader reader { in };
 
   riff_parser<wav_dumper> rp('EVAW');
   rp.emplace(' tmf', &wav_dumper::dump_fmt);

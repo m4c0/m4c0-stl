@@ -1,7 +1,7 @@
 m4c0_add_interface(
   TARGET m4c0-riff
   ALIAS m4c0::riff
-  LIBRARIES m4c0::log
+  LIBRARIES m4c0::io m4c0::log
   )
 
 m4c0_add_test(
@@ -24,11 +24,5 @@ m4c0_add_test(
   TARGET m4c0-riff-test-parser
   ALIAS m4c0::riff::parser
   SOURCES tst/test-parser.cpp
-  LIBRARIES m4c0::riff m4c0::test
-  )
-m4c0_add_test(
-  TARGET m4c0-riff-test-subreader
-  ALIAS m4c0::riff::subreader
-  SOURCES tst/test-subreader.cpp
   LIBRARIES m4c0::riff m4c0::test
   )

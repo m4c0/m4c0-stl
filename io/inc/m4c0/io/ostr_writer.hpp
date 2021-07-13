@@ -1,10 +1,10 @@
 #pragma once
 
-#include "m4c0/riff/writer.hpp"
+#include "m4c0/io/writer.hpp"
 
 #include <ostream>
 
-namespace m4c0::riff {
+namespace m4c0::io {
   class ostr_writer : public writer {
     std::ostream & m_os;
 

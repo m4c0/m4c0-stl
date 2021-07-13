@@ -1,10 +1,10 @@
 #pragma once
 
-#include "m4c0/riff/reader.hpp"
+#include "m4c0/io/reader.hpp"
 
 #include <optional>
 
-namespace m4c0::riff {
+namespace m4c0::io {
   class subreader : public reader {
     reader * m_o;
     unsigned m_start;

@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace m4c0::riff {
+namespace m4c0::io {
   class writer {
   public:
     // TODO: Error handling

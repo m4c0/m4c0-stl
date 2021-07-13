@@ -1,8 +1,8 @@
 #pragma once
 
+#include "m4c0/io/reader.hpp"
+#include "m4c0/io/subreader.hpp"
 #include "m4c0/log.hpp"
-#include "m4c0/riff/reader.hpp"
-#include "m4c0/riff/subreader.hpp"
 #include "m4c0/riff/types.hpp"
 
 #include <cstdint>
@@ -17,7 +17,7 @@ namespace m4c0::riff {
   template<class CbTp>
   class callback_map {
   protected:
-    using callback_t = bool (CbTp::*)(reader *);
+    using callback_t = bool (CbTp::*)(io::reader *);
 
     [[nodiscard]] callback_t get(fourcc_t key) const {
       auto it = m_callbacks.find(key);
@@ -36,7 +36,7 @@ namespace m4c0::riff {
   template<class CbTp, bool SucceedOnUnknown = true>
   class chunk_parser : public callback_map<CbTp> {
   public:
-    bool parse(reader * r, CbTp * cb) const {
+    bool parse(io::reader * r, CbTp * cb) const {
       auto h = r->read<header>();
       if (!h) return warn("Failed to read chunk header");
 
@@ -47,7 +47,7 @@ namespace m4c0::riff {
       auto m = callback_map<CbTp>::get(h->fourcc);
       if (m == nullptr) return SucceedOnUnknown ? true : warn("Unknown chunk type found");
 
-      auto sr = subreader::seek_and_create(r, start, h->length);
+      auto sr = io::subreader::seek_and_create(r, start, h->length);
       if (!sr) return warn("Failure rewinding stream");
 
       return (cb->*m)(&sr.value()) && r->seekg(end);
@@ -66,7 +66,7 @@ namespace m4c0::riff {
         , m_cb(cb)
         , m_map(map) {
       }
-      bool success(reader * r) { // NOLINT
+      bool success(io::reader * r) { // NOLINT
         auto type = r->read<fourcc_t>();
         if (!type) return warn("Failed to read file type in chunk list");
         if (*type != m_expected) return warn("File is not an appropriate RIFF");
@@ -92,7 +92,7 @@ namespace m4c0::riff {
       m_data_parser.emplace(fourcc, std::forward<Cb>(cb));
     }
 
-    [[nodiscard]] bool parse(reader * r, CbTp * cb) const {
+    [[nodiscard]] bool parse(io::reader * r, CbTp * cb) const {
       hdr_cb hdrcb { m_expected, cb, &m_data_parser };
       return m_hdr_parser.parse(r, &hdrcb);
     }
