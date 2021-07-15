@@ -12,9 +12,17 @@ namespace m4c0::io {
     explicit constexpr ostr_writer(std::ostream & os) : m_os(os) {
     }
 
-    void write(const void * buffer, unsigned len) override {
-      m_os.write(static_cast<const char *>(buffer), len);
+    void write(const void * data, unsigned len) override {
+      m_os.write(static_cast<const char *>(data), len);
     }
+
+    void write_u8(std::uint8_t data) override {
+      write(&data, sizeof(data));
+    }
+    void write_u32(std::uint32_t data) override {
+      write(&data, sizeof(data));
+    }
+
     void seekp(unsigned pos) override {
       m_os.seekp(pos);
     }

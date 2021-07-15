@@ -37,10 +37,10 @@ namespace m4c0::riff {
   class chunk_parser : public callback_map<CbTp> {
   public:
     bool parse(io::reader * r, CbTp * cb) const {
-      auto fourcc = r->read<fourcc_t>();
+      auto fourcc = r->read_u32();
       if (!fourcc) return warn("Failed to read chunk type");
 
-      auto length = r->read<uint32_t>();
+      auto length = r->read_u32();
       if (!length) return warn("Failed to read chunk length");
 
       auto m = callback_map<CbTp>::get(*fourcc);
@@ -70,7 +70,7 @@ namespace m4c0::riff {
         , m_map(map) {
       }
       bool success(io::reader * r) { // NOLINT
-        auto type = r->read<fourcc_t>();
+        auto type = r->read_u32();
         if (!type) return warn("Failed to read file type in chunk list");
         if (*type != m_expected) return warn("File is not an appropriate RIFF");
 

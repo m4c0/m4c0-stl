@@ -5,11 +5,6 @@ m4c0_add_interface(
   )
 
 m4c0_add_test(
-  TARGET m4c0-riff-dump
-  SOURCES tst/riff-dump.cpp
-  LIBRARIES m4c0::riff
-  )
-m4c0_add_test(
   TARGET m4c0-riff-wavdump
   SOURCES tst/wav-dump.cpp
   LIBRARIES m4c0::riff

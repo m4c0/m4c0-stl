@@ -18,13 +18,13 @@ public:
     return false;
   }
   bool echo(reader * r) { // NOLINT
-    return r->read<unsigned>().value_or(0) == 'OHCE';
+    return r->read_u32().value_or(0) == 'OHCE';
   }
   bool half_echo(reader * r) { // NOLINT
     // Must read !
-    if (r->read<char>().value_or(0) != '!') return false;
+    if (r->read_u8().value_or(0) != '!') return false;
     // And nothing else
-    return r->read<char>().value_or(1) == 1;
+    return r->read_u8().value_or(1) == 1;
   }
 };
 

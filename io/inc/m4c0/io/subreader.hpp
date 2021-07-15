@@ -26,6 +26,14 @@ namespace m4c0::io {
       if (tellg() + len > m_len) return false;
       return m_o->read(buffer, len);
     }
+    [[nodiscard]] std::optional<uint8_t> read_u8() override {
+      if (tellg() + sizeof(uint8_t) > m_len) return {};
+      return m_o->read_u8();
+    }
+    [[nodiscard]] std::optional<uint32_t> read_u32() override {
+      if (tellg() + sizeof(uint32_t) > m_len) return {};
+      return m_o->read_u32();
+    }
     [[nodiscard]] bool seekg(unsigned pos) override {
       if (pos < 0) return false;
       if (pos > m_len) return false;
