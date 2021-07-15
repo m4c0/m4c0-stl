@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.17..3.19)
+# 3.20.4 solves an issue with MSVC and /std:c++latest
+# See: https://stackoverflow.com/a/64890021
+cmake_minimum_required(VERSION 3.20.4)
 project(m4c0-stl
   VERSION 1.0.0
   DESCRIPTION "m4c0's C++ Standard Library"
