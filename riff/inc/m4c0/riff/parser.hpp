@@ -37,17 +37,20 @@ namespace m4c0::riff {
   class chunk_parser : public callback_map<CbTp> {
   public:
     bool parse(io::reader * r, CbTp * cb) const {
-      auto h = r->read<header>();
-      if (!h) return warn("Failed to read chunk header");
+      auto fourcc = r->read<fourcc_t>();
+      if (!fourcc) return warn("Failed to read chunk type");
 
-      auto start = r->tellg();
-      auto end = start + (h->length + 1U & ~1U);
-      if (!r->seekg(end)) return warn("Found truncated or misaligned chunk");
+      auto length = r->read<uint32_t>();
+      if (!length) return warn("Failed to read chunk length");
 
-      auto m = callback_map<CbTp>::get(h->fourcc);
+      auto m = callback_map<CbTp>::get(*fourcc);
       if (m == nullptr) return SucceedOnUnknown ? true : warn("Unknown chunk type found");
 
-      auto sr = io::subreader::seek_and_create(r, start, h->length);
+      auto start = r->tellg();
+      auto end = start + (*length + 1U & ~1U);
+      if (!r->seekg(end)) return warn("Found truncated or misaligned chunk");
+
+      auto sr = io::subreader::seek_and_create(r, start, *length);
       if (!sr) return warn("Failure rewinding stream");
 
       return (cb->*m)(&sr.value()) && r->seekg(end);
