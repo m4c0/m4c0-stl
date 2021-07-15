@@ -9,3 +9,8 @@ m4c0_add_test(
   SOURCES tst/test-subreader.cpp
   LIBRARIES m4c0::io m4c0::test
   )
+m4c0_add_test(
+  TARGET m4c0-io-test-ce-reader
+  SOURCES tst/test-ce-reader.cpp
+  LIBRARIES m4c0::io
+  )
