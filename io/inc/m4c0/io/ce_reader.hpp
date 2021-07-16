@@ -14,6 +14,9 @@ namespace m4c0::io {
     template<typename... Tp>
     constexpr explicit ce_reader(Tp... data) : m_data { static_cast<uint8_t>(data)... } {
     }
+    constexpr explicit ce_reader(const char (&data)[N + 1]) { // NOLINT
+      std::copy(data, data + N, std::begin(m_data));
+    }
 
     [[nodiscard]] constexpr bool read(void * /*buffer*/, unsigned /*len*/) override {
       return false;
@@ -51,4 +54,6 @@ namespace m4c0::io {
   };
   template<typename... Tp>
   ce_reader(Tp...) -> ce_reader<sizeof...(Tp)>;
+  template<auto N>
+  ce_reader(const char (&)[N]) -> ce_reader<N - 1>; // NOLINT
 }

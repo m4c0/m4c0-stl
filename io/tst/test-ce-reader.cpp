@@ -70,5 +70,10 @@ static_assert([] {
   return dat.seekg(2) && !dat.read_u32();
 }());
 
+// Test if we can build from a string literal
+static_assert([] {
+  return ce_reader("RIFF").read_u32() == 'FFIR';
+}());
+
 int main() {
 }
