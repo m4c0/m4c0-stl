@@ -37,9 +37,13 @@ int main(int argc, char ** argv) {
 
   m4c0::io::istr_reader reader { in };
 
-  riff_parser<wav_dumper> rp('EVAW');
-  rp.emplace(' tmf', &wav_dumper::dump_fmt);
-  rp.emplace('atad', &wav_dumper::dump_data);
+  riff_parser<wav_dumper, 2> rp {
+    'EVAW',
+    {
+        { ' tmf', &wav_dumper::dump_fmt },
+        { 'atad', &wav_dumper::dump_data },
+    },
+  };
 
   wav_dumper w;
 

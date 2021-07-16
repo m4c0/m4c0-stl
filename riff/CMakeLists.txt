@@ -1,7 +1,7 @@
 m4c0_add_interface(
   TARGET m4c0-riff
   ALIAS m4c0::riff
-  LIBRARIES m4c0::io m4c0::log
+  LIBRARIES m4c0::core m4c0::io m4c0::log
   )
 
 m4c0_add_test(

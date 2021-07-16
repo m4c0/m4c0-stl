@@ -31,14 +31,18 @@ public:
 class test_data {
   std::stringstream m_str;
   istr_reader m_reader;
-  riff_parser<callback> m_rp { 'TSET' };
+  riff_parser<callback, 4> m_rp {
+    'TSET',
+    {
+        { 'liaf', &callback::failure },
+        { 'eurt', &callback::success },
+        { 'ohce', &callback::echo },
+        { 'flah', &callback::half_echo },
+    },
+  };
 
 public:
   explicit test_data(const std::string & s) : m_str { s }, m_reader { m_str } {
-    m_rp.emplace('liaf', &callback::failure);
-    m_rp.emplace('eurt', &callback::success);
-    m_rp.emplace('ohce', &callback::echo);
-    m_rp.emplace('flah', &callback::half_echo);
   }
 
   void assert_parses(bool result) {
