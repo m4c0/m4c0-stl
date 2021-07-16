@@ -7,27 +7,6 @@
 #include <stdexcept>
 #include <type_traits>
 
-// It sets a value
-static_assert([] {
-  m4c0::ce_map<int, char, 2> map;
-  map[3] = 'a';
-  return map[3] == 'a';
-}());
-
-// It can store multiple values
-static_assert([] {
-  m4c0::ce_map<int, char, 2> map;
-  map[3] = 'a';
-  map[0] = 'b';
-  return map[3] == 'a';
-}());
-static_assert([] {
-  m4c0::ce_map<int, char, 2> map;
-  map[3] = 'a';
-  map[0] = 'b';
-  return map[0] == 'b';
-}());
-
 // It can be const-constructed
 static_assert([] {
   const m4c0::ce_map<int, char, 2> map {
