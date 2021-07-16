@@ -14,32 +14,32 @@ namespace m4c0::io {
     }
 
   public:
-    static std::optional<subreader> seek_and_create(reader * o, unsigned start, unsigned len) {
+    static constexpr std::optional<subreader> seek_and_create(reader * o, unsigned start, unsigned len) {
       if (!o->seekg(start)) return {};
       return { subreader { o, start, len } };
     }
 
-    [[nodiscard]] bool eof() override {
+    [[nodiscard]] constexpr bool eof() override {
       return tellg() >= m_len;
     }
-    [[nodiscard]] bool read(void * buffer, unsigned len) override {
+    [[nodiscard]] constexpr bool read(void * buffer, unsigned len) override {
       if (tellg() + len > m_len) return false;
       return m_o->read(buffer, len);
     }
-    [[nodiscard]] std::optional<uint8_t> read_u8() override {
+    [[nodiscard]] constexpr std::optional<uint8_t> read_u8() override {
       if (tellg() + sizeof(uint8_t) > m_len) return {};
       return m_o->read_u8();
     }
-    [[nodiscard]] std::optional<uint32_t> read_u32() override {
+    [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
       if (tellg() + sizeof(uint32_t) > m_len) return {};
       return m_o->read_u32();
     }
-    [[nodiscard]] bool seekg(unsigned pos) override {
+    [[nodiscard]] constexpr bool seekg(unsigned pos) override {
       if (pos < 0) return false;
       if (pos > m_len) return false;
       return m_o->seekg(m_start + pos);
     }
-    [[nodiscard]] unsigned tellg() override {
+    [[nodiscard]] constexpr unsigned tellg() override {
       return m_o->tellg() - m_start;
     }
   };
