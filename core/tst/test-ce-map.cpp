@@ -30,5 +30,11 @@ static_assert([](m4c0::ce_map<unsigned, char, 1> map) {
   return map[3] == 'a';
 }({ m4c0::pair { 3U, 'a' } }));
 
+// It can return a default value
+static_assert([] {
+  const m4c0::ce_map map { m4c0::pair { 10, 'a' } };
+  return map.get_or_else(10, 'b') == 'a' && map.get_or_else(20, 'c') == 'c';
+}());
+
 int main() {
 }
