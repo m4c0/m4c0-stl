@@ -34,7 +34,7 @@ namespace m4c0::io {
 
     [[nodiscard]] virtual bool read(void * buffer, unsigned len) = 0;
     [[nodiscard]] virtual std::optional<uint8_t> read_u8() = 0;
-    [[nodiscard]] constexpr virtual std::optional<uint32_t> read_u32() = 0;
+    [[nodiscard]] virtual std::optional<uint32_t> read_u32() = 0;
 
     [[nodiscard]] constexpr std::optional<uint32_t> read_u32_be() {
       auto u32 = read_u32();
