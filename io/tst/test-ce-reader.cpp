@@ -31,10 +31,9 @@ static_assert([] {
 // Test if we can seek backwards
 static_assert([] {
   constexpr const auto valid_pos = 10;
-  constexpr const auto valid_rewind = -3;
-  constexpr const auto final_pos = 7;
+  constexpr const auto valid_rewind = 3;
   ce_reader dat = png;
-  return dat.seekg(valid_pos) && dat.seekg(valid_rewind) && !dat.eof() && (dat.tellg() == final_pos);
+  return dat.seekg(valid_pos) && dat.seekg(valid_rewind) && !dat.eof() && (dat.tellg() == valid_rewind);
 }());
 
 // Test if we cannot seek before start
@@ -73,6 +72,12 @@ static_assert([] {
 // Test if we can build from a string literal
 static_assert([] {
   return ce_reader("RIFF").read_u32() == 'FFIR';
+}());
+
+// Test if we can seek to EOF
+static_assert([] {
+  ce_reader dat("RIFF");
+  return dat.seekg(4) && dat.eof();
 }());
 
 int main() {

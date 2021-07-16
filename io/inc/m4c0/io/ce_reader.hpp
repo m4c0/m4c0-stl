@@ -15,14 +15,14 @@ namespace m4c0::io {
     constexpr explicit ce_reader(Tp... data) : m_data { static_cast<uint8_t>(data)... } {
     }
     constexpr explicit ce_reader(const char (&data)[N + 1]) { // NOLINT
-      std::copy(data, data + N, std::begin(m_data));
+      std::copy(data, data + N, m_data.begin());
     }
 
     [[nodiscard]] constexpr bool read(void * /*buffer*/, unsigned /*len*/) override {
       return false;
     }
     [[nodiscard]] constexpr std::optional<uint8_t> read_u8() override {
-      if (m_pos == N) return {};
+      if (eof()) return {};
       return m_data.at(m_pos++);
     }
     [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
@@ -42,11 +42,13 @@ namespace m4c0::io {
       return (ab << u16_bitsize) | cd;
     }
     [[nodiscard]] constexpr bool eof() override {
-      return false;
+      return m_pos >= N;
     }
     [[nodiscard]] constexpr bool seekg(unsigned pos) override {
-      m_pos += pos;
-      return m_pos < N;
+      if (pos < 0) return false;
+      if (pos > N) return false;
+      m_pos = pos;
+      return true;
     }
     [[nodiscard]] constexpr unsigned tellg() override {
       return m_pos;
