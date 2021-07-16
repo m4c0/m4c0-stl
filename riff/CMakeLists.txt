@@ -17,7 +17,6 @@ m4c0_add_test(
 
 m4c0_add_test(
   TARGET m4c0-riff-test-parser
-  ALIAS m4c0::riff::parser
   SOURCES tst/test-parser.cpp
   LIBRARIES m4c0::riff m4c0::test
   )

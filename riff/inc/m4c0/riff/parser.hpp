@@ -81,7 +81,7 @@ namespace m4c0::riff {
     fourcc_t m_expected;
 
   public:
-    explicit riff_parser(fourcc_t expected, std::initializer_list<typename data_cp_t::pair_t> args)
+    explicit constexpr riff_parser(fourcc_t expected, std::initializer_list<typename data_cp_t::pair_t> args)
       : m_expected(expected)
       , m_data_parser(args) {
     }
