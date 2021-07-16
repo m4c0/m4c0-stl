@@ -16,6 +16,7 @@ Take everything here as an unstable work-in-progress.
   this will be eventually replaced
 * **Fuji** - Small Vulkan framework which provides a small overridable main 
   loop
+* **IO** - Basic IO wrapping classes. Contains constexpr stuff for unit tests
 * **iOS Main** - Main loop for Metal-based iOS apps. It does **not** sign or
   package.
 * **Log** - Simple native logging. It wraps each supported platform log API in
@@ -28,7 +29,8 @@ Take everything here as an unstable work-in-progress.
 * **ObjC Bridge** - Hacks to inject C++ code in Obj-C
 * **ObjC Wraps** - C++ wrappers of some Obj-C classes
 * **OSX Main** - Main loop for Metal-based OSX apps
-* **Riff** - RIFF file read/write
+* **PNG** - PNG container reader
+* **Riff** - RIFF file read/write routines
 * **Test** - Conveniences for unit tests
 * **Vulkan** - Packages all Vulkan sub-libraries
 * **Vulkan Actions** - Fluent interfaces for Vulkan functions (submit queue,
