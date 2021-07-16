@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <optional>
+#include <stdexcept>
 #include <type_traits>
 
 namespace m4c0 {
@@ -42,7 +43,7 @@ namespace m4c0 {
     }
 
     [[nodiscard]] constexpr const ValueTp & at(const KeyTp & key) const {
-      auto * it = std::find(m_keys.begin(), m_keys.end(), key);
+      auto it = std::find(m_keys.begin(), m_keys.end(), key);
       if (it == m_keys.end()) {
         throw std::runtime_error("Map overflow");
       }
@@ -54,7 +55,7 @@ namespace m4c0 {
     }
 
     [[nodiscard]] constexpr ValueTp get_or_else(const KeyTp & key, ValueTp def = {}) const {
-      auto * it = std::find(m_keys.begin(), m_keys.end(), key);
+      auto it = std::find(m_keys.begin(), m_keys.end(), key);
       if (it == m_keys.end()) {
         return def;
       }
