@@ -5,8 +5,8 @@ function(_m4c0_add_library)
 
   add_library(${MAL_TARGET} ${MAL_TYPE})
   # We need this distinction until MSVC allows constexpr virtual in C++20
-  target_compile_features(${MAL_TARGET} ${MAL_SCOPE} $<$<NOT:$<PLATFORM_ID:Windows>>:cxx_std_20>)
-  target_compile_options(${MAL_TARGET} ${MAL_SCOPE} $<$<PLATFORM_ID:Windows>:/std:c++latest>) 
+  target_compile_features(${MAL_TARGET} ${MAL_SCOPE} $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:cxx_std_20>)
+  target_compile_options(${MAL_TARGET} ${MAL_SCOPE} $<$<CXX_COMPILER_ID:MSVC>:/std:c++latest>) 
   target_include_directories(${MAL_TARGET} ${MAL_SCOPE} inc)
   target_link_libraries(${MAL_TARGET} ${MAL_SCOPE} ${MAL_LIBRARIES})
 
