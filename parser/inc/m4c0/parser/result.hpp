@@ -8,16 +8,21 @@ namespace m4c0::parser {
   template<typename ResTp>
   class success {
     ResTp m_value;
+    std::string_view m_remainder;
 
   public:
-    constexpr explicit success(ResTp v) : m_value(v) {};
+    constexpr explicit success(ResTp v, std::string_view r) : m_value(v), m_remainder(r) {};
+
+    [[nodiscard]] constexpr std::string_view remainder() const noexcept {
+      return m_remainder;
+    }
 
     [[nodiscard]] constexpr ResTp value() const noexcept {
       return m_value;
     }
 
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
-      return m_value == o.m_value;
+      return m_value == o.m_value && m_remainder == o.m_remainder;
     }
   };
 

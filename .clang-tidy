@@ -1,5 +1,6 @@
 Checks: >-
   *,
+  -abseil*,
   -altera-struct-pack-align,
   -fuchsia*,
   -google-build-using-namespace,
