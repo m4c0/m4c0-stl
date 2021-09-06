@@ -6,6 +6,9 @@
 #include <type_traits>
 
 namespace m4c0::parser {
-  template<typename Tp, typename ResTp>
-  concept is_parser = std::is_invocable_r_v<result<ResTp>, Tp, std::string_view>;
+  template<typename Tp>
+  concept is_parser = std::is_invocable_v<Tp, std::string_view>;
+
+  template<typename Fn, typename P>
+  concept accepts = std::is_invocable_v<Fn, typename std::invoke_result_t<P, std::string_view>::type>;
 }
