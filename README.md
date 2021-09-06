@@ -29,6 +29,7 @@ Take everything here as an unstable work-in-progress.
 * **ObjC Bridge** - Hacks to inject C++ code in Obj-C
 * **ObjC Wraps** - C++ wrappers of some Obj-C classes
 * **OSX Main** - Main loop for Metal-based OSX apps
+* **Parser** - Composible parser library, based on Scott Wlaschin's design
 * **PNG** - PNG container reader
 * **Riff** - RIFF file read/write routines
 * **Test** - Conveniences for unit tests
