@@ -6,6 +6,7 @@ m4c0_add_interface(
 m4c0_add_test(
   TARGET m4c0-test-parser-constexpr
   SOURCES 
+    tst/concept.cpp
     tst/result.cpp
     tst/str.cpp
   LIBRARIES m4c0::parser
