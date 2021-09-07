@@ -11,6 +11,7 @@ m4c0_add_test(
     tst/numeric.cpp
     tst/result.cpp
     tst/str.cpp
+    tst/traits.cpp
   LIBRARIES m4c0::parser
   )
 
