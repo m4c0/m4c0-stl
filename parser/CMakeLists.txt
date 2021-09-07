@@ -8,6 +8,7 @@ m4c0_add_test(
   SOURCES 
     tst/combiners.cpp
     tst/concept.cpp
+    tst/numeric.cpp
     tst/result.cpp
     tst/str.cpp
   LIBRARIES m4c0::parser
