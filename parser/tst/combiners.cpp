@@ -4,10 +4,16 @@
 
 using namespace m4c0::parser;
 
-static constexpr auto to_int(char c) {
-  return c - '0';
+static constexpr auto fn(char c) {
+  return c - 'A';
 }
-static_assert(to_int('3') == 3); // When a test needs test, are we doing the right thing?
+static_assert(fn('C') == 2); // When a test needs test, are we doing the right thing?
 
-static_assert(!fmap(to_int, match_range('0', '9'))("A3"));
-static_assert(fmap(to_int, match_range('0', '9'))("37") == success { 3, "7" });
+static_assert(!fmap(fn, match_range('A', 'Z'))("cZ"));
+static_assert(fmap(fn, match_range('A', 'Z'))("Cz") == success { 2, "z" });
+
+static_assert((match('a') | failure<char>("ok"))("aha") == success { 'a', "ha" });
+static_assert((match('a') | failure<char>("ok"))("nope") == failure<char>("ok"));
+
+static_assert((match('a') | "nok")("aha") == success { 'a', "ha" });
+static_assert((match('a') | "nok")("nope") == failure<char>("nok"));
