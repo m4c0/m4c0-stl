@@ -24,12 +24,14 @@ namespace m4c0::parser {
     }
   };
 
-  template<typename ResTp>
+  template<typename ResTp = void>
   class failure {
     // TODO: find a constexpr way of storing dynamic strings
     std::string_view m_message;
 
   public:
+    template<typename Tp>
+    constexpr explicit failure(failure<Tp> f) : m_message(f.error()) {};
     constexpr explicit failure(std::string_view msg) : m_message(msg) {};
 
     [[nodiscard]] constexpr auto error() const noexcept {
@@ -55,7 +57,8 @@ namespace m4c0::parser {
 
     constexpr result(success<ResTp> t) : m_value(t) { // NOLINT
     }
-    constexpr result(failure<ResTp> t) : m_value(t) { // NOLINT
+    template<typename Tp>
+    constexpr result(failure<Tp> t) : m_value(failure<ResTp>(t)) { // NOLINT
     }
 
     [[nodiscard]] constexpr bool operator==(const result<ResTp> & o) const noexcept {

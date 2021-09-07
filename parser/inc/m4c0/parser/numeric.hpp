@@ -4,7 +4,7 @@
 #include "m4c0/parser/str.hpp"
 
 namespace m4c0::parser {
-  constexpr auto match_digit() {
+  [[nodiscard]] constexpr auto match_digit() {
     constexpr auto to_int = [](char c) {
       return c - '0';
     };

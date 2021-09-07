@@ -22,5 +22,7 @@ static constexpr int to_int(char /*c*/) {
 static_assert(!polymorphic(false).map(to_int));
 static_assert(polymorphic(true).map(to_int) == success(1, ""));
 
+static_assert(result<int>(failure<char>("test")) == failure<>("test"));
+
 int main() {
 }
