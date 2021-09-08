@@ -15,7 +15,7 @@ namespace m4c0::parser {
     constexpr explicit success(ResTp v, std::string_view r) : m_value(v), m_remainder(r) {};
 
     template<typename Fn>
-    [[nodiscard]] constexpr auto map(Fn && fn) const noexcept {
+    [[nodiscard]] constexpr auto fmap(Fn && fn) const noexcept {
       return success<std::invoke_result_t<Fn, ResTp>>(fn(m_value), m_remainder);
     }
 
@@ -29,18 +29,17 @@ namespace m4c0::parser {
     // TODO: find a constexpr way of storing dynamic strings
     std::string_view m_message;
 
+    template<typename Tp>
+    friend class failure;
+
   public:
     template<typename Tp>
-    constexpr explicit failure(failure<Tp> f) : m_message(f.error()) {};
+    constexpr explicit failure(failure<Tp> f) : m_message(f.m_message) {};
     constexpr explicit failure(std::string_view msg) : m_message(msg) {};
 
-    [[nodiscard]] constexpr auto error() const noexcept {
-      return m_message;
-    }
-
     template<typename Fn>
-    [[nodiscard]] constexpr auto map(Fn && /*fn*/) const noexcept {
-      return failure<std::invoke_result_t<Fn, ResTp>>(m_message);
+    [[nodiscard]] constexpr auto fmap(Fn && /*fn*/) const noexcept {
+      return failure<>(m_message);
     }
 
     [[nodiscard]] constexpr bool operator==([[maybe_unused]] const failure & o) const noexcept {
@@ -65,11 +64,18 @@ namespace m4c0::parser {
       return m_value == o.m_value;
     }
 
+    [[nodiscard]] constexpr const result<ResTp> & operator|(const result<ResTp> & o) const noexcept {
+      return *this ? *this : o;
+    }
+    [[nodiscard]] constexpr const result<ResTp> & operator&(const result<ResTp> & o) const noexcept {
+      return *this ? o : *this;
+    }
+
     template<typename Fn>
-    [[nodiscard]] constexpr auto map(Fn && fn) const noexcept {
+    [[nodiscard]] constexpr auto fmap(Fn && fn) const noexcept {
       return std::visit(
           [fn](auto && v) -> result<std::invoke_result_t<Fn, ResTp>> {
-            return v.map(fn);
+            return v.fmap(fn);
           },
           m_value);
     }
