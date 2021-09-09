@@ -72,4 +72,31 @@ namespace m4c0::parser {
   constexpr auto skip(P && p) noexcept {
     return p & nil {};
   }
+
+  template<typename P>
+  requires is_parser<P>
+  constexpr auto many(P && p) noexcept {
+    using res_t = result_of_t<P>;
+    using tp_t = type_of_t<P>;
+
+    return [p](std::string_view in) -> res_t {
+      res_t res = success<tp_t> { {}, in };
+      while (!in.empty()) {
+        const res_t next = res & [p](auto r1, auto in) {
+          return p(in) & [r1](auto r2) {
+            return r1 + r2;
+          };
+        };
+        if (!next) break;
+        res = next;
+      }
+      return res;
+    };
+  }
+
+  template<typename P>
+  requires is_parser<P>
+  constexpr auto at_least_one(P && p) noexcept {
+    return p + many(p);
+  }
 }

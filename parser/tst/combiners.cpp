@@ -42,3 +42,17 @@ static_assert(!skip(match('a'))("b"));
 static_assert(skip(match('a'))("ab") == success { nil {}, "b" });
 
 static_assert((match('a') + skip(match('b')))("ab") == success { 'a', "" });
+
+static_assert(many(fnp())("") == success { 0, "" });
+static_assert(many(fnp())("a") == success { 0, "a" });
+static_assert(many(fnp())("B") == success { 1, "" });
+static_assert(many(fnp())("BBB") == success { 3, "" });
+static_assert(many(fnp())("Ba") == success { 1, "a" });
+static_assert(many(fnp())("BBa") == success { 2, "a" });
+
+static_assert(!at_least_one(fnp())(""));
+static_assert(!at_least_one(fnp())("a"));
+static_assert(at_least_one(fnp())("B") == success { 1, "" });
+static_assert(at_least_one(fnp())("BBB") == success { 3, "" });
+static_assert(at_least_one(fnp())("Ba") == success { 1, "a" });
+static_assert(at_least_one(fnp())("BBa") == success { 2, "a" });
