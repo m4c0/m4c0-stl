@@ -18,6 +18,9 @@ static_assert(!(match('a') & fnp())("a"));
 static_assert(!(match('a') & fnp())("bA"));
 static_assert((match('a') & fnp())("aAb") == success { 0, "b" });
 
+static_assert((match('a') & 4)("aha") == success { 4, "ha" });
+static_assert(!(match('a') & 4)("nope"));
+
 static_assert(!(match('a') + fnp())(""));
 static_assert(!(match('a') + fnp())("a"));
 static_assert(!(match('a') + fnp())("bA"));

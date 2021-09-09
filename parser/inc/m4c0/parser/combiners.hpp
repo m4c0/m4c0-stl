@@ -13,6 +13,16 @@ namespace m4c0::parser {
     };
   }
 
+  template<typename Tp, typename P>
+  requires is_parser<P> && cant_accept<Tp, P> && not_a_parser<Tp>
+  constexpr auto operator&(P && p, Tp && v) noexcept {
+    return [v, p](std::string_view in) {
+      return p(in) & [v](auto /*r*/) {
+        return v;
+      };
+    };
+  }
+
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
   constexpr auto operator&(PA && a, PB && b) noexcept {
@@ -60,10 +70,6 @@ namespace m4c0::parser {
   template<typename P>
   requires is_parser<P>
   constexpr auto skip(P && p) noexcept {
-    return [p](std::string_view in) {
-      return p(in) & [](auto /*r*/) {
-        return nil {};
-      };
-    };
+    return p & nil {};
   }
 }

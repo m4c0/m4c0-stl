@@ -36,5 +36,8 @@ static constexpr int to_int(char c) {
 static_assert(!(polymorphic(false) & to_int));
 static_assert((polymorphic(true) & to_int) == success { 1, "" });
 
+static_assert(!*polymorphic(false));
+static_assert(*polymorphic(true) == '!');
+
 int main() {
 }

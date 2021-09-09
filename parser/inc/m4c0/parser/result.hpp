@@ -30,6 +30,9 @@ namespace m4c0::parser {
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
       return m_value == o.m_value && m_remainder == o.m_remainder;
     }
+    [[nodiscard]] constexpr auto operator*() const noexcept {
+      return m_value;
+    }
   };
 
   template<typename ResTp = void>
@@ -97,6 +100,10 @@ namespace m4c0::parser {
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
       return std::holds_alternative<success<ResTp>>(m_value);
+    }
+
+    [[nodiscard]] constexpr std::optional<ResTp> operator*() const noexcept {
+      return *this ? std::optional { *get_success() } : std::nullopt;
     }
   };
   template<typename ResTp>
