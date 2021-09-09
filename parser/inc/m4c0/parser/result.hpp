@@ -15,8 +15,16 @@ namespace m4c0::parser {
     constexpr explicit success(ResTp v, std::string_view r) : m_value(v), m_remainder(r) {};
 
     template<typename Fn>
-    [[nodiscard]] constexpr auto fmap(Fn && fn) const noexcept {
-      return success<std::invoke_result_t<Fn, ResTp>>(fn(m_value), m_remainder);
+    requires std::is_invocable_v<Fn, ResTp, std::string_view>
+    constexpr auto map(Fn && fn) const noexcept {
+      return fn(m_value, m_remainder);
+    }
+
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp>
+    constexpr auto map(Fn && fn) const noexcept {
+      using res_t = std::invoke_result_t<Fn, ResTp>;
+      return success<res_t> { fn(m_value), m_remainder };
     }
 
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
@@ -37,11 +45,6 @@ namespace m4c0::parser {
     constexpr explicit failure(failure<Tp> f) : m_message(f.m_message) {};
     constexpr explicit failure(std::string_view msg) : m_message(msg) {};
 
-    template<typename Fn>
-    [[nodiscard]] constexpr auto fmap(Fn && /*fn*/) const noexcept {
-      return failure<>(m_message);
-    }
-
     [[nodiscard]] constexpr bool operator==([[maybe_unused]] const failure & o) const noexcept {
       return m_message == o.m_message;
     }
@@ -50,6 +53,13 @@ namespace m4c0::parser {
   template<typename ResTp>
   class result {
     std::variant<success<ResTp>, failure<ResTp>> m_value;
+
+    [[nodiscard]] constexpr const auto & get_failure() const noexcept {
+      return std::get<failure<ResTp>>(m_value);
+    }
+    [[nodiscard]] constexpr const auto & get_success() const noexcept {
+      return std::get<success<ResTp>>(m_value);
+    }
 
   public:
     using type = ResTp;
@@ -68,16 +78,21 @@ namespace m4c0::parser {
       return *this ? *this : o;
     }
     [[nodiscard]] constexpr const result<ResTp> & operator&(const result<ResTp> & o) const noexcept {
-      return *this ? o : *this;
+      return !*this ? *this : o;
     }
 
     template<typename Fn>
-    [[nodiscard]] constexpr auto fmap(Fn && fn) const noexcept {
-      return std::visit(
-          [fn](auto && v) -> result<std::invoke_result_t<Fn, ResTp>> {
-            return v.fmap(fn);
-          },
-          m_value);
+    requires std::is_invocable_v<Fn, ResTp, std::string_view>
+    constexpr auto operator&(Fn && fn) const noexcept {
+      using res_t = std::invoke_result_t<Fn, ResTp, std::string_view>;
+      return !*this ? res_t { get_failure() } : get_success().map(fn);
+    }
+
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp>
+    constexpr auto operator&(Fn && fn) const noexcept {
+      using res_t = result<std::invoke_result_t<Fn, ResTp>>;
+      return !*this ? res_t { get_failure() } : res_t { get_success().map(fn) };
     }
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {

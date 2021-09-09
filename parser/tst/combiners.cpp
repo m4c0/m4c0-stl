@@ -4,16 +4,38 @@
 
 using namespace m4c0::parser;
 
-static constexpr auto fn(char c) {
-  return c - 'A';
+static constexpr auto fnp() {
+  return match_range('A', 'Z') & [](char c) {
+    return c - 'A';
+  };
 }
-static_assert(fn('C') == 2); // When a test needs test, are we doing the right thing?
+static_assert(!fnp()(""));
+static_assert(!fnp()("cZ"));
+static_assert(fnp()("Cz") == success { 2, "z" });
 
-static_assert(!fmap(fn, match_range('A', 'Z'))("cZ"));
-static_assert(fmap(fn, match_range('A', 'Z'))("Cz") == success { 2, "z" });
+static_assert(!(match('a') & fnp())(""));
+static_assert(!(match('a') & fnp())("a"));
+static_assert(!(match('a') & fnp())("bA"));
+static_assert((match('a') & fnp())("aAb") == success { 0, "b" });
 
-static_assert((match('a') | failure<char>("ok"))("aha") == success { 'a', "ha" });
-static_assert((match('a') | failure<char>("ok"))("nope") == failure<char>("ok"));
+static_assert(!(match('a') + fnp())(""));
+static_assert(!(match('a') + fnp())("a"));
+static_assert(!(match('a') + fnp())("bA"));
+static_assert((match('b') + fnp())("bCa") == success { 'b' + 2, "a" });
+
+static_assert((match('a') | failure<>("ok"))("aha") == success { 'a', "ha" });
+static_assert((match('a') | failure<>("ok"))("nope") == failure<>("ok"));
 
 static_assert((match('a') | "nok")("aha") == success { 'a', "ha" });
 static_assert((match('a') | "nok")("nope") == failure<char>("nok"));
+
+static_assert(!(match('a') | match('c'))(""));
+static_assert(!(match('a') | match('c'))("bc"));
+static_assert((match('a') | match('c'))("ac") == success { 'a', "c" });
+static_assert((match('a') | match('c'))("c") == success { 'c', "" });
+
+static_assert(!skip(match('a'))(""));
+static_assert(!skip(match('a'))("b"));
+static_assert(skip(match('a'))("ab") == success { nil {}, "b" });
+
+static_assert((match('a') + skip(match('b')))("ab") == success { 'a', "" });
