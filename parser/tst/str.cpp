@@ -1,7 +1,6 @@
 #include "m4c0/parser/str.hpp"
 
 using namespace m4c0::parser;
-using str = std::string_view;
 
 static_assert(!match('A')(""));
 static_assert(!match('A')("_"));
@@ -11,8 +10,8 @@ static_assert(match('A')("AB") == success { 'A', "B" });
 static_assert(!match("ABC")(""));
 static_assert(!match("ABC")("AB"));
 static_assert(!match("ABC")("AABC"));
-static_assert(match("ABC")("ABC") == success<str> { "ABC", "" });
-static_assert(match("ABC")("ABCD") == success<str> { "ABC", "D" });
+static_assert(match("ABC")("ABC") == success<input_t> { "ABC", "" });
+static_assert(match("ABC")("ABCD") == success<input_t> { "ABC", "D" });
 
 static_assert(!match_any_of("ABC")(""));
 static_assert(!match_any_of("ABC")("D"));

@@ -4,7 +4,7 @@
 
 using namespace m4c0::parser;
 
-static constexpr result<char> pchar(std::string_view /*in*/) {
+static constexpr result<char> pchar(input_t /*in*/) {
   return failure<char>("");
 }
 

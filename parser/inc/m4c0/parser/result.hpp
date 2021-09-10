@@ -1,21 +1,22 @@
 #pragma once
 
-#include <optional>
-#include <string_view>
+#include "m4c0/parser/string_view.hpp"
+
 #include <type_traits>
-#include <variant>
 
 namespace m4c0::parser {
+  using input_t = string_view;
+
   template<typename ResTp>
   class success {
     ResTp m_value;
-    std::string_view m_remainder;
+    input_t m_remainder;
 
   public:
-    constexpr explicit success(ResTp v, std::string_view r) : m_value(v), m_remainder(r) {};
+    constexpr explicit success(ResTp v, input_t r) noexcept : m_value(v), m_remainder(r) {};
 
     template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp, std::string_view>
+    requires std::is_invocable_v<Fn, ResTp, input_t>
     constexpr auto map(Fn && fn) const noexcept {
       return fn(m_value, m_remainder);
     }
@@ -38,15 +39,15 @@ namespace m4c0::parser {
   template<typename ResTp = void>
   class failure {
     // TODO: find a constexpr way of storing dynamic strings
-    std::string_view m_message;
+    input_t m_message;
 
     template<typename Tp>
     friend class failure;
 
   public:
     template<typename Tp>
-    constexpr explicit failure(failure<Tp> f) : m_message(f.m_message) {};
-    constexpr explicit failure(std::string_view msg) : m_message(msg) {};
+    constexpr explicit failure(failure<Tp> f) noexcept : m_message(f.m_message) {};
+    constexpr explicit failure(input_t msg) noexcept : m_message(msg) {};
 
     [[nodiscard]] constexpr bool operator==([[maybe_unused]] const failure & o) const noexcept {
       return m_message == o.m_message;
@@ -55,26 +56,37 @@ namespace m4c0::parser {
 
   template<typename ResTp>
   class result {
-    std::variant<success<ResTp>, failure<ResTp>> m_value;
+    union value {
+      success<ResTp> s;
+      failure<ResTp> f;
+    };
+    value m_value;
+    bool m_success;
 
     [[nodiscard]] constexpr const auto & get_failure() const noexcept {
-      return std::get<failure<ResTp>>(m_value);
+      return m_value.f;
     }
     [[nodiscard]] constexpr const auto & get_success() const noexcept {
-      return std::get<success<ResTp>>(m_value);
+      return m_value.s;
     }
 
   public:
     using type = ResTp;
 
-    constexpr result(success<ResTp> t) : m_value(t) { // NOLINT
+    constexpr result(success<ResTp> t) noexcept : m_value { t }, m_success { true } { // NOLINT
     }
     template<typename Tp>
-    constexpr result(failure<Tp> t) : m_value(failure<ResTp>(t)) { // NOLINT
+    constexpr result(failure<Tp> t) noexcept // NOLINT
+      : m_value { .f = failure<ResTp>(t) }
+      , m_success { false } {
     }
 
     [[nodiscard]] constexpr bool operator==(const result<ResTp> & o) const noexcept {
-      return m_value == o.m_value;
+      if (m_success != o.m_success) return false;
+      if (m_success) {
+        return get_success() == o.get_success();
+      }
+      return get_failure() == o.get_failure();
     }
 
     [[nodiscard]] constexpr const result<ResTp> & operator|(const result<ResTp> & o) const noexcept {
@@ -85,9 +97,9 @@ namespace m4c0::parser {
     }
 
     template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp, std::string_view>
+    requires std::is_invocable_v<Fn, ResTp, input_t>
     constexpr auto operator&(Fn && fn) const noexcept {
-      using res_t = std::invoke_result_t<Fn, ResTp, std::string_view>;
+      using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
       return !*this ? res_t { get_failure() } : get_success().map(fn);
     }
 
@@ -99,11 +111,12 @@ namespace m4c0::parser {
     }
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
-      return std::holds_alternative<success<ResTp>>(m_value);
+      return m_success;
     }
 
-    [[nodiscard]] constexpr std::optional<ResTp> operator*() const noexcept {
-      return *this ? std::optional { *get_success() } : std::nullopt;
+    [[nodiscard]] constexpr ResTp operator*() const noexcept {
+      // Deref of a failure is UB.
+      return m_success ? *get_success() : ResTp {};
     }
   };
   template<typename ResTp>

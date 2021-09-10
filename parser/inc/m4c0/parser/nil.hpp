@@ -3,12 +3,12 @@
 namespace m4c0::parser {
   struct nil {};
 
-  [[nodiscard]] constexpr bool operator==(nil /*unused*/, nil /*unused*/) {
+  [[nodiscard]] constexpr bool operator==(nil /*unused*/, nil /*unused*/) noexcept {
     return true;
   }
 
   template<typename Tp>
-  [[nodiscard]] constexpr auto operator+(Tp && v, nil /*unused*/) {
+  [[nodiscard]] constexpr auto operator+(Tp && v, nil /*unused*/) noexcept {
     return v;
   }
 }

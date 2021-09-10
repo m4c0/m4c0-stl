@@ -7,17 +7,17 @@
 namespace m4c0::parser {
   template<typename Fn, typename P>
   requires is_parser<P> && accepts<Fn, P>
-  constexpr auto operator&(P && p, Fn && fn) noexcept {
-    return [fn, p](std::string_view in) {
+  static constexpr auto operator&(P && p, Fn && fn) noexcept {
+    return [fn, p](input_t in) noexcept {
       return p(in) & fn;
     };
   }
 
   template<typename Tp, typename P>
   requires is_parser<P> && cant_accept<Tp, P> && not_a_parser<Tp>
-  constexpr auto operator&(P && p, Tp && v) noexcept {
-    return [v, p](std::string_view in) {
-      return p(in) & [v](auto /*r*/) {
+  static constexpr auto operator&(P && p, Tp && v) noexcept {
+    return [v, p](input_t in) noexcept {
+      return p(in) & [v](auto /*r*/) noexcept {
         return v;
       };
     };
@@ -25,9 +25,9 @@ namespace m4c0::parser {
 
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
-  constexpr auto operator&(PA && a, PB && b) noexcept {
-    return [a, b](std::string_view in) {
-      return a(in) & [b](auto /*ra*/, auto in) {
+  static constexpr auto operator&(PA && a, PB && b) noexcept {
+    return [a, b](input_t in) noexcept {
+      return a(in) & [b](auto /*ra*/, auto in) noexcept {
         return b(in);
       };
     };
@@ -35,10 +35,10 @@ namespace m4c0::parser {
 
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
-  constexpr auto operator+(PA && a, PB && b) noexcept {
-    return [a, b](std::string_view in) {
-      return a(in) & [b](auto ra, auto in) {
-        return b(in) & [ra](auto rb) {
+  static constexpr auto operator+(PA && a, PB && b) noexcept {
+    return [a, b](input_t in) noexcept {
+      return a(in) & [b](auto ra, auto in) noexcept {
+        return b(in) & [ra](auto rb) noexcept {
           return ra + rb;
         };
       };
@@ -47,48 +47,48 @@ namespace m4c0::parser {
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto operator|(P && p, type_of_t<P> otherwise) noexcept {
-    return [p, otherwise](std::string_view in) {
+  static constexpr auto operator|(P && p, type_of_t<P> otherwise) noexcept {
+    return [p, otherwise](input_t in) noexcept {
       return p(in) | success { otherwise, in };
     };
   }
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto operator|(P && p, result_of_t<P> otherwise) noexcept {
-    return [p, otherwise](std::string_view in) {
+  static constexpr auto operator|(P && p, result_of_t<P> otherwise) noexcept {
+    return [p, otherwise](input_t in) noexcept {
       return p(in) | otherwise;
     };
   }
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto operator|(P && p, std::string_view msg) noexcept {
+  static constexpr auto operator|(P && p, input_t msg) noexcept {
     return p | failure<>(msg);
   }
 
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
-  constexpr auto operator|(PA && a, PB && b) noexcept {
-    return [a, b](std::string_view in) {
+  static constexpr auto operator|(PA && a, PB && b) noexcept {
+    return [a, b](input_t in) noexcept {
       return a(in) | b(in);
     };
   }
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto skip(P && p) noexcept {
+  static constexpr auto skip(P && p) noexcept {
     return p & nil {};
   }
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto at_least_one(P && p) noexcept {
-    return [p](std::string_view in) {
+  static constexpr auto at_least_one(P && p) noexcept {
+    return [p](input_t in) noexcept {
       auto res = p(in);
       while (res && !in.empty()) {
-        const auto next = res & [p](auto r1, auto in) {
-          return p(in) & [r1](auto r2) {
+        const auto next = res & [p](auto r1, auto in) noexcept {
+          return p(in) & [r1](auto r2) noexcept {
             return r1 + r2;
           };
         };
@@ -101,7 +101,7 @@ namespace m4c0::parser {
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto many(P && p) noexcept {
+  static constexpr auto many(P && p) noexcept {
     return at_least_one(p) | type_of_t<P> {};
   }
 

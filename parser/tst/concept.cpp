@@ -4,7 +4,7 @@
 using namespace m4c0::parser;
 
 template<typename Tp>
-static constexpr result<Tp> dummy(std::string_view /*in*/) {
+static constexpr result<Tp> dummy(input_t /*in*/) {
   return failure<Tp>("");
 }
 

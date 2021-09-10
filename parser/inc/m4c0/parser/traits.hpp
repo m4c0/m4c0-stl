@@ -5,7 +5,7 @@
 namespace m4c0::parser {
   template<typename P>
   requires is_parser<P>
-  using result_of_t = std::invoke_result_t<P, std::string_view>;
+  using result_of_t = std::invoke_result_t<P, input_t>;
 
   template<typename P>
   requires is_parser<P>

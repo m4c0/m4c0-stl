@@ -12,6 +12,7 @@ m4c0_add_test(
     tst/polish.cpp
     tst/result.cpp
     tst/str.cpp
+    tst/string_view.cpp
     tst/traits.cpp
   LIBRARIES m4c0::parser
   )
