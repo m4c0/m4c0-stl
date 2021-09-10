@@ -47,6 +47,14 @@ namespace m4c0::parser {
 
   template<typename P>
   requires is_parser<P>
+  constexpr auto operator|(P && p, type_of_t<P> otherwise) noexcept {
+    return [p, otherwise](std::string_view in) {
+      return p(in) | success { otherwise, in };
+    };
+  }
+
+  template<typename P>
+  requires is_parser<P>
   constexpr auto operator|(P && p, result_of_t<P> otherwise) noexcept {
     return [p, otherwise](std::string_view in) {
       return p(in) | otherwise;
@@ -75,14 +83,11 @@ namespace m4c0::parser {
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto many(P && p) noexcept {
-    using res_t = result_of_t<P>;
-    using tp_t = type_of_t<P>;
-
-    return [p](std::string_view in) -> res_t {
-      res_t res = success<tp_t> { {}, in };
-      while (!in.empty()) {
-        const res_t next = res & [p](auto r1, auto in) {
+  constexpr auto at_least_one(P && p) noexcept {
+    return [p](std::string_view in) {
+      auto res = p(in);
+      while (res && !in.empty()) {
+        const auto next = res & [p](auto r1, auto in) {
           return p(in) & [r1](auto r2) {
             return r1 + r2;
           };
@@ -96,7 +101,8 @@ namespace m4c0::parser {
 
   template<typename P>
   requires is_parser<P>
-  constexpr auto at_least_one(P && p) noexcept {
-    return p + many(p);
+  constexpr auto many(P && p) noexcept {
+    return at_least_one(p) | type_of_t<P> {};
   }
+
 }

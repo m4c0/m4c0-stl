@@ -29,6 +29,9 @@ static_assert((match('b') + fnp())("bCa") == success { 'b' + 2, "a" });
 static_assert((match('a') | failure<>("ok"))("aha") == success { 'a', "ha" });
 static_assert((match('a') | failure<>("ok"))("nope") == failure<>("ok"));
 
+static_assert((match('a') | 'b')("aha") == success { 'a', "ha" });
+static_assert((match('a') | 'b')("nope") == success { 'b', "nope" });
+
 static_assert((match('a') | "nok")("aha") == success { 'a', "ha" });
 static_assert((match('a') | "nok")("nope") == failure<char>("nok"));
 
@@ -43,16 +46,30 @@ static_assert(skip(match('a'))("ab") == success { nil {}, "b" });
 
 static_assert((match('a') + skip(match('b')))("ab") == success { 'a', "" });
 
-static_assert(many(fnp())("") == success { 0, "" });
-static_assert(many(fnp())("a") == success { 0, "a" });
-static_assert(many(fnp())("B") == success { 1, "" });
-static_assert(many(fnp())("BBB") == success { 3, "" });
-static_assert(many(fnp())("Ba") == success { 1, "a" });
-static_assert(many(fnp())("BBa") == success { 2, "a" });
+struct cnt {
+  unsigned c;
+};
+static constexpr cnt operator+(cnt a, cnt b) {
+  return { (a.c << 1U) + b.c };
+}
+static constexpr bool operator==(cnt a, cnt b) {
+  return a.c == b.c;
+}
+static constexpr auto cntp() {
+  return match('B') & cnt { 1 };
+}
 
-static_assert(!at_least_one(fnp())(""));
-static_assert(!at_least_one(fnp())("a"));
-static_assert(at_least_one(fnp())("B") == success { 1, "" });
-static_assert(at_least_one(fnp())("BBB") == success { 3, "" });
-static_assert(at_least_one(fnp())("Ba") == success { 1, "a" });
-static_assert(at_least_one(fnp())("BBa") == success { 2, "a" });
+static_assert(!at_least_one(cntp())(""));
+static_assert(!at_least_one(cntp())("a"));
+static_assert(at_least_one(cntp())("B") == success { cnt { 0b1 }, "" });
+static_assert(at_least_one(cntp())("Ba") == success { cnt { 0b1 }, "a" });
+static_assert(at_least_one(cntp())("BBa") == success { cnt { 0b11 }, "a" });
+static_assert(at_least_one(cntp())("BBB") == success { cnt { 0b111 }, "" });   // NOLINT
+static_assert(at_least_one(cntp())("BBBa") == success { cnt { 0b111 }, "a" }); // NOLINT
+
+static_assert(many(cntp())("") == success { cnt {}, "" });
+static_assert(many(cntp())("a") == success { cnt {}, "a" });
+static_assert(many(cntp())("B") == success { cnt { 0b1 }, "" });
+static_assert(many(cntp())("Ba") == success { cnt { 0b1 }, "a" });
+static_assert(many(cntp())("BBa") == success { cnt { 0b11 }, "a" });
+static_assert(many(cntp())("BBB") == success { cnt { 0b111 }, "" }); // NOLINT
