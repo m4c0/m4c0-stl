@@ -6,6 +6,7 @@ m4c0_add_interface(
 m4c0_add_test(
   TARGET m4c0-test-parser-constexpr
   SOURCES 
+    tst/brainf.cpp
     tst/combiners.cpp
     tst/concept.cpp
     tst/numeric.cpp
