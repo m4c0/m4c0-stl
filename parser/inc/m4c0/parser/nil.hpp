@@ -7,6 +7,15 @@ namespace m4c0::parser {
     return true;
   }
 
+  [[nodiscard]] constexpr auto operator+(nil /*unused*/, nil /*unused*/) noexcept {
+    return nil {};
+  }
+
+  template<typename Tp>
+  [[nodiscard]] constexpr auto operator+(nil /*unused*/, Tp && v) noexcept {
+    return v;
+  }
+
   template<typename Tp>
   [[nodiscard]] constexpr auto operator+(Tp && v, nil /*unused*/) noexcept {
     return v;
