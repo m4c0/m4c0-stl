@@ -6,11 +6,11 @@ namespace m4c0::parser {
   // parsers
   class string_view {
     const char * m_chars;
-    unsigned m_length;
-
-    constexpr string_view(const char * c, unsigned len) noexcept : m_chars { c }, m_length { len } {};
+    unsigned long m_length;
 
   public:
+    constexpr string_view(const char * c, unsigned long len) noexcept : m_chars { c }, m_length { len } {
+    }
     template<unsigned N>
     constexpr string_view(const char (&c)[N]) noexcept : string_view { c, N - 1 } { // NOLINT
     }
