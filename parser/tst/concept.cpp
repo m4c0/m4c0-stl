@@ -4,8 +4,8 @@
 using namespace m4c0::parser;
 
 template<typename Tp>
-static constexpr result<Tp> dummy(input_t /*in*/) {
-  return failure<Tp>("");
+static constexpr result<Tp> dummy(input_t in) {
+  return { failure<Tp>(""), in };
 }
 
 template<typename P>

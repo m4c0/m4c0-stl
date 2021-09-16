@@ -59,7 +59,7 @@ namespace m4c0::parser {
   requires is_parser<P>
   static constexpr auto operator|(P && p, type_of_t<P> otherwise) noexcept {
     return [p, otherwise](input_t in) noexcept {
-      return p(in) | success { otherwise, in };
+      return p(in) | result { success { otherwise }, in };
     };
   }
 
@@ -74,7 +74,9 @@ namespace m4c0::parser {
   template<typename P>
   requires is_parser<P>
   static constexpr auto operator|(P && p, input_t msg) noexcept {
-    return p | failure<>(msg);
+    return [p, msg](input_t in) noexcept {
+      return p(in) | failure<>(msg);
+    };
   }
 
   template<typename PA, typename PB>
