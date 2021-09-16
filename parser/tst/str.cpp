@@ -35,6 +35,9 @@ static_assert(!match_none_of("ABC")("C"));
 static_assert(match_none_of("ABC")("D") == success { 'D', "" });
 static_assert(match_none_of("ABC")("EF") == success { 'E', "F" });
 
+static_assert(eof()("") == success { nil {}, "" });
+static_assert(!eof()("A"));
+
 static_assert(!tokenise(match('X'))(""));
 static_assert(!tokenise(match('X'))("A"));
 static_assert(tokenise(match('X'))("X") == success<input_t> { "X", "" });

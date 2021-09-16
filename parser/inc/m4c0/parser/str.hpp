@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/parser/concept.hpp"
+#include "m4c0/parser/nil.hpp"
 #include "m4c0/parser/result.hpp"
 
 namespace m4c0::parser {
@@ -47,6 +48,12 @@ namespace m4c0::parser {
       if (c < start || c > end) return failure<char>("Char is not in a valid range");
 
       return success<char> { c, in.substr(1) };
+    };
+  }
+
+  [[nodiscard]] static constexpr auto eof() noexcept {
+    return [](input_t in) noexcept -> result<nil> {
+      return in.empty() ? result { success { nil {}, "" } } : failure<>("End of file not found");
     };
   }
 

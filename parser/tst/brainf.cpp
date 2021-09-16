@@ -102,8 +102,11 @@ static constexpr state operator+(const state & s, opcode o) {
       o);
 }
 
-// TODO: eof() primitive
-static constexpr auto brainf = many(expr, state {});
+static constexpr auto brainf = many(expr, state {}) + eof();
+
+// Real BF parsers must support non-command characters. This is a test, therefore, we don't. Let's use it to test if the
+// parser can parse the whole string
+static_assert(!brainf("+++.nope"));
 
 // Very simple examples to confirm we can do a constexpr recursive parser
 // Spoiler: we can
