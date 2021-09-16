@@ -116,5 +116,4 @@ namespace m4c0::parser {
   static constexpr auto many(P && p, Tp init = Tp {}) noexcept {
     return at_least_one(std::forward<P>(p), init) | init;
   }
-
 }

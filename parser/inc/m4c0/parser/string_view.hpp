@@ -29,6 +29,12 @@ namespace m4c0::parser {
     [[nodiscard]] constexpr char at(unsigned index) const noexcept {
       return index >= 0 && index < m_length ? m_chars[index] : '\0'; // NOLINT
     }
+    [[nodiscard]] constexpr const char * begin() const noexcept {
+      return m_chars;
+    }
+    [[nodiscard]] constexpr const char * end() const noexcept {
+      return m_chars + m_length; // NOLINT
+    }
 
     [[nodiscard]] constexpr bool contains(char c) const noexcept {
       const auto * p = m_chars;
@@ -54,6 +60,13 @@ namespace m4c0::parser {
       if (index < 0) return { "" };
       if (index >= m_length) return { "" };
       return string_view { m_chars + index, m_length - index }; // NOLINT
+    }
+
+    // Returns a substring if they intersect in memory
+    [[nodiscard]] constexpr string_view up_to(const string_view & o) const noexcept {
+      auto len = o.begin() - begin();
+      if (len <= 0 || len > m_length) return { "" };
+      return string_view { begin(), static_cast<unsigned int>(len) };
     }
   };
 }

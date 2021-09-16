@@ -1,5 +1,6 @@
 #pragma once
 
+#include "m4c0/parser/concept.hpp"
 #include "m4c0/parser/result.hpp"
 
 namespace m4c0::parser {
@@ -46,6 +47,17 @@ namespace m4c0::parser {
       if (c < start || c > end) return failure<char>("Char is not in a valid range");
 
       return success<char> { c, in.substr(1) };
+    };
+  }
+
+  template<typename P>
+  requires is_parser<P>
+  static constexpr auto tokenise(P && p) noexcept {
+    return [p](input_t in) noexcept -> result<input_t> {
+      return p(in) & [in](auto /*r*/, input_t rem) noexcept -> result<input_t> {
+        const auto substr = rem.empty() ? in : in.up_to(rem);
+        return success { substr, rem };
+      };
     };
   }
 }
