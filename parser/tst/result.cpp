@@ -40,5 +40,20 @@ static_assert((polymorphic(true) & to_int) == success { 1, "" });
 
 static_assert(*polymorphic(true) == '!');
 
+static_assert(polymorphic(true) % [](auto msg) {
+  if constexpr (std::is_same_v<decltype(msg), input_t>) {
+    return false;
+  } else {
+    return msg == '!';
+  }
+});
+static_assert(polymorphic(false) % [](auto msg) {
+  if constexpr (std::is_same_v<decltype(msg), input_t>) {
+    return msg == "failed";
+  } else {
+    return false;
+  }
+});
+
 int main() {
 }

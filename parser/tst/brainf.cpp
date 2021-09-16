@@ -90,6 +90,8 @@ static constexpr state operator+(const state & s, opcode o) {
           state res = s;
           while (res.data.at(s.data_ptr) > 0) {
             const auto p = lbr + many(expr, res) + rbr;
+            // It doesn't matter for this example, but in real life we should deal with failures - otherwise, we might
+            // face issues that are valid from a parser perspective, but invalid from a semantic perspective
             res = *p(v);
           }
           return res;

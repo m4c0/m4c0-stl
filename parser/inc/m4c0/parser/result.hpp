@@ -32,6 +32,11 @@ namespace m4c0::parser {
       }
     }
 
+    template<typename Fn>
+    constexpr auto operator%(Fn && fn) const noexcept {
+      return fn(m_value);
+    }
+
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
       return m_value == o.m_value && m_remainder == o.m_remainder;
     }
@@ -55,6 +60,11 @@ namespace m4c0::parser {
 
     [[nodiscard]] constexpr bool operator==([[maybe_unused]] const failure & o) const noexcept {
       return m_message == o.m_message;
+    }
+
+    template<typename Fn>
+    constexpr auto operator%(Fn && fn) const noexcept {
+      return fn(m_message);
     }
   };
 
@@ -114,12 +124,21 @@ namespace m4c0::parser {
       return !*this ? res_t { get_failure() } : res_t { get_success().map(fn) };
     }
 
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, input_t> && std::is_invocable_v<Fn, ResTp>
+    constexpr auto operator%(Fn && fn) const noexcept {
+      if (*this) {
+        return get_success() % fn;
+      }
+      return get_failure() % fn;
+    }
+
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
       return m_success;
     }
 
     [[nodiscard]] constexpr ResTp operator*() const noexcept {
-      // Deref of a failure is UB.
+      // Deref of a failure is UB. TODO: Migrate usages
       return m_success ? *get_success() : ResTp {};
     }
   };

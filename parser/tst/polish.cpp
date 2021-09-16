@@ -50,13 +50,26 @@ static constexpr auto rec() noexcept -> result<value> (*)(input_t) noexcept {
     return p(in);
   };
 }
+
+struct result_visitor {
+  constexpr value operator()(value res) const noexcept {
+    return res;
+  }
+  constexpr value operator()(input_t /*err*/) const noexcept {
+    return { -1 };
+  }
+};
 static constexpr auto expr = many(space_chr) & rec();
 
-static_assert(*expr("+ 3 4") == 3 + 4);
-static_assert(*expr("- 4 1") == 3);
+static constexpr auto parse(input_t in) {
+  return expr(in) % result_visitor {};
+}
 
-static_assert(*expr("  +  1  2  ") == 3);
+static_assert(parse("+ 3 4") == 3 + 4);
+static_assert(parse("- 4 1") == 3);
 
-static_assert(*expr("- 22 020") == 2);
+static_assert(parse("  +  1  2  ") == 3);
 
-static_assert(*expr("+ - 4 1 + 3 1") == 3 + 4);
+static_assert(parse("- 22 020") == 2);
+
+static_assert(parse("+ - 4 1 + 3 1") == 3 + 4);
