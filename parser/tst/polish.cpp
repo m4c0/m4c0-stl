@@ -7,10 +7,6 @@ using namespace m4c0::parser;
 struct value {
   int d = 0;
 };
-static constexpr value operator+(const value a, const value b) noexcept {
-  constexpr const auto radix = 10;
-  return value { a.d * radix + b.d };
-}
 static constexpr bool operator==(const value o, const int n) noexcept {
   return o.d == n;
 }
@@ -45,7 +41,7 @@ static constexpr auto oper_sign = plus_sign | minus_sign;
 
 static constexpr auto space_chr = skip(match_any_of(" \r\n\t"));
 static constexpr auto space = at_least_one(space_chr);
-static constexpr auto number = at_least_one(match_digit() & to_value);
+static constexpr auto number = match_u32() & to_value;
 
 static constexpr auto rec() noexcept -> result<value> (*)(input_t) noexcept {
   return [](input_t in) noexcept -> result<value> {

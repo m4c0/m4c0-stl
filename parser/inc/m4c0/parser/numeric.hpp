@@ -10,4 +10,26 @@ namespace m4c0::parser {
     };
     return match_range('0', '9') & to_int | "Expecting digit";
   }
+  [[nodiscard]] constexpr auto match_u32() noexcept {
+    class digit {
+      unsigned m_v { 0 };
+
+      [[nodiscard]] constexpr explicit digit(unsigned v) : m_v { v } {
+      }
+
+    public:
+      [[nodiscard]] constexpr digit() = default;
+
+      [[nodiscard]] constexpr auto operator+(int i) const noexcept {
+        constexpr const auto radix = 10;
+        return digit { m_v * radix + i };
+      }
+
+      [[nodiscard]] constexpr auto value() const noexcept {
+        return m_v;
+      }
+    };
+
+    return at_least_one(match_digit(), digit {}) & &digit::value;
+  }
 }

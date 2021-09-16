@@ -25,7 +25,11 @@ namespace m4c0::parser {
     requires std::is_invocable_v<Fn, ResTp>
     constexpr auto map(Fn && fn) const noexcept {
       using res_t = std::invoke_result_t<Fn, ResTp>;
-      return success<res_t> { fn(m_value), m_remainder };
+      if constexpr (std::is_member_function_pointer_v<std::decay_t<Fn>>) {
+        return success<res_t> { (m_value.*fn)(), m_remainder };
+      } else {
+        return success<res_t> { fn(m_value), m_remainder };
+      }
     }
 
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
