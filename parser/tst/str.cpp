@@ -27,3 +27,10 @@ static_assert(match_range('a', 'z')("a") == success { 'a', "" });
 static_assert(match_range('a', 'z')("d") == success { 'd', "" });
 static_assert(match_range('a', 'z')("z") == success { 'z', "" });
 static_assert(match_range('a', 'z')("zaza") == success { 'z', "aza" });
+
+static_assert(!match_none_of("ABC")(""));
+static_assert(!match_none_of("ABC")("A"));
+static_assert(!match_none_of("ABC")("B"));
+static_assert(!match_none_of("ABC")("C"));
+static_assert(match_none_of("ABC")("D") == success { 'D', "" });
+static_assert(match_none_of("ABC")("EF") == success { 'E', "F" });

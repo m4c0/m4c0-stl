@@ -28,6 +28,16 @@ namespace m4c0::parser {
       return success<char> { c, in.substr(1) };
     };
   }
+  [[nodiscard]] static constexpr auto match_none_of(input_t s) noexcept {
+    return [s](input_t in) noexcept -> result<char> {
+      if (in.empty()) return failure<char>("EOF matching chars");
+
+      auto c = in.at(0);
+      if (s.contains(c)) return failure<char>("Mismatched char");
+
+      return success<char> { c, in.substr(1) };
+    };
+  }
   [[nodiscard]] static constexpr auto match_range(char start, char end) noexcept {
     return [start, end](input_t in) noexcept -> result<char> {
       if (in.empty()) return failure<char>("EOF matching char range");
