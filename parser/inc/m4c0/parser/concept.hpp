@@ -6,8 +6,13 @@
 #include <type_traits>
 
 namespace m4c0::parser {
+  template<typename>
+  struct is_parser_result : public std::false_type {};
   template<typename Tp>
-  concept is_parser = std::is_invocable_v<Tp, input_t>;
+  struct is_parser_result<result<Tp>> : public std::true_type {};
+
+  template<typename Tp>
+  concept is_parser = is_parser_result<std::invoke_result_t<Tp, input_t>>::value;
 
   template<typename Fn, typename P>
   concept accepts = std::is_invocable_v<Fn, typename std::invoke_result_t<P, input_t>::type>;
