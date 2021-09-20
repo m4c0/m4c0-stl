@@ -35,6 +35,11 @@ static_assert((tokenise(match('a')) & fn_with_str_input)("a") == succeed(input_t
 static_assert((match('a') & 4)("aha") == succeed(4, "ha"));
 static_assert(!(match('a') & 4)("nope"));
 
+static constexpr auto tag_merger(char a, char b) {
+  return a == '<' && b == '>';
+}
+static_assert(combine(match('<'), match('>'), tag_merger)("<>!") == succeed(true, "!"));
+
 static_assert(!(match('a') + fnp())(""));
 static_assert(!(match('a') + fnp())("a"));
 static_assert(!(match('a') + fnp())("bA"));

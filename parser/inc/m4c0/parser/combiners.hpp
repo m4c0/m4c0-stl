@@ -33,6 +33,18 @@ namespace m4c0::parser {
     };
   }
 
+  template<typename PA, typename PB, typename Fn>
+  requires is_parser<PA> && is_parser<PB>
+  static constexpr auto combine(PA && a, PB && b, Fn && fn) noexcept {
+    return [a, b, fn = std::forward<Fn>(fn)](input_t in) noexcept {
+      return a(in) & [b, fn](auto ra, auto in) noexcept {
+        return b(in) & [ra, fn](auto rb) noexcept {
+          return fn(ra, rb);
+        };
+      };
+    };
+  }
+
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
   static constexpr auto operator+(PA && a, PB && b) noexcept {
