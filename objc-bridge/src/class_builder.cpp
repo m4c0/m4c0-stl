@@ -1,5 +1,6 @@
 #include "m4c0/objc/class_builder.hpp"
 
+#include <cmath>
 #include <string>
 
 using namespace m4c0::objc;
@@ -15,7 +16,7 @@ class_builder::class_builder(const char * parent)
 }
 
 class_builder & class_builder::add_ivar(const char * name, unsigned int size, unsigned int align, const char * sign) {
-  class_addIvar(static_cast<Class>(m_class), name, size, log2(align), sign);
+  class_addIvar(static_cast<Class>(m_class), name, size, std::log2(align), sign);
   return *this;
 }
 
