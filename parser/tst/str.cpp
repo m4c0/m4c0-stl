@@ -42,9 +42,3 @@ static_assert(match_none_of("ABC")("EF") == succeed('E', "F"));
 
 static_assert(eof()("") == succeed(nil {}, ""));
 static_assert(!eof()("A"));
-
-static_assert(!tokenise(match('X'))(""));
-static_assert(!tokenise(match('X'))("A"));
-static_assert(tokenise(match('X'))("X") == succeed(input_t { "X" }, ""));
-static_assert(tokenise(match('X'))("XX") == succeed(input_t { "X" }, "X"));
-static_assert(tokenise(match('X'))("Xx") == succeed(input_t { "X" }, "x"));

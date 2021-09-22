@@ -27,11 +27,6 @@ static_assert(!(match('a') & fnp())("a"));
 static_assert(!(match('a') & fnp())("bA"));
 static_assert((match('a') & fnp())("aAb") == succeed(0, "b"));
 
-static constexpr auto fn_with_str_input(input_t in) {
-  return in;
-}
-static_assert((tokenise(match('a')) & fn_with_str_input)("a") == succeed(input_t { "a" }, ""));
-
 static_assert((match('a') & 4)("aha") == succeed(4, "ha"));
 static_assert(!(match('a') & 4)("nope"));
 

@@ -56,15 +56,4 @@ namespace m4c0::parser {
       return in.empty() ? result { success { nil {} }, "" } : result<nil> { failure<>("End of file not found"), in };
     };
   }
-
-  template<typename P>
-  requires is_parser<P>
-  static constexpr auto tokenise(P && p) noexcept {
-    return [p](input_t in) noexcept -> result<input_t> {
-      return p(in) & [in](auto /*r*/, input_t rem) noexcept -> result<input_t> {
-        const auto substr = rem.empty() ? in : in.up_to(rem);
-        return { success { substr }, rem };
-      };
-    };
-  }
 }

@@ -14,6 +14,7 @@ m4c0_add_test(
     tst/result.cpp
     tst/str.cpp
     tst/string_view.cpp
+    tst/tokeniser.cpp
     tst/traits.cpp
   LIBRARIES m4c0::parser
   )
