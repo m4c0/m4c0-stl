@@ -9,6 +9,7 @@ m4c0_add_test(
     tst/brainf.cpp
     tst/combiners.cpp
     tst/concept.cpp
+    tst/constants.cpp
     tst/numeric.cpp
     tst/polish.cpp
     tst/result.cpp
