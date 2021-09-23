@@ -1,4 +1,5 @@
 #include "m4c0/parser/combiners.hpp"
+#include "m4c0/parser/constants.hpp"
 #include "m4c0/parser/result.hpp"
 #include "m4c0/parser/str.hpp"
 
@@ -82,6 +83,14 @@ static constexpr cnt_init operator+(cnt_init a, cnt b) {
 static constexpr bool operator==(cnt_init a, cnt_init b) {
   return a.c == b.c;
 }
+
+static_assert((constant(cnt_init {}) << cntp())("") == succeed(cnt_init {}, ""));
+static_assert((constant(cnt_init {}) << cntp())("a") == succeed(cnt_init {}, "a"));
+static_assert((constant(cnt_init {}) << cntp())("B") == succeed(cnt_init { 1 }, ""));
+static_assert((constant(cnt_init {}) << cntp())("Ba") == succeed(cnt_init { 1 }, "a"));
+static_assert((constant(cnt_init {}) << cntp())("BBa") == succeed(cnt_init { 2 }, "a"));
+static_assert((constant(cnt_init {}) << cntp())("BBB") == succeed(cnt_init { 3 }, ""));
+static_assert(!(fail<cnt_init>("") << cntp())(""));
 
 static_assert(!at_least_one(cntp())(""));
 static_assert(!at_least_one(cntp())("a"));
