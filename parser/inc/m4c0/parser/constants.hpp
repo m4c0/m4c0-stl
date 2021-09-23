@@ -9,4 +9,11 @@ namespace m4c0::parser {
       return result { failure<T> { msg }, in };
     };
   }
+
+  template<typename T>
+  static constexpr auto constant(T && t) noexcept {
+    return [t](input_t in) noexcept {
+      return result { success { t }, in };
+    };
+  }
 }
