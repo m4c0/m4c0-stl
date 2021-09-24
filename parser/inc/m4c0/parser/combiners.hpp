@@ -11,7 +11,8 @@ namespace m4c0::parser {
   static constexpr auto operator&&(P && p, Fn && fn) noexcept {
     return [p, fn](input_t in) noexcept {
       const auto r = p(in);
-      if (r && fn(*r)) return r;
+      if (!r) return r;
+      if (*(r & fn)) return r;
       return result { failure<type_of_t<P>>("Mismatched condition"), in };
     };
   }
