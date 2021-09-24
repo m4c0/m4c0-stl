@@ -6,6 +6,16 @@
 #include "m4c0/parser/traits.hpp"
 
 namespace m4c0::parser {
+  template<typename P, typename Fn>
+  requires is_parser<P> && accepts<Fn, P>
+  static constexpr auto operator&&(P && p, Fn && fn) noexcept {
+    return [p, fn](input_t in) noexcept {
+      const auto r = p(in);
+      if (r && fn(*r)) return r;
+      return result { failure<type_of_t<P>>("Mismatched condition"), in };
+    };
+  }
+
   template<typename Fn, typename P>
   requires is_parser<P> && accepts<Fn, P> && not_a_parser<Fn>
   static constexpr auto operator&(P && p, Fn && fn) noexcept {

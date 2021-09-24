@@ -23,6 +23,14 @@ static_assert(!fnp()(""));
 static_assert(!fnp()("cZ"));
 static_assert(fnp()("Cz") == succeed(2, "z"));
 
+static constexpr auto nah(char c) {
+  return c != 'a';
+}
+static_assert(!(match('a') && nah)("a"));
+static_assert(!(match('a') && nah)("b"));
+static_assert(!(match('b') && nah)("a"));
+static_assert((match('b') && nah)("ba") == succeed('b', "a"));
+
 static_assert(!(match('a') & fnp())(""));
 static_assert(!(match('a') & fnp())("a"));
 static_assert(!(match('a') & fnp())("bA"));
