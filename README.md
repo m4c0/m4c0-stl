@@ -33,6 +33,7 @@ Take everything here as an unstable work-in-progress.
 * **PNG** - PNG container reader
 * **Riff** - RIFF file read/write routines
 * **Test** - Conveniences for unit tests
+* **Units** - Unit conversion/arithmetic
 * **Vulkan** - Packages all Vulkan sub-libraries
 * **Vulkan Actions** - Fluent interfaces for Vulkan functions (submit queue,
   etc)
