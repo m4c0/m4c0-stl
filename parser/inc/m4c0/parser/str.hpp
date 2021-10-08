@@ -5,6 +5,12 @@
 #include "m4c0/parser/result.hpp"
 
 namespace m4c0::parser {
+  [[nodiscard]] static constexpr auto any_char() noexcept {
+    return [](input_t in) noexcept -> result<char> {
+      if (in.empty()) return { failure("EOF matching any char"), in };
+      return { success { in.at(0) }, in.substr(1) };
+    };
+  }
   [[nodiscard]] static constexpr auto match(char c) noexcept {
     return [c](input_t in) noexcept -> result<char> {
       if (in.empty()) return { failure("EOF matching char"), in };

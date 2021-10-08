@@ -7,6 +7,10 @@ static constexpr auto succeed(Tp res, input_t rem) {
   return result { success { res }, rem };
 }
 
+static_assert(!any_char()(""));
+static_assert(any_char()("a") == succeed('a', ""));
+static_assert(any_char()("xy") == succeed('x', "y"));
+
 static_assert(!match('A')(""));
 static_assert(!match('A')("_"));
 static_assert(match('A')("A") == succeed('A', ""));
