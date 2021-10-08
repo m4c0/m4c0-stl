@@ -119,3 +119,18 @@ static_assert(many(cntp())("BBB") == succeed(cnt { 0b111 }, "")); // NOLINT
 static_assert(many(cntp(), cnt_init {})("") == succeed(cnt_init {}, ""));
 static_assert(many(cntp(), cnt_init {})("a") == succeed(cnt_init {}, "a"));
 static_assert(many(cntp(), cnt_init {})("B") == succeed(cnt_init { 1 }, ""));
+
+static_assert(exactly(0, cntp())("") == succeed(cnt {}, ""));
+static_assert(exactly(0, cntp())("a") == succeed(cnt {}, "a"));
+static_assert(!exactly(1, cntp())(""));
+static_assert(!exactly(1, cntp())("a"));
+static_assert(exactly(1, cntp())("B") == succeed(cnt { 0b1 }, ""));
+static_assert(exactly(1, cntp())("Ba") == succeed(cnt { 0b1 }, "a"));
+static_assert(exactly(1, cntp())("BB") == succeed(cnt { 0b1 }, "B"));
+static_assert(!exactly(3, cntp())(""));
+static_assert(!exactly(3, cntp())("a"));
+static_assert(!exactly(3, cntp())("B"));
+static_assert(!exactly(3, cntp())("BB"));
+static_assert(exactly(3, cntp())("BBB") == succeed(cnt { 0b111 }, ""));   // NOLINT
+static_assert(exactly(3, cntp())("BBBa") == succeed(cnt { 0b111 }, "a")); // NOLINT
+static_assert(exactly(3, cntp())("BBBB") == succeed(cnt { 0b111 }, "B")); // NOLINT

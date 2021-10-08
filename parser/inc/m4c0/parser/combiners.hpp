@@ -149,4 +149,22 @@ namespace m4c0::parser {
   static constexpr auto at_least_one(P && p, Tp init = Tp {}) noexcept {
     return constant(init) + p << p;
   }
+
+  template<typename P, typename Tp = type_of_t<P>>
+  requires is_parser<P>
+  static constexpr auto exactly(unsigned n, P && p, Tp init = Tp {}) noexcept {
+    return [n, p, init = constant(init)](input_t in) noexcept {
+      auto res = init(in);
+      for (unsigned i = 0; i < n; ++i) {
+        const auto next = res & [p](auto r1, input_t rem) noexcept {
+          return p(rem) & [r1](auto r2) noexcept {
+            return r1 + r2;
+          };
+        };
+        if (!next) return next;
+        res = next;
+      }
+      return res;
+    };
+  }
 }
