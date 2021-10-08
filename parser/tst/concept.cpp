@@ -26,5 +26,10 @@ static constexpr bool test_accept(Fn /*fn*/, P /*p*/) {
 static constexpr int to_int(char /*c*/) {
   return 0;
 }
+static constexpr int dyn_parser(char /*c*/, input_t /*in*/) {
+  return 0;
+}
 static_assert(test_accept(to_int, iam_parser<char>));
 static_assert(!test_accept(to_int, iam_groo));
+static_assert(test_accept(dyn_parser, iam_parser<char>));
+static_assert(!test_accept(dyn_parser, iam_groo));

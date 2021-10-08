@@ -15,7 +15,13 @@ namespace m4c0::parser {
   concept is_parser = is_parser_result<std::invoke_result_t<Tp, input_t>>::value;
 
   template<typename Fn, typename P>
-  concept accepts = std::is_invocable_v<Fn, typename std::invoke_result_t<P, input_t>::type>;
+  concept accepts_directly = std::is_invocable_v<Fn, typename std::invoke_result_t<P, input_t>::type>;
+
+  template<typename Fn, typename P>
+  concept accepts_with_remainder = std::is_invocable_v<Fn, typename std::invoke_result_t<P, input_t>::type, input_t>;
+
+  template<typename Fn, typename P>
+  concept accepts = accepts_directly<Fn, P> || accepts_with_remainder<Fn, P>;
 
   template<typename Fn, typename P>
   concept cant_accept = !accepts<Fn, P>;
