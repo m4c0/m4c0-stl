@@ -15,6 +15,7 @@ Take everything here as an unstable work-in-progress.
 * **DI** - Dependency injection with some scope management
 * **Droid Main** - Main loop for Android apps. Uses Android's glue code, but
   this will be eventually replaced
+* **Espresso** - Java class file parser
 * **Fuji** - Small Vulkan framework which provides a small overridable main 
   loop
 * **IO** - Basic IO wrapping classes. Contains constexpr stuff for unit tests
