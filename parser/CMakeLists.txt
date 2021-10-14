@@ -10,6 +10,7 @@ m4c0_add_test(
     tst/combiners.cpp
     tst/concept.cpp
     tst/constants.cpp
+    tst/conversions.cpp
     tst/numeric.cpp
     tst/polish.cpp
     tst/result.cpp
