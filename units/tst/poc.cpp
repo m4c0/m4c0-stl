@@ -28,5 +28,7 @@ static_assert(12_mm * -1 == -12_mm); // NOLINT
 static_assert(1_mm + 1_inch == 26400_um); // NOLINT
 static_assert(1_inch - 1_mm == 24400_um); // NOLINT
 
+static_assert((1_inch).to_mm<int>() == 25); // NOLINT
+
 int main() {
 }

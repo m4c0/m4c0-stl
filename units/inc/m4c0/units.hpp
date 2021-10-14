@@ -42,20 +42,25 @@ namespace m4c0::units {
     }
 
     [[nodiscard]] static constexpr meter from_inch(const uint64_t value) noexcept {
-      return meter(value * 2.54 * 10e-2); // NOLINT
+      return meter(value * 2.54 * 1e-2); // NOLINT
     }
     [[nodiscard]] static constexpr meter from_mil(const uint64_t value) noexcept {
-      return meter(value * 2.54 * 10e-5); // NOLINT
+      return meter(value * 2.54 * 1e-5); // NOLINT
     }
     [[nodiscard]] static constexpr meter from_mm(const uint64_t value) noexcept {
-      return meter(value * 10e-3); // NOLINT
+      return meter(value * 1e-3); // NOLINT
     }
     [[nodiscard]] static constexpr meter from_um(const uint64_t value) noexcept {
-      return meter(value * 10e-6); // NOLINT
+      return meter(value * 1e-6); // NOLINT
     }
 
     [[nodiscard]] static constexpr meter nil() noexcept {
       return meter(0);
+    }
+
+    template<typename Tp>
+    [[nodiscard]] constexpr Tp to_mm() const noexcept {
+      return static_cast<Tp>(m_value * 1000.0); // NOLINT
     }
   };
 }
