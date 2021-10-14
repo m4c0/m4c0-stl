@@ -82,6 +82,10 @@ namespace m4c0::parser {
       , m_remainder { r } {
     }
 
+    [[nodiscard]] constexpr bool operator==(const ResTp & o) const noexcept {
+      if (!m_success) return false;
+      return *get_success() == o;
+    }
     [[nodiscard]] constexpr bool operator==(const result<ResTp> & o) const noexcept {
       if (m_success != o.m_success) return false;
       if (m_remainder != o.m_remainder) return false;

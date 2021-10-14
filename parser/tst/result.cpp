@@ -15,6 +15,10 @@ static_assert(polymorphic(true) == polymorphic(true));
 static_assert(polymorphic(false) == polymorphic(false));
 static_assert(polymorphic(true) != polymorphic(false));
 
+static_assert(polymorphic(false) != '!');
+static_assert(polymorphic(true) == '!');
+static_assert(polymorphic(true) != 'X');
+
 static_assert(result<char>(success('1'), "") == result<char>(success('1'), ""));
 static_assert(result<char>(success('1'), "") != result<char>(success('1'), "A"));
 static_assert(result<char>(success('1'), "") != result<char>(success('2'), ""));
