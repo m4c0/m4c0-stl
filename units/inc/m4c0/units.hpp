@@ -53,6 +53,10 @@ namespace m4c0::units {
     [[nodiscard]] static constexpr meter from_um(const uint64_t value) noexcept {
       return meter(value * 10e-6); // NOLINT
     }
+
+    [[nodiscard]] static constexpr meter nil() noexcept {
+      return meter(0);
+    }
   };
 }
 namespace m4c0::units::literals {
