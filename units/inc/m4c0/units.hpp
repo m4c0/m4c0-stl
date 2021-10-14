@@ -41,31 +41,31 @@ namespace m4c0::units {
       return meter(m_value / value);
     }
 
-    [[nodiscard]] static constexpr meter from_inch(uint64_t value) noexcept {
+    [[nodiscard]] static constexpr meter from_inch(const uint64_t value) noexcept {
       return meter(value * 2.54 * 10e-2); // NOLINT
     }
-    [[nodiscard]] static constexpr meter from_mil(uint64_t value) noexcept {
+    [[nodiscard]] static constexpr meter from_mil(const uint64_t value) noexcept {
       return meter(value * 2.54 * 10e-5); // NOLINT
     }
-    [[nodiscard]] static constexpr meter from_mm(uint64_t value) noexcept {
+    [[nodiscard]] static constexpr meter from_mm(const uint64_t value) noexcept {
       return meter(value * 10e-3); // NOLINT
     }
-    [[nodiscard]] static constexpr meter from_um(uint64_t value) noexcept {
+    [[nodiscard]] static constexpr meter from_um(const uint64_t value) noexcept {
       return meter(value * 10e-6); // NOLINT
     }
   };
 }
 namespace m4c0::units::literals {
-  static constexpr auto operator""_inch(uint64_t value) noexcept {
+  static constexpr auto operator""_inch(const uint64_t value) noexcept {
     return meter::from_inch(value);
   }
-  static constexpr auto operator""_mil(uint64_t value) noexcept {
+  static constexpr auto operator""_mil(const uint64_t value) noexcept {
     return meter::from_mil(value);
   }
-  static constexpr auto operator""_mm(uint64_t value) noexcept {
+  static constexpr auto operator""_mm(const uint64_t value) noexcept {
     return meter::from_mm(value);
   }
-  static constexpr auto operator""_um(uint64_t value) noexcept {
+  static constexpr auto operator""_um(const uint64_t value) noexcept {
     return meter::from_um(value);
   }
 }
