@@ -167,4 +167,23 @@ namespace m4c0::parser {
       return res;
     };
   }
+
+  template<typename P, typename Tp = type_of_t<P>>
+  requires is_parser<P>
+  static constexpr auto at_most(unsigned n, P && p, Tp init = Tp {}) noexcept {
+    // TODO: this is nearly the same as "exactly" - is there a way define one using the other?
+    return [n, p, init = constant(init)](input_t in) noexcept {
+      auto res = init(in);
+      for (unsigned i = 0; i < n; ++i) {
+        const auto next = res & [p](auto r1, input_t rem) noexcept {
+          return p(rem) & [r1](auto r2) noexcept {
+            return r1 + r2;
+          };
+        };
+        if (!next) break;
+        res = next;
+      }
+      return res;
+    };
+  }
 }
