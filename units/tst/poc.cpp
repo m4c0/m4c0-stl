@@ -1,5 +1,6 @@
 #include "m4c0/units.hpp"
 
+using namespace m4c0::units;
 using namespace m4c0::units::literals;
 
 // TODO: find a better way to avoid "nolint" when constexpr-test using magic constants
@@ -29,6 +30,9 @@ static_assert(1_mm + 1_inch == 26400_um); // NOLINT
 static_assert(1_inch - 1_mm == 24400_um); // NOLINT
 
 static_assert((1_inch).to_mm<int>() == 25); // NOLINT
+
+static_assert(meter::nil() == meter::nil());
+static_assert(meter::nil() != 1_um);
 
 int main() {
 }
