@@ -98,6 +98,11 @@ namespace m4c0::espresso {
       return pool {};
     }
   };
+  struct iface {
+    constexpr iface operator+(const uint16_t & /*r*/) const noexcept {
+      return iface {};
+    }
+  };
 
   [[nodiscard]] static constexpr auto constant_class_ref() noexcept {
     constexpr const auto id = 7;
@@ -159,8 +164,16 @@ namespace m4c0::espresso {
     return u16();
   }
 
+  [[nodiscard]] static constexpr auto interfaces() noexcept {
+    return u16() & [](uint16_t size, auto rem) noexcept {
+      const auto p = parser::exactly(size, u16(), iface {});
+      return p(rem);
+    };
+  }
+
   [[nodiscard]] static constexpr auto file() noexcept {
-    return magic() & minor_version() & major_version() & cpool() & flags() & this_class() & super_class();
+    return magic() & minor_version() & major_version() & cpool() & flags() & this_class() & super_class()
+         & interfaces();
   }
 }
 
