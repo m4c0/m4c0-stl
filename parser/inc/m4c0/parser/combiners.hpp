@@ -5,6 +5,8 @@
 #include "m4c0/parser/nil.hpp"
 #include "m4c0/parser/traits.hpp"
 
+#include <type_traits>
+
 namespace m4c0::parser {
   template<typename P, typename Fn>
   requires is_parser<P> && accepts<Fn, P>
@@ -111,6 +113,16 @@ namespace m4c0::parser {
       const auto r = a(in);
       if (r) return r;
       return b(in);
+    };
+  }
+
+  template<typename P, typename Fn>
+  requires is_parser<P> && is_parser<std::invoke_result_t<Fn, type_of_t<P>>>
+  static constexpr auto operator>>(P && p, Fn && fn) noexcept {
+    return [p, fn](input_t in) noexcept {
+      return p(in) & [fn](auto r, input_t rem) noexcept {
+        return fn(r)(rem);
+      };
     };
   }
 

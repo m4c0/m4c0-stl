@@ -1,5 +1,6 @@
 #include "m4c0/parser/combiners.hpp"
 #include "m4c0/parser/constants.hpp"
+#include "m4c0/parser/numeric.hpp"
 #include "m4c0/parser/result.hpp"
 #include "m4c0/parser/str.hpp"
 
@@ -140,3 +141,15 @@ static_assert(at_most(2, cntp())("a") == succeed(cnt {}, "a"));
 static_assert(at_most(2, cntp())("Ba") == succeed(cnt { 0b1 }, "a"));
 static_assert(at_most(2, cntp())("BBa") == succeed(cnt { 0b11 }, "a"));
 static_assert(at_most(2, cntp())("BBBa") == succeed(cnt { 0b11 }, "Ba"));
+
+static constexpr auto repeater() {
+  return match_digit() >> [](int d) noexcept {
+    return exactly(d, cntp());
+  };
+}
+static_assert(!repeater()(""));
+static_assert(!repeater()("A"));
+static_assert(!repeater()("1"));
+static_assert(!repeater()("2B"));
+static_assert(repeater()("1BBB") == succeed(cnt { 0b1 }, "BB"));
+static_assert(repeater()("2BBB") == succeed(cnt { 0b11 }, "B"));
