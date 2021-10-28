@@ -1,9 +1,8 @@
+#include "m4c0/espresso/base_parsing.hpp"
+#include "m4c0/espresso/cpool.hpp"
+#include "m4c0/espresso/magic.hpp"
 #include "m4c0/parser/combiners.hpp"
 #include "m4c0/parser/result.hpp"
-#include "m4c0/parser/str.hpp"
-#include "m4c0/parser/tokeniser.hpp"
-
-#include <variant>
 
 /* Class generated with this Java code:
  *
@@ -32,148 +31,36 @@ static constexpr const auto cls_file =
                             "\x00\x01\x00\x0a\x00\x00\x00\x02\x00\x0b" };
 
 namespace m4c0::espresso {
-  constexpr const auto jclass_magic_number = 0xCAFEBABE;
-  constexpr const auto latest_supported_version = 0x37; // Java SE 11
-  constexpr const auto first_supported_version = 0x2D;  // JDK 1.1
-
-  [[nodiscard]] static constexpr auto is_supported_major_version(uint16_t n) noexcept {
-    return n >= first_supported_version && n <= latest_supported_version;
-  }
-
-  [[nodiscard]] static constexpr auto u8() noexcept {
-    return parser::any_char() & [](char c) noexcept -> uint8_t {
-      return static_cast<uint8_t>(c);
-    };
-  }
-  [[nodiscard]] static constexpr auto u16() noexcept {
-    return parser::combine(u8(), u8(), [](uint8_t a, uint8_t b) noexcept -> uint16_t {
-      return (a << 8U) | b; // NOLINT
-    });
-  }
-  [[nodiscard]] static constexpr auto u32() noexcept {
-    return parser::combine(u16(), u16(), [](uint16_t a, uint16_t b) noexcept -> uint32_t {
-      return (a << 16U) | b; // NOLINT
-    });
-  }
-
-  [[nodiscard]] static constexpr auto match_u8(uint8_t n) noexcept {
-    return u8() && [n](uint8_t o) noexcept {
-      return n == o;
-    };
-  }
-  [[nodiscard]] static constexpr auto match_u32(uint32_t n) noexcept {
-    return u32() && [n](uint32_t o) noexcept {
-      return n == o;
-    };
-  }
-
-  [[nodiscard]] static constexpr auto magic() noexcept {
-    return match_u32(jclass_magic_number) | "Invalid magic number";
-  }
-  [[nodiscard]] static constexpr auto minor_version() noexcept {
-    return u16();
-  }
-  [[nodiscard]] static constexpr auto major_version() noexcept {
-    return (u16() && is_supported_major_version) | "Invalid/unknown major version";
-  }
-
-  struct cls {
-    uint16_t name_index;
-  };
-  struct method {
-    uint16_t class_index;
-    uint16_t name_and_type_index;
-  };
-  struct name_type {
-    uint16_t name_index;
-    uint16_t description_index;
-  };
-  struct utf8 {
-    parser::token<void> bytes;
-  };
-  using cpool_item = std::variant<cls, method, name_type, utf8>;
-
-  struct pool {
-    constexpr pool operator+(const cpool_item & /*r*/) const noexcept {
-      return pool {};
-    }
-  };
   struct iface {
-    constexpr iface operator+(const uint16_t & /*r*/) const noexcept {
+    constexpr iface operator+(const cpool_items & /*r*/) const noexcept {
       return iface {};
     }
   };
 
-  [[nodiscard]] static constexpr auto constant_class_ref() noexcept {
-    constexpr const auto id = 7;
-    return match_u8(id) & u16() & [](uint16_t c) noexcept {
-      return cpool_item { cls { c } };
-    };
-  }
-
-  [[nodiscard]] static constexpr auto constant_method_ref() noexcept {
-    constexpr const auto id = 10;
-    return match_u8(id) & parser::combine(u16(), u16(), [](uint16_t c, uint16_t nt) noexcept {
-             return cpool_item { method { c, nt } };
-           });
-  }
-
-  [[nodiscard]] static constexpr auto constant_name_type() noexcept {
-    constexpr const auto id = 12;
-    return match_u8(id) & parser::combine(u16(), u16(), [](uint16_t c, uint16_t nt) noexcept {
-             return cpool_item { name_type { c, nt } };
-           });
-  }
-
-  [[nodiscard]] static constexpr auto constant_utf8() noexcept {
-    constexpr const auto id = 1;
-    return match_u8(id) & u16() & [](uint16_t size, auto rem) noexcept {
-      using namespace m4c0::parser;
-      const auto p = tokenise<void>(exactly(size, skip(any_char())));
-      return p(rem) & [](token<void> t) noexcept {
-        return cpool_item { utf8 { t } };
-      };
-    };
-  }
-
-  [[nodiscard]] static constexpr auto constant() noexcept {
-    return constant_class_ref() | constant_method_ref() | constant_name_type() | constant_utf8();
-  }
-
-  [[nodiscard]] static constexpr auto cpool_size() noexcept {
-    return u16() & [](uint16_t n) noexcept {
-      return n - 1;
-    };
-  }
-  [[nodiscard]] static constexpr auto cpool() noexcept {
-    return cpool_size() & [](uint16_t size, auto rem) noexcept {
-      const auto p = parser::exactly(size, constant(), pool {});
-      return p(rem);
-    };
+  [[nodiscard]] static constexpr auto operator+(const cpool_items & p, uint16_t /*flags*/) noexcept {
+    return p;
   }
 
   [[nodiscard]] static constexpr auto flags() noexcept {
     return u16();
   }
 
-  [[nodiscard]] static constexpr auto this_class() noexcept {
-    return u16();
+  [[nodiscard]] static constexpr auto this_class(const cpool_items & p) noexcept {
+    return cpool_class(p);
   }
 
-  [[nodiscard]] static constexpr auto super_class() noexcept {
-    return u16();
+  [[nodiscard]] static constexpr auto super_class(const cpool_items & p) noexcept {
+    return cpool_class(p);
   }
 
-  [[nodiscard]] static constexpr auto interfaces() noexcept {
-    return u16() & [](uint16_t size, auto rem) noexcept {
-      const auto p = parser::exactly(size, u16(), iface {});
-      return p(rem);
+  [[nodiscard]] static constexpr auto interfaces(const cpool_items & p) noexcept {
+    return u16() >> [p](uint16_t size) noexcept {
+      return parser::exactly(size, cpool_class(p), iface {});
     };
   }
 
   [[nodiscard]] static constexpr auto file() noexcept {
-    return magic() & minor_version() & major_version() & cpool() & flags() & this_class() & super_class()
-         & interfaces();
+    return magic_version() & cpool() + flags() >> this_class >> super_class >> interfaces;
   }
 }
 
