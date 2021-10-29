@@ -4,6 +4,8 @@
 #include "m4c0/parser/combiners.hpp"
 #include "m4c0/parser/result.hpp"
 
+#include <limits>
+
 /* Class generated with this Java code:
  *
  * package com.github.m4c0.espresso;
@@ -32,35 +34,32 @@ static constexpr const auto cls_file =
 
 namespace m4c0::espresso {
   struct iface {
-    constexpr iface operator+(const cpool_items & /*r*/) const noexcept {
+    constexpr iface operator+(const constant::pool & /*r*/) const noexcept {
       return iface {};
     }
   };
 
-  [[nodiscard]] static constexpr auto operator+(const cpool_items & p, uint16_t /*flags*/) noexcept {
-    return p;
-  }
-
   [[nodiscard]] static constexpr auto flags() noexcept {
-    return u16();
+    return parser::skip(u16());
   }
 
-  [[nodiscard]] static constexpr auto this_class(const cpool_items & p) noexcept {
+  [[nodiscard]] static constexpr auto this_class(const constant::pool & p) noexcept {
     return cpool_class(p);
   }
 
-  [[nodiscard]] static constexpr auto super_class(const cpool_items & p) noexcept {
+  [[nodiscard]] static constexpr auto super_class(const constant::pool & p) noexcept {
     return cpool_class(p);
   }
 
-  [[nodiscard]] static constexpr auto interfaces(const cpool_items & p) noexcept {
+  [[nodiscard]] static constexpr auto interfaces(const constant::pool & p) noexcept {
     return u16() >> [p](uint16_t size) noexcept {
       return parser::exactly(size, cpool_class(p), iface {});
     };
   }
 
-  [[nodiscard]] static constexpr auto file() noexcept {
-    return magic_version() & cpool() + flags() >> this_class >> super_class >> interfaces;
+  template<typename Alloc>
+  [[nodiscard]] static constexpr auto file(Alloc & alloc) noexcept {
+    return (magic_version() & cpool(alloc) + flags()) >> this_class >> super_class >> interfaces;
   }
 }
 
@@ -72,7 +71,13 @@ static_assert(*u8()(cls_file) == 0xCA);    // NOLINT
 static_assert(*u16()(cls_file) == 0xCAFE); // NOLINT
 static_assert(*u32()(cls_file) == jclass_magic_number);
 
-static_assert(file()(cls_file));
+static_assert([] {
+  std::array<constant::item, std::numeric_limits<uint16_t>::max()> buffer;
+  const auto alloc = [&buffer](uint16_t /*size*/) {
+    return buffer.data();
+  };
+  return file(alloc)(cls_file);
+}());
 
 int main() {
 }

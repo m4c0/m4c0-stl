@@ -22,26 +22,30 @@ namespace m4c0::espresso::constant {
   };
 
   using item = std::variant<cls, method, name_type, utf8>;
-}
-namespace m4c0::espresso {
-  class cpool_items {
+
+  class pool {
+    item * m_data {};
     unsigned m_size {};
 
-    explicit constexpr cpool_items(unsigned s) : m_size(s) {
+    constexpr pool(item * d, unsigned s) : m_data(d), m_size(s) {
     }
 
   public:
-    constexpr cpool_items() = default;
+    template<typename Alloc>
+    constexpr pool(Alloc && fn, unsigned s) : pool(fn(s), s) {
+    }
 
-    [[nodiscard]] constexpr cpool_items operator+(const constant::item & /*r*/) const noexcept {
-      return cpool_items { m_size + 1 };
+    [[nodiscard]] constexpr pool operator+(const item & i) const noexcept {
+      m_data[m_size] = i; // NOLINT
+      return pool { m_data, m_size + 1 };
     }
 
     [[nodiscard]] constexpr bool contains(unsigned idx) const noexcept {
-      return idx < m_size;
+      return idx < m_size && std::holds_alternative<cls>(m_data[idx]); // NOLINT
     }
   };
-
+}
+namespace m4c0::espresso {
   [[nodiscard]] static constexpr auto constant_class_ref() noexcept {
     constexpr const auto id = 7;
     return match_u8(id) & u16() & [](uint16_t c) noexcept -> constant::item {
@@ -79,17 +83,18 @@ namespace m4c0::espresso {
   }
 
   [[nodiscard]] static constexpr auto cpool_size() noexcept {
-    return u16() & [](uint16_t n) noexcept {
+    return u16() & [](uint16_t n) noexcept -> unsigned {
       return n - 1;
     };
   }
-  [[nodiscard]] static constexpr auto cpool() noexcept {
-    return cpool_size() >> [](uint16_t size) noexcept {
-      return parser::exactly(size, constant_item(), cpool_items {});
+  template<typename Alloc>
+  [[nodiscard]] static constexpr auto cpool(Alloc && a) noexcept {
+    return cpool_size() >> [a](uint16_t size) noexcept {
+      return parser::exactly(size, constant_item(), constant::pool { a, size });
     };
   }
 
-  [[nodiscard]] static constexpr auto cpool_class(const cpool_items & p) noexcept {
+  [[nodiscard]] static constexpr auto cpool_class(const constant::pool & p) noexcept {
     const auto contains = [p](uint16_t idx) noexcept {
       return p.contains(idx);
     };
