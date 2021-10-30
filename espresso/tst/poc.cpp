@@ -2,6 +2,7 @@
 #include "m4c0/espresso/cpool.hpp"
 #include "m4c0/espresso/magic.hpp"
 #include "m4c0/parser/combiners.hpp"
+#include "m4c0/parser/conversions.hpp"
 #include "m4c0/parser/result.hpp"
 
 #include <limits>
@@ -32,28 +33,86 @@ static constexpr const auto cls_file =
                             "\x00\x01\xb1\x00\x00\x00\x01\x00\x07\x00\x00\x00\x06\x00\x01\x00\x00\x00\x05"
                             "\x00\x01\x00\x0a\x00\x00\x00\x02\x00\x0b" };
 
+namespace m4c0::espresso::partials {
+  class flags {
+  public:
+    explicit constexpr flags(uint16_t i) {
+    }
+  };
+  class class_with_flags {
+    constant::pool m_pool;
+    flags m_flags;
+
+  public:
+    constexpr class_with_flags(const constant::pool & p, flags f) noexcept : m_pool(p), m_flags(f) {
+    }
+
+    [[nodiscard]] constexpr auto parse_class() const noexcept {
+      const auto contains = [p = m_pool](uint16_t idx) noexcept {
+        return p.contains(idx);
+      };
+      return (u16() && contains) & [p = m_pool](uint16_t idx) {
+        return p.get<constant::cls>(idx);
+      };
+    }
+  };
+  class class_with_this : class_with_flags {
+    constant::cls m_this;
+
+  public:
+    constexpr class_with_this(const class_with_flags & o, constant::cls this_cls) noexcept
+      : class_with_flags(o)
+      , m_this(this_cls) {
+    }
+
+    using class_with_flags::parse_class;
+  };
+  class class_with_super : class_with_this {
+    constant::cls m_this;
+
+  public:
+    constexpr class_with_super(const class_with_this & o, constant::cls this_cls) noexcept
+      : class_with_this(o)
+      , m_this(this_cls) {
+    }
+
+    using class_with_this::parse_class;
+  };
+
+  [[nodiscard]] static constexpr auto operator+(const constant::pool & p, flags f) noexcept {
+    return class_with_flags { p, f };
+  }
+  [[nodiscard]] static constexpr auto operator+(const class_with_flags & p, constant::cls f) noexcept {
+    return class_with_this { p, f };
+  }
+  [[nodiscard]] static constexpr auto operator+(const class_with_this & p, constant::cls f) noexcept {
+    return class_with_super { p, f };
+  }
+}
+namespace m4c0::espresso {
+  [[nodiscard]] static constexpr auto flags() noexcept {
+    return u16() & parser::to<partials::flags>();
+  }
+}
+
 namespace m4c0::espresso {
   struct iface {
-    constexpr iface operator+(const constant::pool & /*r*/) const noexcept {
+    constexpr iface operator+(const constant::cls & /*r*/) const noexcept {
       return iface {};
     }
   };
 
-  [[nodiscard]] static constexpr auto flags() noexcept {
-    return parser::skip(u16());
+  [[nodiscard]] static constexpr auto this_class(const partials::class_with_flags & p) noexcept {
+    return parser::constant(p) + p.parse_class();
   }
 
-  [[nodiscard]] static constexpr auto this_class(const constant::pool & p) noexcept {
-    return cpool_class(p);
+  [[nodiscard]] static constexpr auto super_class(const partials::class_with_this & p) noexcept {
+    return parser::constant(p) + p.parse_class();
   }
 
-  [[nodiscard]] static constexpr auto super_class(const constant::pool & p) noexcept {
-    return cpool_class(p);
-  }
-
-  [[nodiscard]] static constexpr auto interfaces(const constant::pool & p) noexcept {
+  [[nodiscard]] static constexpr auto interfaces(const partials::class_with_super & p) noexcept {
     return u16() >> [p](uint16_t size) noexcept {
-      return parser::exactly(size, cpool_class(p), iface {});
+      return parser::exactly(size, p.parse_class(), iface {});
     };
   }
 

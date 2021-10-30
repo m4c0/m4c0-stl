@@ -43,6 +43,11 @@ namespace m4c0::espresso::constant {
     [[nodiscard]] constexpr bool contains(unsigned idx) const noexcept {
       return idx < m_size && std::holds_alternative<cls>(m_data[idx]); // NOLINT
     }
+
+    template<typename T>
+    [[nodiscard]] constexpr T get(unsigned idx) const noexcept {
+      return std::get<T>(m_data[idx]); // NOLINT
+    }
   };
 }
 namespace m4c0::espresso {
@@ -93,12 +98,4 @@ namespace m4c0::espresso {
       return parser::exactly(size, constant_item(), constant::pool { a, size });
     };
   }
-
-  [[nodiscard]] static constexpr auto cpool_class(const constant::pool & p) noexcept {
-    const auto contains = [p](uint16_t idx) noexcept {
-      return p.contains(idx);
-    };
-    return (u16() && contains) & parser::constant(p);
-  }
-
 }
