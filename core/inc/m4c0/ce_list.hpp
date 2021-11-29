@@ -66,7 +66,7 @@ namespace m4c0 {
 
     constexpr void push_back(Tp t) noexcept {
       auto * n = m_alloc->allocate();
-      *n = ce_list_node<int> { t };
+      *n = ce_list_node<Tp> { t };
 
       if (!m_head) {
         m_head = m_tail = n;
