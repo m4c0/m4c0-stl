@@ -31,6 +31,8 @@ namespace m4c0::parser {
       }
     }
   };
+  template<typename T>
+  success(T && t) -> success<std::decay_t<T>>;
 
   template<typename ResTp = void>
   class failure {
