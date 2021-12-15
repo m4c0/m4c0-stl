@@ -55,7 +55,9 @@ namespace m4c0::parser {
     }
   };
 
+  // Requires a trivially destructible type due to the union requirements
   template<typename ResTp>
+  requires std::is_trivially_destructible_v<ResTp>
   class result {
     union value {
       success<ResTp> s;
