@@ -110,7 +110,7 @@ namespace m4c0::parser {
   static constexpr auto operator|(PA && a, PB && b) noexcept {
     return [a, b](input_t in) noexcept {
       // a(in) | b(in) would be just fine, but it process both due to C++ rules
-      const auto r = a(in);
+      auto r = a(in);
       if (r) return r;
       return b(in);
     };
