@@ -11,6 +11,7 @@ m4c0_add_test(
     tst/concept.cpp
     tst/constants.cpp
     tst/conversions.cpp
+    tst/exoterics.cpp
     tst/numeric.cpp
     tst/polish.cpp
     tst/result.cpp
