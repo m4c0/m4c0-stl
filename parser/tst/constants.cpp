@@ -10,7 +10,7 @@ static_assert((match('X') | fail<char>("msg"))("rem") == result { failure<char> 
 static_assert((match('r') & fail<char>("msg"))("rem") == result { failure<char> { "msg" }, "em" });
 
 static_assert(constant<int>(3)("") == result { success { 3 }, "" });
-static_assert(constant<int>(3)("abc") == result { success { 3 }, "abc" });
+static_assert(constant<int>(4)("abc") == result { success { 4 }, "abc" });
 
 static constexpr auto fn(int i) {
   return [i]() {
@@ -19,3 +19,6 @@ static constexpr auto fn(int i) {
 }
 static_assert(producer(fn(3))("") == result { success { 3 }, "" });
 static_assert(producer(fn(4))("abc") == result { success { 4 }, "abc" });
+
+static_assert(producer_of<int>(3)("") == result { success { 3 }, "" });
+static_assert(producer_of<int>(4)("abc") == result { success { 4 }, "abc" });

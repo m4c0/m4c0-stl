@@ -15,7 +15,7 @@ namespace m4c0::parser {
   /// \brief Produces a constant value
   /// Requires a value that can be copied. This requirement is due to the fact a parser might be invoked multiple times.
   template<typename T>
-  requires std::is_trivially_destructible_v<T>
+  requires std::is_copy_constructible_v<std::decay_t<T>>
   static constexpr auto constant(T && t) noexcept {
     return [t](input_t in) noexcept {
       return result { success { t }, in };
@@ -30,5 +30,13 @@ namespace m4c0::parser {
     return [fn = std::forward<Fn>(fn)](input_t in) noexcept {
       return result { success { fn() }, in };
     };
+  }
+
+  template<typename T, typename... Args>
+  requires std::is_constructible_v<T, Args...>
+  static constexpr auto producer_of(Args &&... args) noexcept {
+    return producer([args...]() noexcept {
+      return T { args... };
+    });
   }
 }
