@@ -5,10 +5,11 @@ namespace m4c0::parser {
   // Since we are ditching a STL class, we can ditch all of it here. This should improve compilation time for complex
   // parsers
   class string_view {
-    const char * m_chars;
-    unsigned long m_length;
+    const char * m_chars {};
+    unsigned long m_length {};
 
   public:
+    constexpr string_view() = default;
     constexpr string_view(const char * c, unsigned long len) noexcept : m_chars { c }, m_length { len } {
     }
     template<unsigned N>

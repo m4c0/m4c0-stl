@@ -55,48 +55,33 @@ namespace m4c0::parser {
     }
   };
 
-  // Requires a trivially destructible type due to the union requirements
   template<typename ResTp>
-  requires std::is_trivially_destructible_v<ResTp>
   class result {
-    union value {
-      success<ResTp> s;
-      failure<ResTp> f;
-    };
-    value m_value;
+    ResTp m_value {};
+    input_t m_failure {};
     bool m_success;
     input_t m_remainder;
-
-    [[nodiscard]] constexpr const auto & get_failure() const noexcept {
-      return m_value.f;
-    }
-    [[nodiscard]] constexpr const auto & get_success() const noexcept {
-      return m_value.s;
-    }
 
   public:
     using type = ResTp;
 
-    constexpr result(success<ResTp> t, input_t r) noexcept : m_value { t }, m_success { true }, m_remainder { r } {
+    constexpr result(success<ResTp> t, input_t r) noexcept : m_value { *t }, m_success { true }, m_remainder { r } {
     }
     template<typename Tp>
-    constexpr result(failure<Tp> t, input_t r) noexcept
-      : m_value { .f = failure<ResTp>(t) }
-      , m_success { false }
-      , m_remainder { r } {
+    constexpr result(failure<Tp> t, input_t r) noexcept : m_failure { *t }
+                                                        , m_success { false }
+                                                        , m_remainder { r } {
     }
 
     [[nodiscard]] constexpr bool operator==(const ResTp & o) const noexcept {
       if (!m_success) return false;
-      return *get_success() == o;
+      return m_value == o;
     }
     [[nodiscard]] constexpr bool operator==(const result<ResTp> & o) const noexcept {
       if (m_success != o.m_success) return false;
       if (m_remainder != o.m_remainder) return false;
-      if (m_success) {
-        return get_success() == o.get_success();
-      }
-      return get_failure() == o.get_failure();
+      if (m_success) return m_value == o.m_value;
+      return m_failure == o.m_failure;
     }
 
     [[nodiscard]] constexpr const result<ResTp> & operator|(const result<ResTp> & o) const noexcept {
@@ -124,31 +109,31 @@ namespace m4c0::parser {
     requires std::is_invocable_v<Fn, ResTp, input_t>
     constexpr auto operator&(Fn && fn) const noexcept {
       using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
-      return !*this ? res_t { get_failure(), m_remainder } : fn(*get_success(), m_remainder);
+      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(m_value, m_remainder);
     }
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp>
     constexpr auto operator&(Fn && fn) const noexcept {
       using res_t = result<std::invoke_result_t<Fn, ResTp>>;
-      return !*this ? res_t { get_failure(), m_remainder } : res_t { get_success().map(fn), m_remainder };
+      return !*this ? res_t { failure { m_failure }, m_remainder } : res_t { success { m_value }.map(fn), m_remainder };
     }
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, input_t> && std::is_invocable_v<Fn, ResTp>
     constexpr auto operator%(Fn && fn) const noexcept {
       if (*this) {
-        return fn(*get_success());
+        return fn(m_value);
       }
-      return fn(*get_failure());
+      return fn(m_failure);
     }
     template<typename Fn>
     requires std::is_invocable_v<Fn, input_t, input_t> && std::is_invocable_v<Fn, ResTp, input_t>
     constexpr auto operator%(Fn && fn) const noexcept {
       if (*this) {
-        return fn(*get_success(), m_remainder);
+        return fn(m_value, m_remainder);
       }
-      return fn(*get_failure(), m_remainder);
+      return fn(m_failure, m_remainder);
     }
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
@@ -157,7 +142,7 @@ namespace m4c0::parser {
 
     [[nodiscard]] constexpr ResTp operator*() const noexcept {
       // Deref of a failure is UB. TODO: Migrate usages
-      return m_success ? *get_success() : ResTp {};
+      return m_success ? m_value : ResTp {};
     }
   };
   template<typename ResTp>
