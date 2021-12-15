@@ -46,7 +46,7 @@ public:
   constexpr non_trivial(non_trivial &&) noexcept = default;
   constexpr non_trivial & operator=(non_trivial &&) noexcept = default;
 
-  constexpr auto operator+(char /*c*/) noexcept {
+  constexpr auto operator+(const non_trivial & /*c*/) noexcept {
     return std::move(*this);
   }
 };
@@ -54,7 +54,7 @@ static constexpr const auto passthru = [](auto in) {
   return std::move(in);
 };
 static constexpr const auto parser_non_trivial = (producer_of<non_trivial>() | producer_of<non_trivial>() & passthru)
-                                              << any_char();
+                                              << (skip(any_char()) + producer_of<non_trivial>() + skip(any_char()));
 static_assert(parser_non_trivial("yeah") % [](auto in) {
   return !std::is_same_v<decltype(in), input_t>;
 });

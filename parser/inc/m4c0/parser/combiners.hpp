@@ -64,8 +64,8 @@ namespace m4c0::parser {
   static constexpr auto operator+(PA && a, PB && b) noexcept {
     return [a, b](input_t in) noexcept {
       return a(in) & [b](auto ra, auto in) noexcept {
-        return b(in) & [ra](auto rb) noexcept {
-          return ra + rb;
+        return b(in) & [ra = std::move(ra)](auto rb) mutable noexcept {
+          return std::move(ra) + std::move(rb);
         };
       };
     };
@@ -140,7 +140,7 @@ namespace m4c0::parser {
       while (res && !in.empty()) {
         auto next = res & [pn](auto r1, input_t rem) noexcept {
           return pn(rem) & [r1 = std::move(r1)](auto r2) mutable noexcept {
-            return r1 + r2;
+            return r1 + std::move(r2);
           };
         };
         if (!next) break;

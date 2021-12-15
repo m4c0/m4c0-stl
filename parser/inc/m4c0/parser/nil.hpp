@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 namespace m4c0::parser {
   struct nil {};
 
@@ -12,12 +14,12 @@ namespace m4c0::parser {
   }
 
   template<typename Tp>
-  [[nodiscard]] constexpr auto operator+(nil /*unused*/, Tp && v) noexcept {
-    return v;
+  [[nodiscard]] constexpr decltype(auto) operator+(nil /*unused*/, Tp && v) noexcept {
+    return std::forward<Tp>(v);
   }
 
   template<typename Tp>
-  [[nodiscard]] constexpr auto operator+(Tp && v, nil /*unused*/) noexcept {
-    return v;
+  [[nodiscard]] constexpr decltype(auto) operator+(Tp && v, nil /*unused*/) noexcept {
+    return std::forward<Tp>(v);
   }
 }
