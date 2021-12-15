@@ -149,6 +149,23 @@ namespace m4c0::parser {
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, input_t> && std::is_invocable_v<Fn, ResTp>
+    constexpr auto operator%(Fn && fn) noexcept {
+      if (*this) {
+        return fn(std::move(m_value));
+      }
+      return fn(m_failure);
+    }
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, input_t, input_t> && std::is_invocable_v<Fn, ResTp, input_t>
+    constexpr auto operator%(Fn && fn) noexcept {
+      if (*this) {
+        return fn(std::move(m_value), m_remainder);
+      }
+      return fn(m_failure, m_remainder);
+    }
+
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, input_t> && std::is_invocable_v<Fn, ResTp>
     constexpr auto operator%(Fn && fn) const noexcept {
       if (*this) {
         return fn(m_value);

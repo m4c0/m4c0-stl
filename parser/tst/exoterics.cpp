@@ -54,4 +54,6 @@ static constexpr const auto passthru = [](auto in) {
   return std::move(in);
 };
 static constexpr const auto parser_non_trivial = (producer_of<non_trivial>() & passthru) << any_char();
-static_assert(parser_non_trivial("yeah"));
+static_assert(parser_non_trivial("yeah") % [](auto in) {
+  return !std::is_same_v<decltype(in), input_t>;
+});
