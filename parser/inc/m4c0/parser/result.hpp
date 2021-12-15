@@ -24,6 +24,15 @@ namespace m4c0::parser {
     }
 
     template<typename Fn>
+    [[nodiscard]] constexpr auto map(Fn && fn) noexcept {
+      using res_t = std::invoke_result_t<Fn, ResTp>;
+      if constexpr (std::is_member_function_pointer_v<std::decay_t<Fn>>) {
+        return success<res_t> { (m_value.*fn)() };
+      } else {
+        return success<res_t> { fn(std::move(m_value)) };
+      }
+    }
+    template<typename Fn>
     [[nodiscard]] constexpr auto map(Fn && fn) const noexcept {
       using res_t = std::invoke_result_t<Fn, ResTp>;
       if constexpr (std::is_member_function_pointer_v<std::decay_t<Fn>>) {
@@ -117,7 +126,20 @@ namespace m4c0::parser {
       using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
       return !*this ? res_t { failure { m_failure }, m_remainder } : fn(std::move(m_value), m_remainder);
     }
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp, input_t>
+    constexpr auto operator&(Fn && fn) const noexcept {
+      using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
+      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(m_value, m_remainder);
+    }
 
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp>
+    constexpr auto operator&(Fn && fn) noexcept {
+      using res_t = result<std::invoke_result_t<Fn, ResTp>>;
+      return !*this ? res_t { failure { m_failure }, m_remainder }
+                    : res_t { success { std::move(m_value) }.map(fn), m_remainder };
+    }
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp>
     constexpr auto operator&(Fn && fn) const noexcept {

@@ -50,5 +50,8 @@ public:
     return std::move(*this);
   }
 };
-static constexpr const auto parser_non_trivial = producer_of<non_trivial>() << any_char();
+static constexpr const auto passthru = [](auto in) {
+  return std::move(in);
+};
+static constexpr const auto parser_non_trivial = (producer_of<non_trivial>() & passthru) << any_char();
 static_assert(parser_non_trivial("yeah"));
