@@ -35,18 +35,20 @@ static_assert(skip(parser_cls { 0 })(""));
 // Using non-trivial classes as result
 // ---------------------------------------
 class non_trivial {
-  // FIXME: Currently, this might perform way too many copies
-  std::vector<char> m_data {};
-
 public:
-  auto operator+(char c) const noexcept {
-    return *this;
+  constexpr non_trivial() = default;
+  constexpr ~non_trivial() { // NOLINT we want a non-trivial destructor
+  }
+
+  non_trivial(const non_trivial &) = delete;
+  non_trivial & operator=(const non_trivial &) = delete;
+
+  constexpr non_trivial(non_trivial &&) noexcept = default;
+  constexpr non_trivial & operator=(non_trivial &&) noexcept = default;
+
+  constexpr auto operator+(char /*c*/) noexcept {
+    return std::move(*this);
   }
 };
-static constexpr const auto const_non_trivial = producer([] {
-  return non_trivial {};
-});
-
-// Can't destroy as constexpr, so let's make them non-constexpr
-static const auto parser_non_trivial = many(any_char(), non_trivial {});
-const bool non_trivial_stuff = static_cast<bool>(parser_non_trivial("yeah"));
+static constexpr const auto parser_non_trivial = producer_of<non_trivial>() << any_char();
+static_assert(parser_non_trivial("yeah"));

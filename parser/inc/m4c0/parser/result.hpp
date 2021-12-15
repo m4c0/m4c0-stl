@@ -8,17 +8,19 @@ namespace m4c0::parser {
   using input_t = string_view;
 
   template<typename ResTp>
+  requires std::is_nothrow_move_assignable_v<ResTp> || std::is_nothrow_move_constructible_v<ResTp>
   class success {
     ResTp m_value;
 
   public:
-    constexpr explicit success(ResTp v) noexcept : m_value(v) {};
+    constexpr explicit success(ResTp v) noexcept : m_value(std::move(v)) {};
 
     [[nodiscard]] constexpr bool operator==(const success & o) const noexcept {
       return m_value == o.m_value;
     }
-    [[nodiscard]] constexpr auto operator*() const noexcept {
-      return m_value;
+
+    [[nodiscard]] constexpr auto take() noexcept {
+      return std::move(m_value);
     }
 
     template<typename Fn>
@@ -56,6 +58,7 @@ namespace m4c0::parser {
   };
 
   template<typename ResTp>
+  requires std::is_default_constructible_v<ResTp>
   class result {
     ResTp m_value {};
     input_t m_failure {};
@@ -65,7 +68,10 @@ namespace m4c0::parser {
   public:
     using type = ResTp;
 
-    constexpr result(success<ResTp> t, input_t r) noexcept : m_value { *t }, m_success { true }, m_remainder { r } {
+    constexpr result(success<ResTp> t, input_t r) noexcept
+      : m_value { t.take() }
+      , m_success { true }
+      , m_remainder { r } {
     }
     template<typename Tp>
     constexpr result(failure<Tp> t, input_t r) noexcept : m_failure { *t }
@@ -107,9 +113,9 @@ namespace m4c0::parser {
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp, input_t>
-    constexpr auto operator&(Fn && fn) const noexcept {
+    constexpr auto operator&(Fn && fn) noexcept {
       using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
-      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(m_value, m_remainder);
+      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(std::move(m_value), m_remainder);
     }
 
     template<typename Fn>

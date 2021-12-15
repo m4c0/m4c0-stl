@@ -138,13 +138,13 @@ namespace m4c0::parser {
     return [p0, pn](input_t in) noexcept {
       auto res = p0(in);
       while (res && !in.empty()) {
-        const auto next = res & [pn](auto r1, input_t rem) noexcept {
-          return pn(rem) & [r1](auto r2) noexcept {
+        auto next = res & [pn](auto r1, input_t rem) noexcept {
+          return pn(rem) & [r1 = std::move(r1)](auto r2) mutable noexcept {
             return r1 + r2;
           };
         };
         if (!next) break;
-        res = next;
+        res = std::move(next);
       }
       return res;
     };
