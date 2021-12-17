@@ -24,18 +24,6 @@ static_assert(result<char>(success('1'), "") != result<char>(success('1'), "A"))
 static_assert(result<char>(success('1'), "") != result<char>(success('2'), ""));
 static_assert(result<int>(failure<char>("test"), "") == result { failure<int>("test"), "" });
 
-static_assert((polymorphic(true) | success { '@' }) == result { success('!'), "X" });
-static_assert((polymorphic(false) | success { '@' }) == result { success('@'), "Y" });
-
-static_assert((polymorphic(true) & success { '@' }) == result { success('@'), "X" });
-static_assert(!(polymorphic(false) & success { '@' }));
-
-static_assert((polymorphic(true) | failure { "OK" }) == result { success('!'), "X" });
-static_assert((polymorphic(false) | failure { "OK" }) == result { failure<char>("OK"), "Y" });
-
-static_assert((polymorphic(true) & failure { "OK" }) == result { failure<char>("OK"), "X" });
-static_assert((polymorphic(false) & failure { "OK" }) == result { failure<char>("failed"), "Y" });
-
 static_assert((polymorphic(true) | result { success { '@' }, "A" }) == result { success('!'), "X" });
 static_assert((polymorphic(false) | result { success { '@' }, "A" }) == result { success('@'), "A" });
 

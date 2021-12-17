@@ -105,20 +105,6 @@ namespace m4c0::parser {
     [[nodiscard]] constexpr const result<ResTp> & operator&(const result<ResTp> & o) const noexcept {
       return !*this ? *this : o;
     }
-    [[nodiscard]] constexpr result<ResTp> operator|(success<ResTp> o) const noexcept {
-      return *this ? *this : result { o, m_remainder };
-    }
-    [[nodiscard]] constexpr result<ResTp> operator&(success<ResTp> o) const noexcept {
-      return !*this ? *this : result { o, m_remainder };
-    }
-    template<typename Tp>
-    [[nodiscard]] constexpr result<ResTp> operator|(failure<Tp> o) const noexcept {
-      return *this ? *this : result { o, m_remainder };
-    }
-    template<typename Tp>
-    [[nodiscard]] constexpr result<ResTp> operator&(failure<Tp> o) const noexcept {
-      return !*this ? *this : result { o, m_remainder };
-    }
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp, input_t>
