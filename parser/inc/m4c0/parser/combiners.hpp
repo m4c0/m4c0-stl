@@ -123,9 +123,7 @@ namespace m4c0::parser {
       while (res) {
         auto next = pn(res.remainder());
         if (!next) break;
-        res = next.map([r = std::move(*res)](auto n) mutable noexcept {
-          return r + n;
-        });
+        res = result { std::move(*res) + std::move(*next), next.remainder() };
       }
       return res;
     };

@@ -60,8 +60,8 @@ public:
     m_count++;
     return std::move(*this);
   }
-  constexpr auto operator+(const non_trivial & /*c*/) noexcept {
-    m_count++;
+  constexpr auto operator+(non_trivial c) noexcept {
+    m_count += c.m_count;
     return std::move(*this);
   }
 
@@ -69,10 +69,15 @@ public:
     return m_count;
   }
 };
+static constexpr auto operator+(char c, non_trivial n) noexcept {
+  return n + c;
+}
+static constexpr const auto non_trivial_p = producer_of<non_trivial>();
 static constexpr const auto passthru = [](auto in) {
   return std::move(in);
 };
-static_assert((producer_of<non_trivial>() << any_char())("yeah")->count() == 4);
+static_assert((non_trivial_p << any_char())("yeah")->count() == 4);
+static_assert((non_trivial_p << (any_char() + non_trivial_p))("yeah")->count() == 4);
 static constexpr const auto parser_non_trivial = (producer_of<non_trivial>() | producer_of<non_trivial>() & passthru)
-                                              << (skip(any_char()) + producer_of<non_trivial>() + skip(any_char()));
+                                              << (any_char() + producer_of<non_trivial>() + skip(any_char()));
 static_assert(parser_non_trivial("yeah")->count() == 2);
