@@ -14,7 +14,7 @@ namespace m4c0::parser {
     return [p, fn](input_t in) noexcept {
       const auto r = p(in);
       if (!r) return r;
-      if (*(r.map(fn))) return r;
+      if (fn(*r)) return r;
       return result { failure<type_of_t<P>>("Mismatched condition"), in };
     };
   }
@@ -44,12 +44,15 @@ namespace m4c0::parser {
   template<typename PA, typename PB, typename Fn>
   requires is_parser<PA> && is_parser<PB>
   static constexpr auto combine(PA && a, PB && b, Fn && fn) noexcept {
-    return [a, b, fn = std::forward<Fn>(fn)](input_t in) noexcept {
-      return a(in).map([b, fn](auto ra, auto in) noexcept {
-        return b(in).map([ra, fn](auto rb) noexcept {
-          return fn(ra, rb);
-        });
-      });
+    using res_t = std::decay_t<std::invoke_result_t<Fn, type_of_t<PA>, type_of_t<PB>>>;
+    return [a, b, fn = std::forward<Fn>(fn)](input_t in) noexcept -> result<res_t> {
+      auto ra = a(in);
+      if (!ra) return ra.template as_failure<res_t>();
+
+      auto rb = b(ra.remainder());
+      if (!rb) return rb.template as_failure<res_t>();
+
+      return { fn(std::move(*ra), std::move(*rb)), rb.remainder() };
     };
   }
 
@@ -117,10 +120,10 @@ namespace m4c0::parser {
   static constexpr auto operator<<(P0 && p0, PN && pn) noexcept {
     return [p0, pn](input_t in) noexcept {
       auto res = p0(in);
-      while (res && !in.empty()) {
+      while (res) {
         auto next = pn(res.remainder());
         if (!next) break;
-        res = next.map([r = std::move(*res)](auto n) noexcept {
+        res = next.map([r = std::move(*res)](auto n) mutable noexcept {
           return r + n;
         });
       }

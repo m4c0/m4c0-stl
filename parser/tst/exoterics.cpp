@@ -1,4 +1,5 @@
 #include "m4c0/parser/combiners.hpp"
+#include "m4c0/parser/constants.hpp"
 #include "m4c0/parser/str.hpp"
 
 #include <vector>
@@ -35,26 +36,43 @@ static_assert(skip(parser_cls { 0 })(""));
 // Using non-trivial classes as result
 // ---------------------------------------
 class non_trivial {
+  int m_count = 0;
+
 public:
   constexpr non_trivial() = default;
   constexpr ~non_trivial() { // NOLINT we want a non-trivial destructor
+    m_count = 0;
   }
 
   non_trivial(const non_trivial &) = delete;
   non_trivial & operator=(const non_trivial &) = delete;
 
-  constexpr non_trivial(non_trivial &&) noexcept = default;
-  constexpr non_trivial & operator=(non_trivial &&) noexcept = default;
+  constexpr non_trivial(non_trivial && o) noexcept : m_count(o.m_count) {
+    o.m_count = 0;
+  }
+  constexpr non_trivial & operator=(non_trivial && o) noexcept {
+    m_count = o.m_count;
+    o.m_count = 0;
+    return *this;
+  }
 
-  constexpr auto operator+(const non_trivial & /*c*/) noexcept {
+  constexpr auto operator+(char /*c*/) noexcept {
+    m_count++;
     return std::move(*this);
+  }
+  constexpr auto operator+(const non_trivial & /*c*/) noexcept {
+    m_count++;
+    return std::move(*this);
+  }
+
+  [[nodiscard]] constexpr int count() const noexcept {
+    return m_count;
   }
 };
 static constexpr const auto passthru = [](auto in) {
   return std::move(in);
 };
+static_assert((producer_of<non_trivial>() << any_char())("yeah")->count() == 4);
 static constexpr const auto parser_non_trivial = (producer_of<non_trivial>() | producer_of<non_trivial>() & passthru)
                                               << (skip(any_char()) + producer_of<non_trivial>() + skip(any_char()));
-static_assert(parser_non_trivial("yeah") % [](auto in) {
-  return !std::is_same_v<decltype(in), input_t>;
-});
+static_assert(parser_non_trivial("yeah")->count() == 2);
