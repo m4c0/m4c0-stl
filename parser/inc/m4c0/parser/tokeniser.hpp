@@ -17,10 +17,10 @@ namespace m4c0::parser {
   requires is_parser<P>
   static constexpr auto tokenise(P && p) noexcept {
     return [p](input_t in) noexcept -> result<token<T>> {
-      return p(in) & [in](auto /*r*/, input_t rem) noexcept -> result<token<T>> {
+      return p(in).map([in](auto /*r*/, input_t rem) noexcept {
         const auto substr = rem.empty() ? in : in.up_to(rem);
-        return { success { token<T> { substr } }, rem };
-      };
+        return result { token<T> { substr }, rem };
+      });
     };
   }
 }

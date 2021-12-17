@@ -77,6 +77,8 @@ namespace m4c0::parser {
   public:
     using type = ResTp;
 
+    constexpr result(ResTp t, input_t r) noexcept : m_value { t }, m_success { true }, m_remainder { r } {
+    }
     constexpr result(success<ResTp> t, input_t r) noexcept
       : m_value { t.take() }
       , m_success { true }
@@ -104,33 +106,6 @@ namespace m4c0::parser {
     }
     [[nodiscard]] constexpr const result<ResTp> & operator&(const result<ResTp> & o) const noexcept {
       return !*this ? *this : o;
-    }
-
-    template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp, input_t>
-    constexpr auto operator&(Fn && fn) noexcept {
-      using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
-      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(std::move(m_value), m_remainder);
-    }
-    template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp, input_t>
-    constexpr auto operator&(Fn && fn) const noexcept {
-      using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
-      return !*this ? res_t { failure { m_failure }, m_remainder } : fn(m_value, m_remainder);
-    }
-
-    template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp>
-    constexpr auto operator&(Fn && fn) noexcept {
-      using res_t = result<std::invoke_result_t<Fn, ResTp>>;
-      return !*this ? res_t { failure { m_failure }, m_remainder }
-                    : res_t { success { std::move(m_value) }.map(fn), m_remainder };
-    }
-    template<typename Fn>
-    requires std::is_invocable_v<Fn, ResTp>
-    constexpr auto operator&(Fn && fn) const noexcept {
-      using res_t = result<std::invoke_result_t<Fn, ResTp>>;
-      return !*this ? res_t { failure { m_failure }, m_remainder } : res_t { success { m_value }.map(fn), m_remainder };
     }
 
     template<typename Fn>
@@ -174,6 +149,29 @@ namespace m4c0::parser {
     [[nodiscard]] constexpr ResTp operator*() const noexcept {
       // Deref of a failure is UB. TODO: Migrate usages
       return m_success ? m_value : ResTp {};
+    }
+    [[nodiscard]] constexpr input_t remainder() const noexcept {
+      return m_remainder;
+    }
+
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp>
+    [[nodiscard]] constexpr auto map(Fn && fn) const noexcept {
+      using res_t = result<std::invoke_result_t<Fn, ResTp>>;
+      if (!*this) return res_t { failure { m_failure }, m_remainder };
+
+      if constexpr (std::is_member_function_pointer_v<std::decay_t<Fn>>) {
+        return res_t { (m_value.*fn)(), m_remainder };
+      } else {
+        return res_t { fn(m_value), m_remainder };
+      }
+    }
+
+    template<typename Fn>
+    requires std::is_invocable_v<Fn, ResTp, input_t>
+    [[nodiscard]] constexpr auto map(Fn && fn) const noexcept {
+      using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
+      return *this ? fn(m_value, m_remainder) : res_t { failure { m_failure }, m_remainder };
     }
   };
   template<typename ResTp>

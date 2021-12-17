@@ -33,14 +33,14 @@ static_assert(!(polymorphic(false) & result { success { '@' }, "A" }));
 static constexpr result<int> parse_int(char c, input_t v) {
   return { success { c == '!' ? 1 : 0 }, v };
 }
-static_assert(!(polymorphic(false) & parse_int));
-static_assert((polymorphic(true) & parse_int) == result { success { 1 }, "X" });
+static_assert(!(polymorphic(false).map(parse_int)));
+static_assert((polymorphic(true).map(parse_int)) == result { success { 1 }, "X" });
 
 static constexpr int to_int(char c) {
   return c == '!' ? 1 : 0;
 }
-static_assert(!(polymorphic(false) & to_int));
-static_assert((polymorphic(true) & to_int) == result { success { 1 }, "X" });
+static_assert(!(polymorphic(false).map(to_int)));
+static_assert((polymorphic(true).map(to_int)) == result { success { 1 }, "X" });
 
 static_assert(*polymorphic(true) == '!');
 
@@ -82,7 +82,7 @@ static_assert([] {
       return m_result;
     }
   };
-  return result { success { val {} }, "" } & &val::test;
+  return result { val {}, "" }.map(&val::test);
 }());
 
 int main() {
