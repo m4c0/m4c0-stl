@@ -173,4 +173,14 @@ namespace m4c0::parser {
       return res;
     };
   }
+
+  template<typename P>
+  requires is_parser<P>
+  static constexpr auto look_ahead(P && p) noexcept {
+    return [p](input_t in) noexcept -> result<nil> {
+      auto res = p(in);
+      if (!res) return res.template as_failure<nil>();
+      return { nil {}, in };
+    };
+  }
 }

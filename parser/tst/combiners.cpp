@@ -153,3 +153,7 @@ static_assert(!repeater()("1"));
 static_assert(!repeater()("2B"));
 static_assert(repeater()("1BBB") == succeed(cnt { 0b1 }, "BB"));
 static_assert(repeater()("2BBB") == succeed(cnt { 0b11 }, "B"));
+
+static_assert(!(match("ok") + look_ahead(match("?")))("??"));
+static_assert(!(match("ok") + look_ahead(match("?")))("ok"));
+static_assert((match("ok") + look_ahead(match("?")))("ok?") == succeed(input_t { "ok" }, "?"));
