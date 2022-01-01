@@ -3,7 +3,6 @@
 #include "m4c0/concepts.hpp"
 
 #include <array>
-#include <span>
 #include <stdexcept>
 
 namespace m4c0::containers::details {
@@ -68,10 +67,16 @@ namespace m4c0::containers {
       }
       return false;
     }
+    [[nodiscard]] constexpr const value_t * get(key_t key) const {
+      for (const auto & kv : m_buckets.at(bucket_index_of(key))) {
+        if (kv.first == key) return &kv.second;
+      }
+      return nullptr;
+    }
 
     [[nodiscard]] constexpr const value_t & operator[](key_t key) const {
-      for (const auto & kv : m_buckets.at(bucket_index_of(key))) {
-        if (kv.first == key) return kv.second;
+      if (auto * v = get(key)) {
+        return *v;
       }
       throw std::runtime_error("trying to access non-existent element");
     }
