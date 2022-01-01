@@ -10,6 +10,7 @@ Take everything here as an unstable work-in-progress.
 
 * **Audio** - Toolbox to generate and play sounds
 * **Casein** - A simple library to glue different platforms together
+* **Containers** - Specialised containers for special cases
 * **Core** - Convenience classes
 * **DI** - Dependency injection with some scope management
 * **Droid Main** - Main loop for Android apps. Uses Android's glue code, but
