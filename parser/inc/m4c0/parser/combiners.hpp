@@ -21,8 +21,8 @@ namespace m4c0::parser {
 
   template<typename Fn, typename P>
   requires is_parser<P> && accepts<Fn, P> && not_a_parser<Fn>
-  static constexpr auto operator&(P && p, Fn && fn) noexcept(nothrows<Fn, P>) {
-    return [fn, p](input_t in) noexcept(nothrows<Fn, P>) {
+  static constexpr auto operator&(P && p, Fn && fn) noexcept(nothrows_v<Fn, P>) {
+    return [fn, p](input_t in) noexcept(nothrows_v<Fn, P>) {
       return p(in).map(fn);
     };
   }

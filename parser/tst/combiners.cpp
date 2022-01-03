@@ -25,7 +25,7 @@ static_assert(!fnp()(""));
 static_assert(!fnp()("cZ"));
 static_assert(fnp()("Cz") == succeed(2, "z"));
 
-static constexpr auto nah(char c) {
+static constexpr auto nah(char c) noexcept {
   return c != 'a';
 }
 static_assert(noexcept((match('a') & nah)("")));
