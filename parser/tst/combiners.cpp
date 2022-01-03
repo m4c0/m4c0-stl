@@ -81,7 +81,7 @@ static_assert((match('a') + skip(match('b')))("ab") == succeed('a', ""));
 struct cnt {
   unsigned c;
 };
-static constexpr cnt operator+(cnt a, cnt b) {
+static constexpr cnt operator+(cnt a, cnt b) noexcept {
   return { (a.c << 1U) + b.c };
 }
 static constexpr bool operator==(cnt a, cnt b) {
@@ -93,7 +93,7 @@ static constexpr auto cntp() noexcept {
 struct cnt_init {
   unsigned c;
 };
-static constexpr cnt_init operator+(cnt_init a, cnt b) {
+static constexpr cnt_init operator+(cnt_init a, cnt b) noexcept {
   return { a.c + b.c };
 }
 static constexpr bool operator==(cnt_init a, cnt_init b) {

@@ -34,16 +34,24 @@ static constexpr const auto thrower_plus = [](auto, auto) -> int {
   throw example_exception {};
 };
 static constexpr const auto thrower_p = thrower<input_t, result<int>>;
+static constexpr const auto thrower_builder = [](auto) {
+  return thrower_p;
+};
 
-static constexpr const auto ok = eof();
+static constexpr const auto ok = constant(1);
+
 int main() {
   try {
-    assert_throws("ok & mapper", ok & thrower<nil, int>);
+    assert_throws("ok & mapper", ok & thrower<int, int>);
     assert_throws("ok & parser", ok & thrower_p);
-    assert_throws("ok && bool", ok && thrower<nil, bool>);
+    assert_throws("ok && bool", ok && thrower<int, bool>);
     assert_throws("combine(fail, ok, ok)", combine(thrower_p, ok, std::plus<>()));
     assert_throws("combine(ok, fail, ok)", combine(ok, thrower_p, std::plus<>()));
     assert_throws("combine(ok, ok,fail)", combine(ok, ok, thrower_plus));
+    assert_throws("fail | const", thrower_p | 1);
+    assert_throws("ok >> fail", ok >> thrower_builder);
+    assert_throws("fail << ok", thrower_p << ok);
+    assert_throws("ok << fail", ok << thrower_p);
   } catch (const std::runtime_error & err) {
     std::cerr << "failed\n";
   }

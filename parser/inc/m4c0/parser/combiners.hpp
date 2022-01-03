@@ -74,15 +74,13 @@ namespace m4c0::parser {
   template<typename P>
   requires is_parser<P>
   static constexpr auto operator|(P && p, type_of_t<P> otherwise) noexcept {
-    return [p, otherwise](input_t in) noexcept {
-      return p(in) | result { success { otherwise }, in };
-    };
+    return p | constant(otherwise);
   }
 
   template<typename P>
   requires is_parser<P>
   static constexpr auto operator|(P && p, result_of_t<P> otherwise) noexcept {
-    return [p, otherwise](input_t in) noexcept {
+    return [p, otherwise](input_t in) noexcept(p(in)) {
       return p(in) | otherwise;
     };
   }
@@ -96,7 +94,7 @@ namespace m4c0::parser {
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
   static constexpr auto operator|(PA && a, PB && b) noexcept {
-    return [a, b](input_t in) noexcept {
+    return [a, b](input_t in) noexcept(nothrows_v<PA, PB>) {
       // a(in) | b(in) would be just fine, but it process both due to C++ rules
       auto r = a(in);
       if (r) return r;
@@ -107,7 +105,7 @@ namespace m4c0::parser {
   template<typename P, typename Fn>
   requires is_parser<P> && is_parser<std::invoke_result_t<Fn, type_of_t<P>>>
   static constexpr auto operator>>(P && p, Fn && fn) noexcept {
-    return p & [fn](auto r, input_t rem) noexcept {
+    return p & [fn](auto r, input_t rem) noexcept(nothrows_v<Fn, P>) {
       return fn(r)(rem);
     };
   }
@@ -121,7 +119,7 @@ namespace m4c0::parser {
   template<typename P0, typename PN>
   requires is_parser<P0> && is_parser<PN>
   static constexpr auto operator<<(P0 && p0, PN && pn) noexcept {
-    return [p0, pn](input_t in) noexcept {
+    return [p0, pn](input_t in) noexcept(nothrows_v<P0, PN>) {
       auto res = p0(in);
       while (res) {
         auto next = pn(res.remainder());
