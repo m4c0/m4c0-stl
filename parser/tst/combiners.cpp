@@ -64,7 +64,7 @@ static_assert(!(match('a') | match('c'))("bc"));
 static_assert((match('a') | match('c'))("ac") == succeed('a', "c"));
 static_assert((match('a') | match('c'))("c") == succeed('c', ""));
 
-static constexpr auto tag_merger(char a, char b) {
+static constexpr auto tag_merger(char a, char b) noexcept {
   return a == '<' && b == '>';
 }
 static_assert(noexcept(combine(match('<'), match('>'), tag_merger)("")));

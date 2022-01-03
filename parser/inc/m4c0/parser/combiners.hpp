@@ -11,7 +11,7 @@ namespace m4c0::parser {
   template<typename P, typename Fn>
   requires is_parser<P> && accepts<Fn, P>
   static constexpr auto operator&&(P && p, Fn && fn) noexcept {
-    return [p, fn](input_t in) noexcept {
+    return [p, fn](input_t in) noexcept(nothrows_v<Fn, P>) {
       const auto r = p(in);
       if (!r) return r;
       if (fn(*r)) return r;
@@ -21,7 +21,7 @@ namespace m4c0::parser {
 
   template<typename Fn, typename P>
   requires is_parser<P> && accepts<Fn, P> && not_a_parser<Fn>
-  static constexpr auto operator&(P && p, Fn && fn) noexcept(nothrows_v<Fn, P>) {
+  static constexpr auto operator&(P && p, Fn && fn) noexcept {
     return [fn, p](input_t in) noexcept(nothrows_v<Fn, P>) {
       return p(in).map(fn);
     };
@@ -36,7 +36,7 @@ namespace m4c0::parser {
   template<typename PA, typename PB>
   requires is_parser<PA> && is_parser<PB>
   static constexpr auto operator&(PA && a, PB && b) noexcept {
-    return a & [b](auto /*r*/, input_t rem) noexcept {
+    return a & [b](auto /*r*/, input_t rem) noexcept(nothrows_v<PA, PB>) {
       return b(rem);
     };
   }
@@ -44,8 +44,11 @@ namespace m4c0::parser {
   template<typename PA, typename PB, typename Fn>
   requires is_parser<PA> && is_parser<PB>
   static constexpr auto combine(PA && a, PB && b, Fn && fn) noexcept {
-    using res_t = std::decay_t<std::invoke_result_t<Fn, type_of_t<PA>, type_of_t<PB>>>;
-    return [a, b, fn = std::forward<Fn>(fn)](input_t in) noexcept -> result<res_t> {
+    using a_t = type_of_t<PA>;
+    using b_t = type_of_t<PB>;
+    using res_t = std::decay_t<std::invoke_result_t<Fn, a_t, b_t>>;
+    constexpr const auto is_no_except = nothrows_v<PA, PB> && std::is_nothrow_invocable_v<Fn, a_t, b_t>;
+    return [a, b, fn = std::forward<Fn>(fn)](input_t in) noexcept(is_no_except) -> result<res_t> {
       auto ra = a(in);
       if (!ra) return ra.template as_failure<res_t>();
 
