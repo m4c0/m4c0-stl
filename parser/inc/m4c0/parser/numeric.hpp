@@ -32,4 +32,9 @@ namespace m4c0::parser {
 
     return at_least_one(match_digit(), digit {}) & &digit::value;
   }
+  [[nodiscard]] constexpr auto match_s32() noexcept {
+    return combine(match('-') & -1 | 1, match_u32(), [](int s, unsigned m) noexcept -> int {
+      return s * static_cast<int>(m);
+    });
+  }
 }
