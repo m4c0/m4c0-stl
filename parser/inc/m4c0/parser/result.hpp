@@ -173,7 +173,7 @@ namespace m4c0::parser {
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp>
-    [[nodiscard]] constexpr auto map(Fn && fn) noexcept {
+    [[nodiscard]] constexpr auto map(Fn && fn) noexcept(std::is_nothrow_invocable_v<Fn, ResTp>) {
       using res_t = result<std::invoke_result_t<Fn, ResTp>>;
       if (!*this) return res_t { failure { m_failure }, m_remainder };
 
@@ -186,7 +186,7 @@ namespace m4c0::parser {
 
     template<typename Fn>
     requires std::is_invocable_v<Fn, ResTp, input_t>
-    [[nodiscard]] constexpr auto map(Fn && fn) noexcept {
+    [[nodiscard]] constexpr auto map(Fn && fn) noexcept(std::is_nothrow_invocable_v<Fn, ResTp>) {
       using res_t = std::invoke_result_t<Fn, ResTp, input_t>;
       return *this ? fn(std::move(m_value), m_remainder) : res_t { failure { m_failure }, m_remainder };
     }

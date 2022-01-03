@@ -21,3 +21,9 @@ m4c0_add_test(
     tst/traits.cpp
   LIBRARIES m4c0::parser
   )
+m4c0_add_test(
+  TARGET m4c0-test-parser-exceptions
+  ALIAS m4c0::parser::exceptions
+  SOURCES tst/exceptions.cpp
+  LIBRARIES m4c0::parser
+  )
