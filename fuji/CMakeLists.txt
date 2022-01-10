@@ -1,8 +1,7 @@
 m4c0_add_library(
   TARGET m4c0-fuji
-  ALIAS m4c0::fuji
   LIBRARIES
-    m4c0::vulkan
+    m4c0-vulkan
   SOURCES
     src/device_context.cpp
     src/depth_buffer.cpp
@@ -15,5 +14,5 @@ m4c0_add_library(
 m4c0_add_test(
   TARGET m4c0-fuji-test-poc
   SOURCES tst/test-poc.cpp
-  LIBRARIES m4c0::fuji
+  LIBRARIES m4c0-fuji
   )

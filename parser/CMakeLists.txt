@@ -1,6 +1,5 @@
 m4c0_add_interface(
   TARGET m4c0-parser
-  ALIAS m4c0::parser
   )
 
 m4c0_add_test(
@@ -19,11 +18,11 @@ m4c0_add_test(
     tst/string_view.cpp
     tst/tokeniser.cpp
     tst/traits.cpp
-  LIBRARIES m4c0::parser
+  LIBRARIES m4c0-parser
   )
 m4c0_add_test(
   TARGET m4c0-test-parser-exceptions
   ALIAS m4c0::parser::exceptions
   SOURCES tst/exceptions.cpp
-  LIBRARIES m4c0::parser
+  LIBRARIES m4c0-parser
   )

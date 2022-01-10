@@ -7,10 +7,15 @@ function(_m4c0_add_library)
   # We need this distinction until MSVC allows constexpr virtual in C++20
   target_compile_features(${MAL_TARGET} ${MAL_SCOPE} $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:cxx_std_20>)
   target_compile_options(${MAL_TARGET} ${MAL_SCOPE} $<$<CXX_COMPILER_ID:MSVC>:/std:c++latest>) 
-  target_include_directories(${MAL_TARGET} ${MAL_SCOPE} inc)
   target_link_libraries(${MAL_TARGET} ${MAL_SCOPE} ${MAL_LIBRARIES})
 
-  add_library(${MAL_ALIAS} ALIAS ${MAL_TARGET})
+  if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/inc/m4c0)
+    target_include_directories(${MAL_TARGET} ${MAL_SCOPE}
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+      $<INSTALL_INTERFACE:include>)
+    install(DIRECTORY inc/m4c0 TYPE INCLUDE COMPONENT ${MAL_TARGET})
+  endif()
+  install(TARGETS ${MAL_TARGET} EXPORT m4c0-targets COMPONENT ${MAL_TARGET})
 endfunction()
 
 function(m4c0_add_interface)

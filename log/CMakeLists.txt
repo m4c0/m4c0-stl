@@ -1,6 +1,5 @@
 m4c0_add_library(
   TARGET m4c0-log
-  ALIAS m4c0::log
   )
 
 if (APPLE)
@@ -17,4 +16,4 @@ endif()
 m4c0_add_test(
   TARGET m4c0-test-log-link
   SOURCES tst/test-log-link.cpp
-  LIBRARIES m4c0::log)
+  LIBRARIES m4c0-log)

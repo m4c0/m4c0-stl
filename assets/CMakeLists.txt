@@ -1,8 +1,7 @@
 m4c0_add_library(
   TARGET m4c0-assets
-  ALIAS m4c0::assets
-  LIBRARIES m4c0::native-handles
-  PRIVATE_LIBRARIES m4c0::ext::stb
+  LIBRARIES m4c0-native-handles
+  PRIVATE_LIBRARIES m4c0-ext-stb
   SOURCES src/stb_image.cpp
   )
 
@@ -18,6 +17,6 @@ endif()
 
 m4c0_add_test(
   TARGET m4c0-test-assets-link
-  LIBRARIES m4c0::assets
+  LIBRARIES m4c0-assets
   SOURCES tst/test-link.cpp
   )

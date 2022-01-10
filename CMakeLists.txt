@@ -52,3 +52,4 @@ elseif(WIN32)
   add_subdirectory(win-main)
 endif()
 
+include(cmake/install.cmake)

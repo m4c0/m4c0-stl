@@ -1,27 +1,35 @@
-add_library(m4c0-ext-bandit INTERFACE)
-target_include_directories(m4c0-ext-bandit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/bandit)
-add_library(m4c0::ext::bandit ALIAS m4c0-ext-bandit)
+function(m4c0_add_ext_interface)
+  cmake_parse_arguments(M "" "NAME;INCLUDE" "" ${ARGN})
 
-add_library(m4c0-ext-stb INTERFACE)
-target_include_directories(m4c0-ext-stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
-add_library(m4c0::ext::stb ALIAS m4c0-ext-stb)
+  set(target "m4c0-ext-${M_NAME}")
+
+  add_library(${target} INTERFACE)
+  target_include_directories(${target} INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${M_NAME}/${M_INCLUDE}>
+    $<INSTALL_INTERFACE:include/${M_NAME}/${M_INCLUDE}>)
+  install(DIRECTORY ${M_NAME} TYPE INCLUDE COMPONENT ${target})
+  install(TARGETS ${target} EXPORT m4c0-targets COMPONENT ${target})
+endfunction()
+
+m4c0_add_ext_interface(NAME bandit)
+m4c0_add_ext_interface(NAME stb)
+m4c0_add_ext_interface(NAME vulkan-headers INCLUDE include)
 
 add_library(m4c0-ext-volk STATIC)
-target_include_directories(m4c0-ext-volk PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/volk)
-target_link_libraries(m4c0-ext-volk PUBLIC m4c0::ext::vulkan)
-target_sources(m4c0-ext-volk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/volk/volk.c)
-add_library(m4c0::ext::volk ALIAS m4c0-ext-volk)
-
-add_library(m4c0-ext-vulkan INTERFACE)
-target_include_directories(m4c0-ext-vulkan INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/vulkan-headers/include)
-add_library(m4c0::ext::vulkan ALIAS m4c0-ext-vulkan)
+target_include_directories(m4c0-ext-volk PUBLIC 
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/volk>
+  $<INSTALL_INTERFACE:include/volk>)
+target_link_libraries(m4c0-ext-volk PUBLIC m4c0-ext-vulkan-headers)
+target_sources(m4c0-ext-volk PRIVATE volk/volk.c)
+install(DIRECTORY volk TYPE INCLUDE COMPONENT ext-volk)
+install(TARGETS m4c0-ext-volk EXPORT m4c0-targets COMPONENT ext-volk)
 
 if(ANDROID)
-  target_compile_definitions(m4c0-ext-vulkan INTERFACE VK_USE_PLATFORM_ANDROID_KHR)
+  target_compile_definitions(m4c0-ext-vulkan-headers INTERFACE VK_USE_PLATFORM_ANDROID_KHR)
 elseif(APPLE)
-  target_compile_definitions(m4c0-ext-vulkan INTERFACE VK_USE_PLATFORM_METAL_EXT)
+  target_compile_definitions(m4c0-ext-vulkan-headers INTERFACE VK_USE_PLATFORM_METAL_EXT)
 elseif(WIN32)
-  target_compile_definitions(m4c0-ext-vulkan INTERFACE VK_USE_PLATFORM_WIN32_KHR)
+  target_compile_definitions(m4c0-ext-vulkan-headers INTERFACE VK_USE_PLATFORM_WIN32_KHR)
 else()
   message(ERROR "Unsupported platform")
 endif()
@@ -45,7 +53,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
     "-framework QuartzCore"
     "-framework UIKit"
     MoltenVK)
-  add_library(m4c0::ext::moltenvk ALIAS m4c0-ext-moltenvk)
 
   # Most definitely we can link directly to the xcframework but I don't know how (or I can't properly use -F/-framework)
   string(TOLOWER "${CMAKE_OSX_SYSROOT}" SYSROOT_LC)
