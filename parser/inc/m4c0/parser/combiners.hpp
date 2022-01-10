@@ -147,9 +147,8 @@ namespace m4c0::parser {
   static constexpr auto exactly(unsigned n, P && p, Tp init = Tp {}) noexcept {
     return [n, p, init = constant(init)](input_t in) noexcept {
       auto res = init(in);
-      for (unsigned i = 0; i < n; ++i) {
+      for (unsigned i = 0; i < n && res; ++i) {
         auto next = p(res.remainder());
-        if (!next) return next;
         res = next.map([r = std::move(*res)](auto n) noexcept {
           return r + n;
         });

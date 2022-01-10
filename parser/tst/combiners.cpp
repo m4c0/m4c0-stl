@@ -146,6 +146,7 @@ static_assert(!exactly(3, cntp())("BB"));
 static_assert(exactly(3, cntp())("BBB") == succeed(cnt { 0b111 }, ""));   // NOLINT
 static_assert(exactly(3, cntp())("BBBa") == succeed(cnt { 0b111 }, "a")); // NOLINT
 static_assert(exactly(3, cntp())("BBBB") == succeed(cnt { 0b111 }, "B")); // NOLINT
+static_assert(exactly(3, cntp(), cnt_init {})("BBBa") == succeed(cnt_init { 3 }, "a"));
 
 static_assert(noexcept(at_most(2, cntp())("")));
 static_assert(at_most(2, cntp())("") == succeed(cnt {}, ""));
@@ -153,6 +154,7 @@ static_assert(at_most(2, cntp())("a") == succeed(cnt {}, "a"));
 static_assert(at_most(2, cntp())("Ba") == succeed(cnt { 0b1 }, "a"));
 static_assert(at_most(2, cntp())("BBa") == succeed(cnt { 0b11 }, "a"));
 static_assert(at_most(2, cntp())("BBBa") == succeed(cnt { 0b11 }, "Ba"));
+static_assert(at_most(2, cntp(), cnt_init {})("BBBa") == succeed(cnt_init { 2 }, "Ba"));
 
 static constexpr auto repeater() noexcept {
   return match_digit() >> [](int d) noexcept {
