@@ -31,6 +31,8 @@ namespace m4c0::espresso::constant {
     }
 
   public:
+    constexpr pool() = default;
+
     template<typename Alloc>
     constexpr pool(Alloc && fn, unsigned s) : pool(fn(s), s) {
     }
@@ -74,12 +76,11 @@ namespace m4c0::espresso {
 
   [[nodiscard]] static constexpr auto constant_utf8() noexcept {
     constexpr const auto id = 1;
-    return match_u8(id) & u16() & [](uint16_t size, auto rem) noexcept {
+    return match_u8(id) & u16() >> [](uint16_t size) noexcept {
       using namespace m4c0::parser;
-      const auto p = tokenise<void>(exactly(size, skip(any_char())));
-      return p(rem) & [](token<void> t) noexcept -> constant::item {
-        return constant::utf8 { t };
-      };
+      return tokenise<void>(exactly(size, skip(any_char())));
+    } & [](parser::token<void> t) noexcept -> constant::item {
+      return constant::utf8 { t };
     };
   }
 

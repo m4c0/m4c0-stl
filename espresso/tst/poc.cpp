@@ -36,6 +36,7 @@ static constexpr const auto cls_file =
 namespace m4c0::espresso::partials {
   class flags {
   public:
+    constexpr flags() = default;
     explicit constexpr flags(uint16_t i) {
     }
   };
@@ -44,6 +45,7 @@ namespace m4c0::espresso::partials {
     flags m_flags;
 
   public:
+    constexpr class_with_flags() = default;
     constexpr class_with_flags(const constant::pool & p, flags f) noexcept : m_pool(p), m_flags(f) {
     }
 
@@ -57,9 +59,10 @@ namespace m4c0::espresso::partials {
     }
   };
   class class_with_this : class_with_flags {
-    constant::cls m_this;
+    constant::cls m_this {};
 
   public:
+    constexpr class_with_this() = default;
     constexpr class_with_this(const class_with_flags & o, constant::cls this_cls) noexcept
       : class_with_flags(o)
       , m_this(this_cls) {
@@ -68,9 +71,10 @@ namespace m4c0::espresso::partials {
     using class_with_flags::parse_class;
   };
   class class_with_super : class_with_this {
-    constant::cls m_this;
+    constant::cls m_this {};
 
   public:
+    constexpr class_with_super() = default;
     constexpr class_with_super(const class_with_this & o, constant::cls this_cls) noexcept
       : class_with_this(o)
       , m_this(this_cls) {
