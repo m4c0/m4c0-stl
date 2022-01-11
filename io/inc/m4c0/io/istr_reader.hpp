@@ -24,6 +24,11 @@ namespace m4c0::io {
       if (read(&res, sizeof(uint32_t))) return res;
       return {};
     }
+    [[nodiscard]] std::optional<uint16_t> read_u16() override {
+      uint16_t res {};
+      if (read(&res, sizeof(uint16_t))) return res;
+      return {};
+    }
     [[nodiscard]] std::optional<uint8_t> read_u8() override {
       uint8_t res {};
       if (read(&res, sizeof(uint8_t))) return res;

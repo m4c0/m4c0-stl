@@ -25,21 +25,23 @@ namespace m4c0::io {
       if (eof()) return {};
       return m_data.at(m_pos++);
     }
-    [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
-      if (m_pos + sizeof(uint32_t) > N) return {};
+    [[nodiscard]] constexpr std::optional<uint16_t> read_u16() override {
+      if (m_pos + sizeof(uint16_t) > N) return {};
 
       constexpr const auto u8_bitsize = 8U;
-      constexpr const auto u16_bitsize = 16U;
-
-      unsigned d = *read_u8();
-      unsigned c = *read_u8();
-      unsigned cd = (c << u8_bitsize) | d;
 
       unsigned b = *read_u8();
       unsigned a = *read_u8();
-      unsigned ab = (a << u8_bitsize) | b;
+      return (a << u8_bitsize) | b;
+    }
+    [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
+      if (m_pos + sizeof(uint32_t) > N) return {};
 
-      return (ab << u16_bitsize) | cd;
+      constexpr const auto u16_bitsize = 16U;
+
+      unsigned b = *read_u16();
+      unsigned a = *read_u16();
+      return (a << u16_bitsize) | b;
     }
     [[nodiscard]] constexpr bool eof() override {
       return m_pos >= N;

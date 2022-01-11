@@ -30,6 +30,10 @@ namespace m4c0::io {
       if (tellg() + sizeof(uint8_t) > m_len) return {};
       return m_o->read_u8();
     }
+    [[nodiscard]] constexpr std::optional<uint16_t> read_u16() override {
+      if (tellg() + sizeof(uint16_t) > m_len) return {};
+      return m_o->read_u16();
+    }
     [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
       if (tellg() + sizeof(uint32_t) > m_len) return {};
       return m_o->read_u32();
