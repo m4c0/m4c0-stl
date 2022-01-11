@@ -18,8 +18,8 @@ namespace m4c0::containers {
       delete[] m_ptr;
     }
 
-    unique_array(const unique_array &) = delete;
-    unique_array & operator=(const unique_array &) = delete;
+    constexpr unique_array(const unique_array &) = delete;
+    constexpr unique_array & operator=(const unique_array &) = delete;
 
     constexpr unique_array(unique_array && o) noexcept : m_ptr { o.m_ptr }, m_len { o.m_len } {
       o.m_ptr = nullptr;
