@@ -34,6 +34,23 @@ static_assert(!(match('a') && nah)("b"));
 static_assert(!(match('b') && nah)("a"));
 static_assert((match('b') && nah)("ba") == succeed('b', "a"));
 
+// && using method ref
+class booly {
+  bool m_v;
+
+public:
+  constexpr booly() = default;
+  explicit constexpr booly(bool v) : m_v { v } {};
+  [[nodiscard]] constexpr bool val() const noexcept {
+    return m_v;
+  }
+};
+static constexpr auto booly_val(bool v) noexcept {
+  return constant(booly { v }) && &booly::val;
+}
+static_assert(booly_val(true)(""));
+static_assert(!(booly_val(false)("")));
+
 static_assert(noexcept((match('a') & fnp())("")));
 static_assert(!(match('a') & fnp())(""));
 static_assert(!(match('a') & fnp())("a"));

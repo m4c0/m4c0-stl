@@ -12,9 +12,13 @@ namespace m4c0::parser {
   requires is_parser<P> && accepts<Fn, P>
   static constexpr auto operator&&(P && p, Fn && fn) noexcept {
     return [p, fn](input_t in) noexcept(nothrows_v<Fn, P>) {
-      const auto r = p(in);
-      if (!r) return r;
-      if (fn(*r)) return r;
+      auto r = p(in);
+      if (!r) return std::move(r);
+      if constexpr (std::is_member_function_pointer_v<Fn>) {
+        if ((*r.*fn)()) return std::move(r);
+      } else {
+        if (fn(*r)) return std::move(r);
+      }
       return result { failure<type_of_t<P>>("Mismatched condition"), in };
     };
   }
