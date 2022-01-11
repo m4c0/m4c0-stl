@@ -7,7 +7,9 @@ using m4c0::containers::unique_array;
 using uint = unique_array<int>;
 
 static_assert(!uint());
+static_assert(uint().size() == 0);
 static_assert(uint(3));
+static_assert(uint(3).size() == 3);
 
 static constexpr auto algo_gen() noexcept {
   uint res { 3 };

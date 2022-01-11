@@ -38,6 +38,10 @@ namespace m4c0::containers {
       return m_ptr != nullptr;
     }
 
+    [[nodiscard]] constexpr auto size() const noexcept {
+      return m_len;
+    }
+
     [[nodiscard]] constexpr Tp & operator[](size_t idx) noexcept {
       assert(idx < m_len);
       return m_ptr[idx]; // NOLINT
