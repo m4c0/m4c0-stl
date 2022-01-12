@@ -1,16 +1,10 @@
-#include "m4c0/espresso/constant.hpp"
+#include "m4c0/espresso/reader.hpp"
 #include "m4c0/io/ce_reader.hpp"
-
-/*
-m4c0::io::ce_reader {
-"j\x01\x00\x03\x28\x29\x56\x01\x00"
-};
-*/
 
 template<auto N>
 static constexpr auto read(const char (&in)[N]) { // NOLINT
   m4c0::io::ce_reader r { in };
-  return m4c0::espresso::constant::read(&r);
+  return m4c0::espresso::read_item(&r);
 }
 
 static_assert([] {

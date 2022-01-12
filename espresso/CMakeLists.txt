@@ -9,6 +9,6 @@ m4c0_add_test(
   TARGET m4c0-test-espresso-poc
   LIBRARIES m4c0-espresso
   SOURCES 
-    tst/constant.cpp
     tst/poc.cpp
+    tst/reader.cpp
   )

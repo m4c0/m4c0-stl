@@ -1,38 +1,17 @@
 #include "m4c0/espresso/common.hpp"
 #include "m4c0/espresso/constant.hpp"
+#include "m4c0/espresso/reader.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
 #include <stdexcept>
 
 namespace m4c0::espresso {
-  class pool {
-    containers::unique_array<constant::item> m_data {};
-
-  public:
-    constexpr pool() = default;
-    constexpr explicit pool(size_t n) noexcept : m_data { n } {
-    }
-    [[nodiscard]] constexpr auto & operator*() noexcept {
-      return m_data;
-    }
-    [[nodiscard]] constexpr const auto & operator*() const noexcept {
-      return m_data;
-    }
-  };
-
-  static constexpr pool read_cpool(m4c0::io::reader * r) {
-    pool res { unwrap(r->read_u16_be(), "Truncated constant pool count") - 1U };
-    for (auto & item : *res) {
-      item = constant::read(r);
-    }
-    return res;
-  }
 
   struct cls_header {
     uint32_t magic;
     uint16_t minor_version;
     uint16_t major_version;
-    pool cpool;
+    constant::pool cpool;
   };
 
   static constexpr cls_header read_header(m4c0::io::reader * r) {
