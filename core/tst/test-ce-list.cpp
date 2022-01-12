@@ -66,6 +66,3 @@ static_assert([] {
   constexpr const auto a = std::array { 1, 2, 4 };
   return std::equal(l.begin(), l.end(), a.begin(), a.end());
 }());
-
-int main() {
-}
