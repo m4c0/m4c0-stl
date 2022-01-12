@@ -1,7 +1,8 @@
 #pragma once
 
 #include "m4c0/espresso/constant.hpp"
-#include "m4c0/io/ce_reader.hpp"
+#include "m4c0/espresso/raw_class.hpp"
+#include "m4c0/io/reader.hpp"
 
 namespace m4c0::espresso {
   static constexpr auto read_utf8_bytes(m4c0::io::reader * r) {
@@ -73,6 +74,71 @@ namespace m4c0::espresso {
     for (const auto & item : res) {
       item->validate(res);
     }
+    return res;
+  }
+
+  static constexpr containers::unique_array<raw::attribute> read_attributes(io::reader * r, const constant::pool & pool) {
+    auto res = containers::unique_array<raw::attribute> { read_u16(r, "Truncated attribute list count") };
+    for (auto & a : res) {
+      a.name = read_u16(r, "Truncated attribute name");
+      pool.at(a.name - 1)->assert_type(constant::utf8::type);
+
+      a.info = containers::unique_array<uint8_t> { read_u32(r, "Truncated attribute info size") };
+      if (!r->read(a.info.begin(), a.info.size())) {
+        throw std::runtime_error("Truncated attribute info");
+      }
+    }
+    return res;
+  }
+
+  static constexpr containers::unique_array<raw::member> read_members(io::reader * r, const constant::pool & pool) {
+    auto res = containers::unique_array<raw::member> { read_u16(r, "Truncated member list count") };
+    for (auto & m : res) {
+      m.flags = read_u16(r, "Truncated member access flags");
+      m.name = read_u16(r, "Truncated member name");
+      pool.at(m.name - 1)->assert_type(constant::utf8::type);
+
+      m.descriptor = read_u16(r, "Truncated member descriptor");
+      pool.at(m.name - 1)->assert_type(constant::utf8::type);
+
+      m.attributes = read_attributes(r, pool);
+    }
+    return res;
+  }
+
+  static constexpr raw::cls_header read_header(io::reader * r) {
+    constexpr const auto class_magic_number = 0xCAFEBABE;
+    constexpr const auto min_version = 45.0;
+    constexpr const auto max_version = 55.0;
+
+    raw::cls_header res {};
+    res.magic = read_u32(r, "Truncated magic number");
+    if (res.magic != class_magic_number) throw std::runtime_error("Invalid magic number");
+
+    res.minor_version = read_u16(r, "Truncated minor version");
+    res.major_version = read_u16(r, "Truncated major version");
+    if (res.major_version < min_version || res.major_version > max_version) {
+      throw std::runtime_error("Unsupported version");
+    }
+
+    res.cpool = read_cpool(r);
+    res.flags = read_u16(r, "Truncated access flags");
+
+    res.this_class = read_u16(r, "Truncated 'this' class ref");
+    res.cpool.at(res.this_class - 1)->assert_type(constant::cls::type);
+
+    res.super_class = read_u16(r, "Truncated 'super' class ref");
+    res.cpool.at(res.super_class - 1)->assert_type(constant::cls::type);
+
+    res.ifaces = containers::unique_array<uint16_t> { read_u16(r, "Truncated interface list count") };
+    for (auto & iface : res.ifaces) {
+      iface = read_u16(r, "Truncated interface list");
+      res.cpool.at(iface - 1)->assert_type(constant::cls::type);
+    }
+
+    res.fields = read_members(r, res.cpool);
+    res.methods = read_members(r, res.cpool);
+    res.attributes = read_attributes(r, res.cpool);
     return res;
   }
 }
