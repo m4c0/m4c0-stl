@@ -5,7 +5,7 @@
 
 namespace m4c0::espresso {
   static constexpr auto read_utf8_bytes(m4c0::io::reader * r) {
-    auto count = unwrap(r->read_u16_be(), "Missing UTF8 length");
+    auto count = read_u16(r, "Missing UTF8 length");
     auto bytes = containers::unique_array<uint8_t> { count };
     for (auto & b : bytes) {
       b = unwrap(r->read_u8(), "Missing UTF8 char");
@@ -16,7 +16,7 @@ namespace m4c0::espresso {
     switch (static_cast<constant::tag>(unwrap(r->read_u8(), "Missing constant tag"))) {
     case constant::tag::k_class:
       return constant::item { new constant::cls {
-          unwrap(r->read_u16_be(), "Missing name index in class"),
+          read_u16(r, "Missing name index in class"),
       } };
     case constant::tag::k_double:
       throw std::runtime_error("Double not supported");
@@ -40,15 +40,15 @@ namespace m4c0::espresso {
       throw std::runtime_error("Method type not supported");
     case constant::tag::k_methodref:
       return constant::item { new constant::methodref {
-          unwrap(r->read_u16_be(), "Missing class index in methodref"),
-          unwrap(r->read_u16_be(), "Missing name/type index in methodref"),
+          read_u16(r, "Missing class index in methodref"),
+          read_u16(r, "Missing name/type index in methodref"),
       } };
     case constant::tag::k_module:
       throw std::runtime_error("Module not supported");
     case constant::tag::k_name_and_type:
       return constant::item { new constant::name_and_type {
-          unwrap(r->read_u16_be(), "Missing name index in name/type"),
-          unwrap(r->read_u16_be(), "Missing descriptor index in name/type"),
+          read_u16(r, "Missing name index in name/type"),
+          read_u16(r, "Missing descriptor index in name/type"),
       } };
     case constant::tag::k_null:
       throw std::runtime_error("Invalid constant tag");
@@ -66,7 +66,7 @@ namespace m4c0::espresso {
   }
 
   static constexpr constant::pool read_cpool(m4c0::io::reader * r) {
-    constant::pool res { unwrap(r->read_u16_be(), "Truncated constant pool count") - 1U };
+    constant::pool res { read_u16(r, "Truncated constant pool count") - 1U };
     for (auto & item : res) {
       item = read_item(r);
     }

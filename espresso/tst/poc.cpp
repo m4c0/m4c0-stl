@@ -16,11 +16,11 @@ namespace m4c0::espresso {
     constexpr const auto max_version = 55.0;
 
     cls_header res {};
-    res.magic = unwrap(r->read_u32_be(), "Truncated magic number");
+    res.magic = read_u32(r, "Truncated magic number");
     if (res.magic != class_magic_number) throw std::runtime_error("Invalid magic number");
 
-    res.minor_version = unwrap(r->read_u16_be(), "Truncated minor version");
-    res.major_version = unwrap(r->read_u16_be(), "Truncated major version");
+    res.minor_version = read_u16(r, "Truncated minor version");
+    res.major_version = read_u16(r, "Truncated major version");
     if (res.major_version < min_version || res.major_version > max_version) {
       throw std::runtime_error("Unsupported version");
     }
