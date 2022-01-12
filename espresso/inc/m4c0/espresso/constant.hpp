@@ -52,6 +52,8 @@ namespace m4c0::espresso::constant {
   template<tag Tag>
   class base : public base<tag::k_null> {
   public:
+    static constexpr const auto type = Tag;
+
     constexpr void assert_type(tag t) const final {
       if (t != Tag) throw std::runtime_error("Class name does not point to a name");
     }

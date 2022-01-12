@@ -1,16 +1,63 @@
+#include "m4c0/containers/unique_array.hpp"
 #include "m4c0/espresso/constant.hpp"
 #include "m4c0/espresso/reader.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
 namespace m4c0::espresso {
+  struct attribute {
+    uint16_t name {};
+    containers::unique_array<uint8_t> info {}; // up to u32
+  };
+  struct member {
+    uint16_t flags {};
+    uint16_t name {};
+    uint16_t descriptor {};
+    containers::unique_array<attribute> attributes {};
+  };
   struct cls_header {
-    uint32_t magic;
-    uint16_t minor_version;
-    uint16_t major_version;
-    constant::pool cpool;
+    uint32_t magic {};
+    uint16_t minor_version {};
+    uint16_t major_version {};
+    constant::pool cpool {};
+    uint16_t flags {};
+    uint16_t this_class {};
+    uint16_t super_class {};
+    containers::unique_array<uint16_t> ifaces {};
+    containers::unique_array<member> fields {};
+    containers::unique_array<member> methods {};
+    containers::unique_array<attribute> attributes {};
   };
 
-  static constexpr cls_header read_header(m4c0::io::reader * r) {
+  static constexpr containers::unique_array<attribute> read_attributes(io::reader * r, const constant::pool & pool) {
+    auto res = containers::unique_array<attribute> { read_u16(r, "Truncated attribute list count") };
+    for (auto & a : res) {
+      a.name = read_u16(r, "Truncated attribute name");
+      pool.at(a.name - 1)->assert_type(constant::utf8::type);
+
+      a.info = containers::unique_array<uint8_t> { read_u32(r, "Truncated attribute info size") };
+      if (!r->read(a.info.begin(), a.info.size())) {
+        throw std::runtime_error("Truncated attribute info");
+      }
+    }
+    return res;
+  }
+
+  static constexpr containers::unique_array<member> read_members(io::reader * r, const constant::pool & pool) {
+    auto res = containers::unique_array<member> { read_u16(r, "Truncated member list count") };
+    for (auto & m : res) {
+      m.flags = read_u16(r, "Truncated member access flags");
+      m.name = read_u16(r, "Truncated member name");
+      pool.at(m.name - 1)->assert_type(constant::utf8::type);
+
+      m.descriptor = read_u16(r, "Truncated member descriptor");
+      pool.at(m.name - 1)->assert_type(constant::utf8::type);
+
+      m.attributes = read_attributes(r, pool);
+    }
+    return res;
+  }
+
+  static constexpr cls_header read_header(io::reader * r) {
     constexpr const auto class_magic_number = 0xCAFEBABE;
     constexpr const auto min_version = 45.0;
     constexpr const auto max_version = 55.0;
@@ -26,6 +73,23 @@ namespace m4c0::espresso {
     }
 
     res.cpool = read_cpool(r);
+    res.flags = read_u16(r, "Truncated access flags");
+
+    res.this_class = read_u16(r, "Truncated 'this' class ref");
+    res.cpool.at(res.this_class - 1)->assert_type(constant::cls::type);
+
+    res.super_class = read_u16(r, "Truncated 'super' class ref");
+    res.cpool.at(res.super_class - 1)->assert_type(constant::cls::type);
+
+    res.ifaces = containers::unique_array<uint16_t> { read_u16(r, "Truncated interface list count") };
+    for (auto & iface : res.ifaces) {
+      iface = read_u16(r, "Truncated interface list");
+      res.cpool.at(iface - 1)->assert_type(constant::cls::type);
+    }
+
+    res.fields = read_members(r, res.cpool);
+    res.methods = read_members(r, res.cpool);
+    res.attributes = read_attributes(r, res.cpool);
     return res;
   }
 }
