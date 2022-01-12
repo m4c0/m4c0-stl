@@ -21,6 +21,12 @@ namespace m4c0::io {
     [[nodiscard]] constexpr bool read(void * /*buffer*/, unsigned /*len*/) override {
       return false;
     }
+    [[nodiscard]] constexpr bool read(uint8_t * buffer, unsigned len) override {
+      if (m_pos + len > N) return false;
+      std::copy(m_data.begin() + m_pos, m_data.begin() + m_pos + len, buffer);
+      m_pos += len;
+      return true;
+    }
     [[nodiscard]] constexpr std::optional<uint8_t> read_u8() override {
       if (eof()) return {};
       return m_data.at(m_pos++);

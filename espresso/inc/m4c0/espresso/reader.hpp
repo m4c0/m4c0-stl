@@ -7,8 +7,8 @@ namespace m4c0::espresso {
   static constexpr auto read_utf8_bytes(m4c0::io::reader * r) {
     auto count = read_u16(r, "Missing UTF8 length");
     auto bytes = containers::unique_array<uint8_t> { count };
-    for (auto & b : bytes) {
-      b = unwrap(r->read_u8(), "Missing UTF8 char");
+    if (!r->read(bytes.begin(), count)) {
+      throw std::runtime_error("Truncated UTF8 chars");
     }
     return bytes;
   }
