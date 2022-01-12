@@ -1,12 +1,8 @@
-#include "m4c0/espresso/common.hpp"
 #include "m4c0/espresso/constant.hpp"
 #include "m4c0/espresso/reader.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
-#include <stdexcept>
-
 namespace m4c0::espresso {
-
   struct cls_header {
     uint32_t magic;
     uint16_t minor_version;
@@ -66,7 +62,7 @@ static constexpr auto run(auto fn) {
   auto c = cls_file;
   return fn(&c);
 }
-static_assert((*run(read_header).cpool).size() == 14); // NOLINT
+static_assert(run(read_header).cpool.size() == 14); // NOLINT
 
 int main() {
 }
