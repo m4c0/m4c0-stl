@@ -33,6 +33,12 @@ namespace m4c0::containers {
       return m_ptr != nullptr;
     }
 
+    [[nodiscard]] constexpr Tp * operator->() noexcept {
+      return m_ptr;
+    }
+    [[nodiscard]] constexpr const Tp * operator->() const noexcept {
+      return m_ptr;
+    }
     [[nodiscard]] constexpr Tp & operator*() noexcept {
       return *m_ptr;
     }

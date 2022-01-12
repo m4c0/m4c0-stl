@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cassert>
+#include <exception>
 #include <utility>
 
 namespace m4c0::containers {
+  class out_of_bounds : public std::exception {};
+
   // constexpr variant of STL's
   template<typename Tp>
   class unique_array {
@@ -32,6 +35,15 @@ namespace m4c0::containers {
       o.m_ptr = nullptr;
       o.m_len = 0;
       return *this;
+    }
+
+    [[nodiscard]] constexpr Tp & at(size_t idx) {
+      if (idx >= m_len) throw out_of_bounds {};
+      return m_ptr[idx]; // NOLINT
+    }
+    [[nodiscard]] constexpr const Tp & at(size_t idx) const {
+      if (idx >= m_len) throw out_of_bounds {};
+      return m_ptr[idx]; // NOLINT
     }
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
