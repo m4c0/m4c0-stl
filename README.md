@@ -8,6 +8,7 @@ Take everything here as an unstable work-in-progress.
 
 ## Modules
 
+* **Ark** - File archives (such as ZIP)
 * **Audio** - Toolbox to generate and play sounds
 * **Casein** - A simple library to glue different platforms together
 * **Containers** - Specialised containers for special cases

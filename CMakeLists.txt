@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(cmake/library-utils.cmake)
 include(cmake/test-utils.cmake)
 
+add_subdirectory(ark)
 add_subdirectory(assets)
 add_subdirectory(audio)
 add_subdirectory(casein)
