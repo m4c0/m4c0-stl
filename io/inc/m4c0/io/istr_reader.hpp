@@ -35,8 +35,9 @@ namespace m4c0::io {
       return {};
     }
 
-    [[nodiscard]] bool seekg(unsigned pos) override {
-      return static_cast<bool>(m_ifs.seekg(pos));
+    [[nodiscard]] bool seekg(int pos, seek_mode mode) override {
+      auto dir = static_cast<std::ios::seekdir>(mode);
+      return static_cast<bool>(m_ifs.seekg(pos, dir));
     }
     [[nodiscard]] unsigned tellg() override {
       return m_ifs.tellg();

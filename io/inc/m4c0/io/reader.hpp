@@ -26,9 +26,15 @@ namespace m4c0::io {
     friend class subreader;
 
   public:
+    enum class seek_mode { set, current, end };
+
     [[nodiscard]] virtual bool eof() = 0;
-    [[nodiscard]] virtual bool seekg(unsigned pos) = 0;
+    [[nodiscard]] virtual bool seekg(int pos, seek_mode mode) = 0;
     [[nodiscard]] virtual unsigned tellg() = 0;
+
+    [[nodiscard]] constexpr bool seekg(unsigned pos) {
+      return seekg(static_cast<int>(pos), seek_mode::set);
+    }
 
     [[nodiscard]] virtual bool read(uint8_t * buffer, unsigned len) {
       return read(static_cast<void *>(buffer), len);

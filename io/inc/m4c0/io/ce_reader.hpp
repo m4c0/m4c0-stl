@@ -52,11 +52,21 @@ namespace m4c0::io {
     [[nodiscard]] constexpr bool eof() override {
       return m_pos >= N;
     }
-    [[nodiscard]] constexpr bool seekg(unsigned pos) override {
+    [[nodiscard]] constexpr bool seekg(unsigned pos) {
       if (pos < 0) return false;
       if (pos > N) return false;
       m_pos = pos;
       return true;
+    }
+    [[nodiscard]] constexpr bool seekg(int pos, seek_mode mode) override {
+      switch (mode) {
+      case seek_mode::set:
+        return seekg(pos);
+      case seek_mode::current:
+        return seekg(m_pos + pos);
+      case seek_mode::end:
+        return seekg(N - pos);
+      }
     }
     [[nodiscard]] constexpr unsigned tellg() override {
       return m_pos;
