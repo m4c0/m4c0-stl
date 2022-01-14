@@ -28,9 +28,9 @@ namespace m4c0::io {
     friend class subreader;
 
   public:
-    [[nodiscard]] virtual bool eof() = 0;
+    [[nodiscard]] virtual bool eof() const = 0;
     [[nodiscard]] virtual bool seekg(int pos, seek_mode mode) = 0;
-    [[nodiscard]] virtual unsigned tellg() = 0;
+    [[nodiscard]] virtual unsigned tellg() const = 0;
 
     [[nodiscard]] constexpr bool seekg(unsigned pos) {
       return seekg(static_cast<int>(pos), seek_mode::set);

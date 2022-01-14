@@ -19,10 +19,14 @@ namespace m4c0::io {
       return { subreader { o, start, len } };
     }
 
-    [[nodiscard]] constexpr bool eof() override {
+    [[nodiscard]] constexpr bool eof() const override {
       return tellg() >= m_len;
     }
     [[nodiscard]] constexpr bool read(void * buffer, unsigned len) override {
+      if (tellg() + len > m_len) return false;
+      return m_o->read(buffer, len);
+    }
+    [[nodiscard]] constexpr bool read(uint8_t * buffer, unsigned len) override {
       if (tellg() + len > m_len) return false;
       return m_o->read(buffer, len);
     }
@@ -53,7 +57,7 @@ namespace m4c0::io {
         return seekg(m_len - pos);
       }
     }
-    [[nodiscard]] constexpr unsigned tellg() override {
+    [[nodiscard]] constexpr unsigned tellg() const override {
       return m_o->tellg() - m_start;
     }
   };

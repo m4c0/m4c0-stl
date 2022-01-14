@@ -49,7 +49,7 @@ namespace m4c0::io {
       unsigned a = *read_u16();
       return (a << u16_bitsize) | b;
     }
-    [[nodiscard]] constexpr bool eof() override {
+    [[nodiscard]] constexpr bool eof() const override {
       return m_pos >= N;
     }
     [[nodiscard]] constexpr bool seekg(unsigned pos) {
@@ -68,7 +68,7 @@ namespace m4c0::io {
         return seekg(N - pos);
       }
     }
-    [[nodiscard]] constexpr unsigned tellg() override {
+    [[nodiscard]] constexpr unsigned tellg() const override {
       return m_pos;
     }
   };

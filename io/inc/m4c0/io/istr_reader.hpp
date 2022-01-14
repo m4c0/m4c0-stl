@@ -12,7 +12,7 @@ namespace m4c0::io {
     explicit constexpr istr_reader(std::istream & ifs) : m_ifs(ifs) {
     }
 
-    [[nodiscard]] bool eof() override {
+    [[nodiscard]] bool eof() const override {
       return m_ifs.eof();
     }
 
@@ -39,7 +39,7 @@ namespace m4c0::io {
       auto dir = static_cast<std::ios::seekdir>(mode);
       return static_cast<bool>(m_ifs.seekg(pos, dir));
     }
-    [[nodiscard]] unsigned tellg() override {
+    [[nodiscard]] unsigned tellg() const override {
       return m_ifs.tellg();
     }
   };
