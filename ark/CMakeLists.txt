@@ -1,10 +1,15 @@
 m4c0_add_interface(
   TARGET m4c0-ark
-  LIBRARIES m4c0-io
+  LIBRARIES 
+    m4c0-containers
+    m4c0-io
   )
 
 m4c0_add_test(
   TARGET m4c0-test-ark
-  SOURCES tst/zip.cpp
+  SOURCES
+    tst/zip.cpp
+    tst/zip.cdir.cpp
+    tst/zip.eocd.cpp
   LIBRARIES m4c0-ark
   )
