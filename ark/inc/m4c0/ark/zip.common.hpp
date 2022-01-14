@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <exception>
 #include <optional>
+#include <string_view>
 
 namespace m4c0::ark::zip {
   struct cdir_meta {
@@ -36,5 +37,9 @@ namespace m4c0::ark::zip {
   static constexpr T unwrap(std::optional<T> v) {
     if (!v) throw Exc {};
     return *v;
+  }
+
+  static constexpr bool filename_matches(const cdir_entry & cd, std::string_view filename) {
+    return std::equal(filename.begin(), filename.end(), cd.filename.begin(), cd.filename.end());
   }
 }

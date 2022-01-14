@@ -1,4 +1,5 @@
 #include "m4c0/ark/zip.cdir.hpp"
+#include "m4c0/ark/zip.common.hpp"
 
 #include <algorithm>
 #include <string_view>
@@ -38,6 +39,6 @@ static_assert([] {
   if (cd.offset != offset) return false;
   if (cd.filename.size() != filename.size()) return false;
   if (cd.extra.size() != extra_size) return false;
-  if (!std::equal(filename.begin(), filename.end(), cd.filename.begin(), cd.filename.end())) return false;
+  if (!filename_matches(cd, filename)) return false;
   return r.eof();
 }());
