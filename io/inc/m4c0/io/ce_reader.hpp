@@ -65,7 +65,7 @@ namespace m4c0::io {
       case seek_mode::current:
         return seekg(m_pos + pos);
       case seek_mode::end:
-        return seekg(N - pos);
+        return seekg(N + pos);
       }
     }
     [[nodiscard]] constexpr unsigned tellg() const override {

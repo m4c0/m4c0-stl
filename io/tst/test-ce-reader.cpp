@@ -58,7 +58,7 @@ static_assert([] {
 // Test if we can seek using mode::end
 static_assert([] {
   ce_reader dat('R', 'I', 'F', 'F');
-  return dat.seekg(1, seek_mode::end) && dat.tellg() == 3;
+  return dat.seekg(-1, seek_mode::end) && dat.tellg() == 3;
 }());
 
 // Test if it seeks when reading

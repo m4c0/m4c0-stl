@@ -85,7 +85,7 @@ go_bandit([] { // NOLINT
     });
     it("seeks from end", [] {
       holder h;
-      assert_position(h->seekg(1, seek_mode::end), h, false, 3);
+      assert_position(h->seekg(-1, seek_mode::end), h, false, 3);
     });
     it("reads", [] {
       holder h;

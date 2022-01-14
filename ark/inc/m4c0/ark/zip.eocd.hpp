@@ -8,7 +8,7 @@ namespace m4c0::ark::zip {
 
   static constexpr void find_eocd_start(io::reader * r) {
     constexpr const auto eocd_len = 22;
-    if (!r->seekg(eocd_len, io::seek_mode::end)) {
+    if (!r->seekg(-eocd_len, io::seek_mode::end)) {
       throw missing_eocd_error {};
     }
 
