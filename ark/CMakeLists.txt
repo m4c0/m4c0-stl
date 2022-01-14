@@ -13,3 +13,9 @@ m4c0_add_test(
     tst/zip.eocd.cpp
   LIBRARIES m4c0-ark
   )
+
+m4c0_add_test(
+  TARGET m4c0-ark-zipdump
+  SOURCES tst/zip.dump.cpp
+  LIBRARIES m4c0-ark
+  )
