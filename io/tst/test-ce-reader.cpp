@@ -51,14 +51,14 @@ static_assert([] {
   constexpr const auto final_pos = any_pos + delta_fwd + delta_rev;
 
   ce_reader dat = png;
-  return dat.seekg(any_pos) && dat.seekg(delta_fwd, reader::seek_mode::current)
-      && dat.seekg(delta_rev, reader::seek_mode::current) && (dat.tellg() == final_pos);
+  return dat.seekg(any_pos) && dat.seekg(delta_fwd, seek_mode::current) && dat.seekg(delta_rev, seek_mode::current)
+      && (dat.tellg() == final_pos);
 }());
 
 // Test if we can seek using mode::end
 static_assert([] {
   ce_reader dat('R', 'I', 'F', 'F');
-  return dat.seekg(1, reader::seek_mode::end) && dat.tellg() == 3;
+  return dat.seekg(1, seek_mode::end) && dat.tellg() == 3;
 }());
 
 // Test if it seeks when reading

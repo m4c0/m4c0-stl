@@ -80,12 +80,12 @@ go_bandit([] { // NOLINT
     it("seeks from current position", [] {
       holder h;
       assert_position(h->seekg(2), h, false, 2);
-      assert_position(h->seekg(1, reader::seek_mode::current), h, false, 3);
-      assert_position(h->seekg(-2, reader::seek_mode::current), h, false, 1);
+      assert_position(h->seekg(1, seek_mode::current), h, false, 3);
+      assert_position(h->seekg(-2, seek_mode::current), h, false, 1);
     });
     it("seeks from end", [] {
       holder h;
-      assert_position(h->seekg(1, reader::seek_mode::end), h, false, 3);
+      assert_position(h->seekg(1, seek_mode::end), h, false, 3);
     });
     it("reads", [] {
       holder h;

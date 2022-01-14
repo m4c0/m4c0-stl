@@ -22,12 +22,12 @@ namespace m4c0::io {
     static_assert(flip(test_be) == test_le);
   }
 
+  enum class seek_mode { set, current, end };
+
   class reader {
     friend class subreader;
 
   public:
-    enum class seek_mode { set, current, end };
-
     [[nodiscard]] virtual bool eof() = 0;
     [[nodiscard]] virtual bool seekg(int pos, seek_mode mode) = 0;
     [[nodiscard]] virtual unsigned tellg() = 0;
