@@ -26,16 +26,15 @@ int main(int argc, char ** argv) { // NOLINT TODO: deal with exceptions?
     }
     std::cout << "\n";
 
-    std::cout << "offset: " << cd.method << "\n";
+    std::cout << "offset: " << std::dec << cd.method << "\n";
     std::cout << "compressed size: " << cd.compressed_size << "\n";
     std::cout << "uncompressed size: " << cd.uncompressed_size << "\n";
     std::cout << "\n";
 
-    std::cout << "crc: " << std::hex << cd.uncompressed_size << "\n";
+    std::cout << "crc: " << std::hex << cd.crc << "\n";
     std::cout << "flags: " << cd.flags << "\n";
     std::cout << "method: " << cd.method << "\n";
 
-    std::cout << "\n";
     std::cout << "------\n";
   }
 }
