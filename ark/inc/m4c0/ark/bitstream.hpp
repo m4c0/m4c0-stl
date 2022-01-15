@@ -8,8 +8,8 @@ namespace m4c0::ark {
   struct truncated_stream : std::exception {};
 
   class bit_stream {
-    static constexpr const auto max_bits_at_once = 5;
-    static constexpr const auto bits_per_byte = 8;
+    static constexpr const auto max_bits_at_once = 8;
+    static constexpr const auto bits_per_byte = 8U;
 
     io::reader * m_reader;
 
@@ -33,6 +33,16 @@ namespace m4c0::ark {
       m_rem -= N;
       m_buf >>= N;
       return res;
+    }
+
+    template<size_t N>
+    constexpr void skip() {
+      auto rem = N;
+      while (rem >= max_bits_at_once) {
+        auto r = next<max_bits_at_once>();
+        rem -= max_bits_at_once;
+      }
+      auto r = next<N % max_bits_at_once>();
     }
   };
 }
