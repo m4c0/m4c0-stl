@@ -11,6 +11,7 @@ m4c0_add_test(
     tst/zip.cpp
     tst/zip.cdir.cpp
     tst/zip.eocd.cpp
+    tst/zip.local.cpp
   LIBRARIES m4c0-ark
   )
 
