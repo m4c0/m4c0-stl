@@ -9,6 +9,7 @@ m4c0_add_test(
   TARGET m4c0-test-ark
   SOURCES
     tst/bitstream.cpp
+    tst/deflate.cpp
     tst/zip.cpp
     tst/zip.cdir.cpp
     tst/zip.eocd.cpp
