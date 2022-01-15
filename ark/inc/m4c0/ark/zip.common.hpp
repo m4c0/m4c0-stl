@@ -24,14 +24,23 @@ namespace m4c0::ark::zip {
     containers::unique_array<uint8_t> extra {};
   };
 
-  struct missing_eocd_error : std::exception {};
-  struct truncated_eocd_error : std::exception {};
-  struct multidisk_is_unsupported : std::exception {};
-  struct zip64_is_unsupported : std::exception {};
+  struct zip_exception : std::exception {};
 
-  struct invalid_central_directory : std::exception {};
-  struct truncated_central_directory : std::exception {};
-  struct unsupported_zip_version : std::exception {};
+  struct missing_eocd_error : zip_exception {};
+  struct truncated_eocd_error : zip_exception {};
+  struct multidisk_is_unsupported : zip_exception {};
+  struct zip64_is_unsupported : zip_exception {};
+
+  struct invalid_central_directory : zip_exception {};
+  struct truncated_central_directory : zip_exception {};
+  struct unsupported_zip_version : zip_exception {};
+
+  struct invalid_file_offset : zip_exception {};
+  struct invalid_local_directory : zip_exception {};
+  struct truncated_local_directory : zip_exception {};
+  struct local_directory_mismatch : zip_exception {};
+
+  static constexpr const auto maximum_supported_version = 20; // 2.0 - Deflate
 
   template<typename Exc, typename T>
   static constexpr T unwrap(std::optional<T> v) {

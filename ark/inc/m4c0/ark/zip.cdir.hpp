@@ -5,8 +5,7 @@
 
 namespace m4c0::ark::zip {
   static constexpr auto read_cd(io::reader * r) {
-    constexpr const auto cdir_magic = 0x02014b50;        // PK\1\2
-    constexpr const auto maximum_supported_version = 20; // 2.0 - Deflate
+    constexpr const auto cdir_magic = 0x02014b50; // PK\1\2
 
     if (unwrap<truncated_central_directory>(r->read_u32()) != cdir_magic) {
       throw invalid_central_directory {};
