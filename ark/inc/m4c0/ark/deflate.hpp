@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <exception>
 
 namespace m4c0::ark::deflate {
   // Magic constants gallore - it should follow this RFC:
@@ -84,5 +85,26 @@ namespace m4c0::ark::deflate {
     }
 
     return res;
+  }
+
+  struct invalid_huffman_code : std::exception {};
+
+  template<auto MaxCodes>
+  [[nodiscard]] static constexpr auto decode_huffman(const huffman_codes<MaxCodes> & hc, bit_stream * bits) {
+    unsigned code = 0;
+    unsigned first = 0;
+    unsigned index = 0;
+    for (auto it = hc.counts.begin() + 1; it != hc.counts.end(); ++it) {
+      auto count = *it;
+
+      code |= bits->next<1>();
+      if (code < first + count) {
+        return hc.indexes.at(index + code - first);
+      }
+      index += count;
+      first = (first + count) << 1U;
+      code <<= 1U;
+    }
+    throw invalid_huffman_code {};
   }
 }
