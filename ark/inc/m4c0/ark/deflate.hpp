@@ -1,6 +1,7 @@
 #pragma once
 
 #include "m4c0/ark/bitstream.hpp"
+#include "m4c0/ark/huffman.hpp"
 #include "m4c0/containers/unique_array.hpp"
 
 #include <algorithm>
@@ -47,5 +48,53 @@ namespace m4c0::ark::deflate {
       res.at(hclen_order.at(i)) = bits->next<hclen_bits>();
     }
     return res;
+  }
+
+  constexpr const auto copy_previous = 16;
+  constexpr const auto repeat_zero_3_10 = 17;
+  constexpr const auto repeat_zero_11_138 = 18;
+  [[nodiscard]] static constexpr auto code_to_repeat(unsigned code, unsigned previous) {
+    switch (code) {
+    case copy_previous:
+      return previous;
+    case repeat_zero_3_10:
+    case repeat_zero_11_138:
+      return 0U;
+    default:
+      return code;
+    }
+  }
+  [[nodiscard]] static constexpr auto repeat_count(unsigned code, bit_stream * bits) {
+    switch (code) {
+    case copy_previous:
+      return 3U + bits->next<2>();
+    case repeat_zero_3_10:
+      return 3U + bits->next<3>();
+    case repeat_zero_11_138:
+      return 11U + bits->next<7>(); // NOLINT;
+    default:
+      return 1U;
+    }
+  }
+  [[nodiscard]] static constexpr auto read_hlit_hdest(
+      const dynamic_huffman_format & fmt,
+      const std::array<unsigned, max_code_lengths> & hclens,
+      bit_stream * bits) {
+    containers::unique_array<unsigned> result { fmt.hclen + fmt.hdist };
+
+    auto huff = huffman::create_huffman_codes(hclens);
+    auto previous = 0U;
+    auto * it = result.begin();
+    while (it != result.end()) {
+      auto code = huffman::decode_huffman(huff, bits);
+      auto to_repeat = code_to_repeat(code, previous);
+      auto count = repeat_count(code, bits);
+      for (int j = 0; j < count; j++) {
+        *it++ = to_repeat; // NOLINT
+      }
+      previous = to_repeat;
+    }
+
+    return result;
   }
 }

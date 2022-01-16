@@ -1,5 +1,6 @@
 #include "m4c0/ark/bitstream.hpp"
 #include "m4c0/ark/deflate.hpp"
+#include "m4c0/ark/huffman.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
 #include <algorithm>
@@ -54,3 +55,16 @@ static constexpr const auto hclens = [] {
 }();
 constexpr const std::array<unsigned, 19> expected_hclens { 2, 0, 0, 5, 4, 4, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 6, 4, 6 };
 static_assert(hclens == expected_hclens);
+
+static_assert([] {
+  auto r = ex1;
+  m4c0::ark::bit_stream bits { &r };
+  bits.skip<hclens_offset + expected_hclen * 3>();
+
+  auto res = read_hlit_hdest(fmt, expected_hclens, &bits);
+  if (res.at(0) != 0) return false;
+  if (res.at(9) != 0) return false;  // NOLINT
+  if (res.at(10) != 6) return false; // NOLINT
+
+  return true;
+}());
