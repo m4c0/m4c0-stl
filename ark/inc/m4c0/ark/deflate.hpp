@@ -47,38 +47,42 @@ namespace m4c0::ark::deflate {
     }
     return res;
   }
-  // section 3.2.2 of RFC
+
   template<auto MaxCodes>
-  [[nodiscard]] static constexpr auto codes_for_alphabet(const std::array<unsigned, MaxCodes> & lengths) {
+  struct huffman_codes {
+    // Counts per bit length
+    containers::unique_array<unsigned> counts {};
+    // Symbol per offset
+    std::array<unsigned, MaxCodes> indexes {};
+  };
+
+  // section 3.2.2 of RFC - using a variant based on ZLIB algorithms
+  template<auto MaxCodes>
+  [[nodiscard]] static constexpr auto create_huffman_codes(const std::array<unsigned, MaxCodes> & lengths) {
     const auto max_bits = *std::max_element(lengths.begin(), lengths.end());
-    containers::unique_array<unsigned> bl_count { max_bits + 1 };
-    for (auto & e : bl_count) {
+    huffman_codes<MaxCodes> res;
+    res.counts = containers::unique_array<unsigned> { max_bits + 1 };
+    for (auto & e : res.counts) {
       e = 0;
     }
-
-    // step 1
     for (auto len : lengths) {
-      bl_count.at(len)++;
+      res.counts.at(len)++;
     }
 
-    // step 2
-    containers::unique_array<unsigned> next_code { max_bits + 1 };
-    auto code = 0U;
-    bl_count[0] = 0;
-    for (auto bits = 1; bits <= max_bits; bits++) {
-      code = (code + bl_count.at(bits - 1)) << 1U;
-      next_code.at(bits) = code;
+    containers::unique_array<unsigned> offsets { max_bits + 1 };
+    offsets.at(1) = 0;
+    for (auto bits = 1; bits < max_bits; bits++) {
+      offsets.at(bits + 1) = offsets.at(bits) + res.counts.at(bits);
     }
 
-    // step 3
-    std::array<unsigned, MaxCodes> codes {};
     for (auto n = 0; n < MaxCodes; n++) {
       auto len = lengths.at(n);
       if (len != 0) {
-        codes.at(n) = next_code.at(len);
-        next_code.at(len)++;
+        res.indexes.at(offsets.at(len)) = n;
+        offsets.at(len)++;
       }
     }
-    return codes;
+
+    return res;
   }
 }

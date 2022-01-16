@@ -1,6 +1,7 @@
 #include "m4c0/ark/deflate.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
+#include <algorithm>
 #include <exception>
 
 static constexpr const m4c0::io::ce_reader ex1 {
@@ -53,7 +54,11 @@ static constexpr const auto hclens = [] {
 constexpr const std::array<unsigned, 19> expected_hclens { 2, 0, 0, 5, 4, 4, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 6, 4, 6 };
 static_assert(hclens == expected_hclens);
 
-static constexpr const auto c4a = codes_for_alphabet(std::array<unsigned, 8> { 3, 3, 3, 3, 3, 2, 4, 4 });
-static_assert(c4a == std::array<unsigned, 8> { 0b010, 0b011, 0b100, 0b101, 0b110, 0b00, 0b1110, 0b1111 }); // NOLINT
+static_assert([] {
+  constexpr const auto expected_counts = std::array { 0, 0, 1, 5, 2 };
+  constexpr const auto expected_symbols = std::array<unsigned, 8> { 5, 0, 1, 2, 3, 4, 6, 7 };
 
-static constexpr const auto hclens_c4a = codes_for_alphabet(expected_hclens);
+  const auto hfc = create_huffman_codes(std::array<unsigned, 8> { 3, 3, 3, 3, 3, 2, 4, 4 });
+  if (!std::equal(hfc.counts.begin(), hfc.counts.end(), expected_counts.begin(), expected_counts.end())) return false;
+  return hfc.indexes == expected_symbols;
+}());
