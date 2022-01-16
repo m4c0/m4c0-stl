@@ -10,6 +10,7 @@ m4c0_add_test(
   SOURCES
     tst/bitstream.cpp
     tst/deflate.cpp
+    tst/huffman.cpp
     tst/zip.cpp
     tst/zip.cdir.cpp
     tst/zip.eocd.cpp
