@@ -6,14 +6,29 @@
 
 using namespace m4c0::ark::huffman;
 
+static constexpr bool operator==(const auto & a, const auto & b) noexcept {
+  return std::equal(a.begin(), a.end(), b.begin(), b.end());
+}
 // Checks huffman table construction
 static_assert([] {
   constexpr const auto expected_counts = std::array { 0, 0, 1, 5, 2 };
   constexpr const auto expected_symbols = std::array<unsigned, 8> { 5, 0, 1, 2, 3, 4, 6, 7 };
 
   const auto hfc = create_huffman_codes(std::array<unsigned, 8> { 3, 3, 3, 3, 3, 2, 4, 4 });
-  if (!std::equal(hfc.counts.begin(), hfc.counts.end(), expected_counts.begin(), expected_counts.end())) return false;
-  return hfc.indexes == expected_symbols;
+  if (hfc.counts != expected_counts) return false;
+  if (hfc.indexes != expected_symbols) return false;
+  return true;
+}());
+
+// Checks again with unused symbols
+static_assert([] {
+  constexpr const auto expected_counts = std::array { 4, 0, 0, 5 };
+  constexpr const auto expected_symbols = std::array { 0, 2, 4, 6, 8 };
+
+  const auto hfc = create_huffman_codes(std::array { 3U, 0U, 3U, 0U, 3U, 0U, 3U, 0U, 3U });
+  if (hfc.counts != expected_counts) return false;
+  if (hfc.indexes != expected_symbols) return false;
+  return true;
 }());
 
 // Checks symbol lookup

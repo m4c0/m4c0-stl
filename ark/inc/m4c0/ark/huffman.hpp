@@ -10,20 +10,21 @@
 namespace m4c0::ark::huffman {
   struct invalid_huffman_code : std::exception {};
 
-  template<auto MaxCodes>
   struct huffman_codes {
     // Counts per bit length
     containers::unique_array<unsigned> counts {};
     // Symbol per offset
-    std::array<unsigned, MaxCodes> indexes {};
+    containers::unique_array<unsigned> indexes {};
   };
 
   // section 3.2.2 of RFC 1951 - using a variant based on ZLIB algorithms
-  template<auto MaxCodes>
-  [[nodiscard]] static constexpr auto create_huffman_codes(const std::array<unsigned, MaxCodes> & lengths) {
+  template<typename LengthArray>
+  [[nodiscard]] static constexpr auto create_huffman_codes(const LengthArray & lengths) {
+    const auto max_codes = lengths.size();
     const auto max_bits = *std::max_element(lengths.begin(), lengths.end());
-    huffman_codes<MaxCodes> res;
+    huffman_codes res;
     res.counts = containers::unique_array<unsigned> { max_bits + 1 };
+
     for (auto & e : res.counts) {
       e = 0;
     }
@@ -37,7 +38,8 @@ namespace m4c0::ark::huffman {
       offsets.at(bits + 1) = offsets.at(bits) + res.counts.at(bits);
     }
 
-    for (auto n = 0; n < MaxCodes; n++) {
+    res.indexes = containers::unique_array<unsigned> { offsets.at(max_bits) + res.counts.at(max_bits) };
+    for (auto n = 0; n < max_codes; n++) {
       auto len = lengths.at(n);
       if (len != 0) {
         res.indexes.at(offsets.at(len)) = n;
@@ -48,12 +50,12 @@ namespace m4c0::ark::huffman {
     return res;
   }
 
-  template<auto MaxCodes>
-  [[nodiscard]] static constexpr auto decode_huffman(const huffman_codes<MaxCodes> & hc, bit_stream * bits) {
+  [[nodiscard]] static constexpr auto decode_huffman(const huffman_codes & hc, bit_stream * bits) {
     unsigned code = 0;
     unsigned first = 0;
     unsigned index = 0;
-    for (auto it = hc.counts.begin() + 1; it != hc.counts.end(); ++it) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    for (const auto * it = hc.counts.begin() + 1; it != hc.counts.end(); ++it) {
       auto count = *it;
 
       code |= bits->next<1>();
