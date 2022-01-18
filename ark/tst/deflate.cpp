@@ -34,8 +34,7 @@ using namespace m4c0::ark::deflate::details;
 
 static constexpr const auto fmt_offset = 3; // last block + dynamic
 static constexpr const auto fmt = [] {
-  auto r = ex1;
-  m4c0::ark::bit_stream b { &r };
+  m4c0::ark::ce_bit_stream b { ex1 };
   b.skip<fmt_offset>();
   return read_hc_format(&b);
 }();
@@ -48,8 +47,7 @@ static_assert(fmt.hclen == expected_hclen);
 
 static constexpr const auto hclens_offset = fmt_offset + hlit_count_bits + hdist_count_bits + hclen_count_bits;
 static constexpr const auto hclens = [] {
-  auto r = ex1;
-  m4c0::ark::bit_stream b { &r };
+  m4c0::ark::ce_bit_stream b { ex1 };
   b.skip<hclens_offset>();
   return read_hclens(&b, fmt);
 }();
@@ -57,8 +55,7 @@ constexpr const std::array<unsigned, 19> expected_hclens { 2, 0, 0, 5, 4, 4, 2, 
 static_assert(hclens == expected_hclens);
 
 static_assert([] {
-  auto r = ex1;
-  m4c0::ark::bit_stream bits { &r };
+  m4c0::ark::ce_bit_stream bits { ex1 };
   bits.skip<hclens_offset + expected_hclen * 3>();
 
   auto res = read_hlit_hdest(fmt, expected_hclens, &bits);

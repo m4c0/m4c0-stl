@@ -45,4 +45,12 @@ namespace m4c0::ark {
       auto r = next<N % max_bits_at_once>();
     }
   };
+
+  template<typename Reader>
+  class ce_bit_stream : public bit_stream {
+    Reader m_real_reader;
+
+  public:
+    explicit constexpr ce_bit_stream(Reader r) : bit_stream { &m_real_reader }, m_real_reader { r } {};
+  };
 }
