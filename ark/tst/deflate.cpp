@@ -58,7 +58,7 @@ static_assert([] {
   m4c0::ark::ce_bit_stream bits { ex1 };
   bits.skip<hclens_offset + expected_hclen * 3>();
 
-  auto res = read_hlit_hdest(fmt, expected_hclens, &bits);
+  auto res = read_hlit_hdist(fmt, expected_hclens, &bits);
   if (res.at(0) != 0) return false;
   if (res.at(9) != 0) return false;        // NOLINT
   if (res.at(10) != 6) return false;       // NOLINT

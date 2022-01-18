@@ -13,9 +13,9 @@ namespace m4c0::ark::deflate::details {
   // https://datatracker.ietf.org/doc/html/rfc1951
   // Note: PKZIP's "APPNOTE" does not match these
 
-  static constexpr const auto hlit_count_bits = 5;
-  static constexpr const auto hdist_count_bits = 5;
-  static constexpr const auto hclen_count_bits = 4;
+  static constexpr const auto hlit_count_bits = 5U;
+  static constexpr const auto hdist_count_bits = 5U;
+  static constexpr const auto hclen_count_bits = 4U;
 
   static constexpr const auto hlit_min = 257;
   static constexpr const auto hdist_min = 1;
@@ -76,7 +76,7 @@ namespace m4c0::ark::deflate::details {
       return 1U;
     }
   }
-  [[nodiscard]] static constexpr auto read_hlit_hdest(
+  [[nodiscard]] static constexpr auto read_hlit_hdist(
       const dynamic_huffman_format & fmt,
       const std::array<unsigned, max_code_lengths> & hclens,
       bit_stream * bits) {
@@ -90,7 +90,7 @@ namespace m4c0::ark::deflate::details {
       auto to_repeat = code_to_repeat(code, previous);
       auto count = repeat_count(code, bits);
       for (int j = 0; j < count; j++) {
-        *it++ = to_repeat; // NOLINT
+        *it++ = to_repeat; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
       }
       previous = to_repeat;
     }
