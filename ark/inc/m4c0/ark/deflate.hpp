@@ -8,7 +8,7 @@
 #include <array>
 #include <exception>
 
-namespace m4c0::ark::deflate {
+namespace m4c0::ark::deflate::details {
   // Magic constants gallore - it should follow this RFC:
   // https://datatracker.ietf.org/doc/html/rfc1951
   // Note: PKZIP's "APPNOTE" does not match these
@@ -80,7 +80,7 @@ namespace m4c0::ark::deflate {
       const dynamic_huffman_format & fmt,
       const std::array<unsigned, max_code_lengths> & hclens,
       bit_stream * bits) {
-    containers::unique_array<unsigned> result { fmt.hclen + fmt.hdist };
+    containers::unique_array<unsigned> result { fmt.hlit + fmt.hdist };
 
     auto huff = huffman::create_huffman_codes(hclens);
     auto previous = 0U;

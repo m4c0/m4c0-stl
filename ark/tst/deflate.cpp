@@ -30,13 +30,13 @@ static constexpr const m4c0::io::ce_reader ex1 {
   0x1b, 0xa7, 0xa8, 0xdf,
 };
 
-using namespace m4c0::ark::deflate;
+using namespace m4c0::ark::deflate::details;
 
 static constexpr const auto fmt_offset = 3; // last block + dynamic
 static constexpr const auto fmt = [] {
   auto r = ex1;
   m4c0::ark::bit_stream b { &r };
-  auto type = b.next<fmt_offset>();
+  b.skip<fmt_offset>();
   return read_hc_format(&b);
 }();
 static constexpr const auto expected_hlit = 274;
@@ -63,8 +63,10 @@ static_assert([] {
 
   auto res = read_hlit_hdest(fmt, expected_hclens, &bits);
   if (res.at(0) != 0) return false;
-  if (res.at(9) != 0) return false;  // NOLINT
-  if (res.at(10) != 6) return false; // NOLINT
-
+  if (res.at(9) != 0) return false;        // NOLINT
+  if (res.at(10) != 6) return false;       // NOLINT
+  if (res.at(32) != 4) return false;       // NOLINT
+  if (res.at(58) != 6) return false;       // NOLINT
+  if (res.at(274 + 18) != 6) return false; // NOLINT
   return true;
 }());
