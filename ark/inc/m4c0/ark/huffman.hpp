@@ -40,7 +40,7 @@ namespace m4c0::ark::huffman {
 
     res.indexes = containers::unique_array<unsigned> { offsets.at(max_bits) + res.counts.at(max_bits) };
     for (auto n = 0; n < max_codes; n++) {
-      auto len = lengths.at(n);
+      auto len = lengths[n];
       if (len != 0) {
         res.indexes.at(offsets.at(len)) = n;
         offsets.at(len)++;

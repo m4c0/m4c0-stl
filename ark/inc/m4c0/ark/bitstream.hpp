@@ -20,6 +20,22 @@ namespace m4c0::ark {
     explicit constexpr bit_stream(io::reader * r) : m_reader { r } {
     }
 
+    [[nodiscard]] constexpr auto next(unsigned n) {
+      assert(n <= max_bits_at_once);
+
+      if (m_rem < n) {
+        auto next = m_reader->read_u8();
+        if (!next) throw truncated_stream {};
+        m_buf = m_buf + (*next << m_rem);
+        m_rem += bits_per_byte;
+      }
+
+      auto res = m_buf & ((1U << n) - 1U);
+      m_rem -= n;
+      m_buf >>= n;
+      return res;
+    }
+
     template<size_t N>
     requires(N <= max_bits_at_once) [[nodiscard]] constexpr auto next() {
       if (m_rem < N) {
