@@ -11,6 +11,7 @@ m4c0_add_test(
     tst/bitstream.cpp
     tst/deflate.cpp
     tst/deflate.buffer.cpp
+    tst/deflate.details.cpp
     tst/deflate.symbols.cpp
     tst/huffman.cpp
     tst/zip.cpp
