@@ -60,6 +60,10 @@ namespace m4c0::ark {
       }
       auto r = next<N % max_bits_at_once>();
     }
+
+    [[nodiscard]] constexpr auto eof() const noexcept {
+      return m_reader->eof() && m_rem == 0;
+    }
   };
 
   template<typename Reader>

@@ -1,100 +1,80 @@
 #pragma once
 
 #include "m4c0/ark/bitstream.hpp"
-#include "m4c0/ark/huffman.hpp"
-#include "m4c0/containers/unique_array.hpp"
+#include "m4c0/ark/deflate.buffer.hpp"
+#include "m4c0/ark/deflate.details.hpp"
+#include "m4c0/ark/deflate.symbols.hpp"
+#include "m4c0/io/reader.hpp"
 
-#include <algorithm>
-#include <array>
-#include <exception>
+#include <variant>
 
-namespace m4c0::ark::deflate::details {
-  // Magic constants gallore - it should follow this RFC:
-  // https://datatracker.ietf.org/doc/html/rfc1951
-  // Note: PKZIP's "APPNOTE" does not match these
+namespace m4c0::ark::deflate {
+  class reader : public io::reader {
+    bit_stream * m_bits;
+    symbols::huff_tables m_tables;
+    buffer m_buffer {};
+    bool m_finished {};
 
-  static constexpr const auto hlit_count_bits = 5U;
-  static constexpr const auto hdist_count_bits = 5U;
-  static constexpr const auto hclen_count_bits = 4U;
-
-  static constexpr const auto hlit_min = 257;
-  static constexpr const auto hdist_min = 1;
-  static constexpr const auto hclen_min = 4;
-
-  static constexpr const auto max_code_lengths = 19;
-  static constexpr const auto hclen_order =
-      std::array { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 };
-  static_assert(hclen_order.size() == max_code_lengths);
-
-  static constexpr const auto hclen_bits = 3U;
-
-  struct dynamic_huffman_format {
-    unsigned hlit;
-    unsigned hdist;
-    unsigned hclen;
-  };
-
-  [[nodiscard]] static constexpr auto read_hc_format(bit_stream * bits) {
-    dynamic_huffman_format res {};
-    res.hlit = bits->next<hlit_count_bits>() + hlit_min;
-    res.hdist = bits->next<hdist_count_bits>() + hdist_min;
-    res.hclen = bits->next<hclen_count_bits>() + hclen_min;
-    return res;
-  }
-
-  [[nodiscard]] static constexpr auto read_hclens(bit_stream * bits, const dynamic_huffman_format & fmt) {
-    std::array<unsigned, max_code_lengths> res {};
-    for (int i = 0; i < fmt.hclen; i++) {
-      res.at(hclen_order.at(i)) = bits->next<hclen_bits>();
+  public:
+    constexpr explicit reader(bit_stream * bits) : m_bits { bits } {
+      auto fmt = details::read_hc_format(bits);
+      auto lens = details::read_hclens(bits, fmt);
+      auto hlit_hdist = details::read_hlit_hdist(fmt, lens, bits);
+      m_tables = symbols::create_tables(hlit_hdist, fmt.hlit);
     }
-    return res;
-  }
 
-  constexpr const auto copy_previous = 16;
-  constexpr const auto repeat_zero_3_10 = 17;
-  constexpr const auto repeat_zero_11_138 = 18;
-  [[nodiscard]] static constexpr auto code_to_repeat(unsigned code, unsigned previous) {
-    switch (code) {
-    case copy_previous:
-      return previous;
-    case repeat_zero_3_10:
-    case repeat_zero_11_138:
-      return 0U;
-    default:
-      return code;
+    [[nodiscard]] constexpr bool eof() const override {
+      return m_bits->eof() || m_finished;
     }
-  }
-  [[nodiscard]] static constexpr auto repeat_count(unsigned code, bit_stream * bits) {
-    switch (code) {
-    case copy_previous:
-      return 3U + bits->next<2>();
-    case repeat_zero_3_10:
-      return 3U + bits->next<3>();
-    case repeat_zero_11_138:
-      return 11U + bits->next<7>(); // NOLINT;
-    default:
-      return 1U;
+    [[nodiscard]] constexpr bool seekg(int /*pos*/, io::seek_mode /*mode*/) override {
+      return false;
     }
-  }
-  [[nodiscard]] static constexpr auto read_hlit_hdist(
-      const dynamic_huffman_format & fmt,
-      const std::array<unsigned, max_code_lengths> & hclens,
-      bit_stream * bits) {
-    containers::unique_array<unsigned> result { fmt.hlit + fmt.hdist };
+    [[nodiscard]] constexpr unsigned tellg() const override {
+      return 0;
+    }
 
-    auto huff = huffman::create_huffman_codes(hclens);
-    auto previous = 0U;
-    auto * it = result.begin();
-    while (it != result.end()) {
-      auto code = huffman::decode_huffman(huff, bits);
-      auto to_repeat = code_to_repeat(code, previous);
-      auto count = repeat_count(code, bits);
-      for (int j = 0; j < count; j++) {
-        *it++ = to_repeat; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    [[nodiscard]] constexpr bool read(uint8_t * buffer, unsigned len) override {
+      for (unsigned i = 0; i < len; i++) {
+        const auto r = read_u8();
+        if (!r) return false;
+        buffer[i] = *r; // NOLINT
       }
-      previous = to_repeat;
+      return true;
+    }
+    [[nodiscard]] bool read(void * buffer, unsigned len) override {
+      return read(static_cast<uint8_t *>(buffer), len);
     }
 
-    return result;
-  }
+    [[nodiscard]] constexpr std::optional<uint8_t> read_u8() override {
+      if (m_buffer.empty()) {
+        auto sym = symbols::read_next_symbol(m_tables, m_bits);
+        if (!std::visit(m_buffer, sym)) {
+          m_finished = true;
+          return {};
+        }
+      }
+      return { m_buffer.read() };
+    }
+
+    [[nodiscard]] constexpr std::optional<uint16_t> read_u16() override {
+      constexpr const auto bits_per_byte = 8U;
+
+      const auto a = read_u8();
+      if (!a) return {};
+      const auto b = read_u8();
+      if (!b) return {};
+
+      return { (static_cast<unsigned>(*a) << bits_per_byte) | *b };
+    }
+    [[nodiscard]] constexpr std::optional<uint32_t> read_u32() override {
+      constexpr const auto bits_per_word = 16U;
+
+      const auto a = read_u16();
+      if (!a) return {};
+      const auto b = read_u16();
+      if (!b) return {};
+
+      return { (static_cast<unsigned>(*a) << bits_per_word) | *b };
+    }
+  };
 }

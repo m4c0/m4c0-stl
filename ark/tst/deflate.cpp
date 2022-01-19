@@ -1,10 +1,8 @@
-#include "m4c0/ark/bitstream.hpp"
 #include "m4c0/ark/deflate.hpp"
 #include "m4c0/ark/huffman.hpp"
 #include "m4c0/io/ce_reader.hpp"
 
-#include <algorithm>
-#include <exception>
+#include <string_view>
 
 static constexpr const m4c0::io::ce_reader ex1 {
   0x8d, 0x52, 0x4d, 0x6b, 0x83, 0x40, 0x10, 0xbd, 0xfb, 0x2b, 0x06, 0x0b, 0x21, 0xa1, 0x98, 0x98, 0xd4, 0xe4, 0xa0,
@@ -30,40 +28,21 @@ static constexpr const m4c0::io::ce_reader ex1 {
   0x1b, 0xa7, 0xa8, 0xdf,
 };
 
-using namespace m4c0::ark::deflate::details;
+using namespace m4c0::ark::deflate;
 
 static constexpr const auto fmt_offset = 3; // last block + dynamic
-static constexpr const auto fmt = [] {
+
+static_assert([]() {
   m4c0::ark::ce_bit_stream b { ex1 };
   b.skip<fmt_offset>();
-  return read_hc_format(&b);
-}();
-static constexpr const auto expected_hlit = 274;
-static_assert(fmt.hlit == expected_hlit);
-static constexpr const auto expected_hdist = 19;
-static_assert(fmt.hdist == expected_hdist);
-static constexpr const auto expected_hclen = 14;
-static_assert(fmt.hclen == expected_hclen);
 
-static constexpr const auto hclens_offset = fmt_offset + hlit_count_bits + hdist_count_bits + hclen_count_bits;
-static constexpr const auto hclens = [] {
-  m4c0::ark::ce_bit_stream b { ex1 };
-  b.skip<hclens_offset>();
-  return read_hclens(&b, fmt);
-}();
-constexpr const std::array<unsigned, 19> expected_hclens { 2, 0, 0, 5, 4, 4, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 6, 4, 6 };
-static_assert(hclens == expected_hclens);
+  reader r { &b };
 
-static_assert([] {
-  m4c0::ark::ce_bit_stream bits { ex1 };
-  bits.skip<hclens_offset + expected_hclen * 3>();
+  constexpr const std::string_view expected = R"CPP(#include "m4c0/ark/zip.eocd.hpp"
 
-  auto res = read_hlit_hdist(fmt, expected_hclens, &bits);
-  if (res.at(0) != 0) return false;
-  if (res.at(9) != 0) return false;        // NOLINT
-  if (res.at(10) != 6) return false;       // NOLINT
-  if (res.at(32) != 4) return false;       // NOLINT
-  if (res.at(58) != 6) return false;       // NOLINT
-  if (res.at(274 + 18) != 6) return false; // NOLINT
-  return true;
+// End-of-central-directory has an extra comment to test the reverse)CPP";
+  std::array<uint8_t, expected.size()> res {};
+  if (!r.read(res.data(), res.size())) return false;
+
+  return std::equal(res.begin(), res.end(), expected.begin());
 }());
