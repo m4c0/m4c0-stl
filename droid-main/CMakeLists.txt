@@ -1,5 +1,5 @@
 m4c0_add_library(
-  TARGET m4c0_droid_main
+  TARGET m4c0-droid-main
   SOURCES
     src/glue/android_native_app_glue.c
     src/main.cpp
