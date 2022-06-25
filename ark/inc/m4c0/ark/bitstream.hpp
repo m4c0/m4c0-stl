@@ -2,6 +2,7 @@
 
 #include "m4c0/io/reader.hpp"
 
+#include <cassert>
 #include <exception>
 
 namespace m4c0::ark {

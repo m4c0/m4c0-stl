@@ -3,6 +3,7 @@
 #include "m4c0/io/reader.hpp"
 
 #include <optional>
+#include <stdexcept>
 
 namespace m4c0::espresso {
   template<typename T>
