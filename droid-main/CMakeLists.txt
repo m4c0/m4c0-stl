@@ -5,7 +5,7 @@ m4c0_add_library(
     src/main.cpp
   LIBRARIES android log
   )
-target_link_options(m4c0_droid_main PUBLIC "-u ANativeActivity_onCreate")
+target_link_options(m4c0-droid-main PUBLIC "-u ANativeActivity_onCreate")
 
 m4c0_add_test(
   TARGET m4c0-test-droid-main-link

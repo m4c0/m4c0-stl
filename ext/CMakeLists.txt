@@ -53,6 +53,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
     "-framework QuartzCore"
     "-framework UIKit"
     MoltenVK)
+  install(TARGETS m4c0-ext-moltenvk EXPORT m4c0-targets COMPONENT m4c0-ext-moltenvk)
 
   # Most definitely we can link directly to the xcframework but I don't know how (or I can't properly use -F/-framework)
   string(TOLOWER "${CMAKE_OSX_SYSROOT}" SYSROOT_LC)
